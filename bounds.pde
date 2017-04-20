@@ -1,0 +1,20 @@
+boolean checkBounds(unit x,battleMode field){
+  boolean r = false;
+  if(x.xcor > field._width - (x.size / 2)){
+    x.xcor = field._width - (x.size / 2);
+    r = true;
+  }
+  if(x.xcor < x.size / 2){
+    x.xcor = x.size / 2;
+    r = true;
+  }
+  if(x.ycor > field._height - (x.size / 2)){
+    x.ycor = field._height - (x.size / 2);
+    r = true;
+  }
+  if(x.ycor < x.size / 2){
+    x.ycor = x.size / 2;
+    r = true;
+  }
+  return r;
+}
