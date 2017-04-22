@@ -38,6 +38,8 @@ class bullet extends unit{
       return false;
     }
   }
+  void death(){
+  }
   boolean update(oneWayLinkedList<unit> x){
     boolean a = update();
     while(x.hasNext()){

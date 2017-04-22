@@ -75,6 +75,9 @@ int positiveOrNegative(){
 class delay{
   int wait;
   int counter = 0;
+  void setWait(float wait){
+    this.wait = int(wait * expectedFrameRate);
+  }
   delay(float wait){
     this.wait = int(wait * expectedFrameRate);
   }
@@ -91,6 +94,9 @@ class charge{
   int wait;
   int counter = 0;
   charge(float wait){
+    this.wait = int(wait * expectedFrameRate);
+  }
+  void setWait(float wait){
     this.wait = int(wait * expectedFrameRate);
   }
   boolean cooldown(){

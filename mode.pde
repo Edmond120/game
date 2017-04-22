@@ -1,7 +1,27 @@
 class mode{
+  ArrayList<button>buttons = new ArrayList<button>();
   void _setup(){
   }
   void tick(){
+  }
+  void updateButtons(){
+    for(int i = 0; i < buttons.size(); i++){
+      buttons.get(i).tick();
+    }
+  }
+}
+class gameOver extends mode{
+  void _setup(){
+    background(#FF0000);
+    buttons.add(new testButton(1,6,3,2));
+    buttons.add(new muteButton(4,6));
+  }
+  void tick(){
+    background(#FF0000);
+    textSize(5 * scale);
+    fill(0);
+    text("R.I.P.",3 * scale,4.5 * scale);
+    updateButtons();
   }
 }
 class testButton extends button{
@@ -55,7 +75,6 @@ class muteButton extends button{
   }
 }
 class mainMenu extends mode{
-  ArrayList<button>buttons = new ArrayList<button>();
   void _setup(){
     buttons.add(new testButton(1,6,3,2));
     buttons.add(new muteButton(4,6));
@@ -63,8 +82,6 @@ class mainMenu extends mode{
   }
   void tick(){
     background(#F0F0F0);
-    for(int i = 0; i < buttons.size(); i++){
-      buttons.get(i).tick();
-    }
+    updateButtons();
   }
 }

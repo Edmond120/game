@@ -19,6 +19,8 @@ class unit extends entity{
   float ycor;
   float radius;
   float displaySize;
+  void death(){
+  }
 }
 class battleMode extends mode{
   int _width = width;
@@ -36,8 +38,8 @@ class battleMode extends mode{
     enemies = new oneWayLinkedList<unit>();
     players = new oneWayLinkedList<unit>();
     anime = new oneWayLinkedList<unit>();
-    //players.add(new testUnit(this,0.5,0.5,0.20,0.5));
-    players.add(new testUnitA(this,0.5,0.5,0.20,0.5));
+    players.add(new testUnit(this,0.5,0.5,0.20,0.5));
+    //players.add(new testUnitA(this,0.5,0.5,0.20,0.5));
     background(0);
     //testing only <end>
   }
@@ -66,6 +68,7 @@ class battleMode extends mode{
   void update(oneWayLinkedList<unit> x){
     while(x.hasNext()){
       if(x.next().update()){
+        x.getCurrent().death();
         x.remove();
       }
     }

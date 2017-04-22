@@ -43,6 +43,7 @@ void setup(){
   //frame.setSize(1000,1000);
   //frame.setLocation(100,100);
   Mode = new mainMenu();
+  //Mode = new gameOver();
   //Mode = new tempTestEnvironment();
   //Mode = new robotTestEnvironment();
   //Mode = new pushedTestEnvironment();
@@ -72,8 +73,8 @@ void draw(){
 }
 
 //keyboard
-char[]_keys = {'z','x'};
-int keyZ = 0;int keyX = 1;
+char[]_keys = {'z','x','c'};
+int keyZ = 0;int keyX = 1;int keyC = 2;
 boolean[]keys = new boolean[_keys.length];
 int[] _codedKeys = {UP,DOWN,LEFT,RIGHT,SHIFT,CONTROL,ALT};
 int cKeyUP = 0;int cKeyDOWN = 1;int cKeyLEFT = 2;int cKeyRIGHT = 3;int cKeySHIFT = 4;int cKeyCONTROL = 5;

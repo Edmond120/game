@@ -10,6 +10,7 @@ class testUnit extends player{
     this.size = size;
     this.displaySize = displaySize;
     this.radius = this.size / 2;
+    health = 100;
   }
   testUnit(battleMode field,float xcor,float ycor,float size,float displaySize){
     this.field = field;
@@ -18,6 +19,7 @@ class testUnit extends player{
     this.size = size * scale;
     this.displaySize = displaySize * scale;
     this.radius = this.size / 2;
+    health = 100;
   }
   int[] face = {-1,0};// -1 = up 1 = down, -1 = left 1 = right
   //face must never be {0,0}
@@ -52,7 +54,7 @@ class testUnit extends player{
           xcor += mSpeed;
         }
       }
-      boolean noChange = codedKeys[cKeyALT];
+      boolean noChange = keys[keyC];
       if(faceLock){
         noChange = !noChange;
       }
@@ -70,19 +72,39 @@ class testUnit extends player{
       }
     }
   }
+  float spread = 0.05;
   boolean faceLock = false;
   void shoot(){
-    float xVector = (face[1] * (0.3 + random(0.1))) + (random(0.05) * positiveOrNegative()); //0.6 is the speed of the bullet
-      float yVector = (face[0] * (0.3 + random(0.1))) + (random(0.05) * positiveOrNegative());
+    if(codedKeys[cKeySHIFT]){
+      spread = 0.015;
+    }
+    else{
+      spread = 0.05;
+    }
+    float xVector = (face[1] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
+      float yVector = (face[0] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
       field.playerBullets.add(new bullet(this,field,xcor,ycor,0.2 * scale,xVector * scale,yVector * scale,10));
   }
   charge zCooldown = new charge(0.1);
+  void death(){
+    Mode = new gameOver();
+    Mode._setup();
+  }
   boolean update(){
+    if(health <=0){
+      return true;
+    }
     if(pushed(CONTROL)){
       faceLock = !faceLock;
     }
     move();
     checkBounds(this,field);
+    if(codedKeys[cKeySHIFT]){
+      zCooldown.setWait(0.075);
+    }
+    else{
+      zCooldown.setWait(0.1);
+    }
     if(zCooldown.cooldown(keys[keyZ])){
       //System.out.print("shoot");
       shoot();
