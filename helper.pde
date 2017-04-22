@@ -14,6 +14,11 @@ void centerWindow(){
     surface.setLocation(displayWidth/2-width/2,displayHeight/2-height/2);
   }
 }
+void centerWindow(PApplet x){
+  if(x.getSurface() != null){
+    x.getSurface().setLocation(x.displayWidth/2-x.width/2,x.displayHeight/2-x.height/2);
+  }
+}
 String randomSelect(String[]x){
   return x[int(random(x.length))];
 }

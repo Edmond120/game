@@ -17,6 +17,10 @@ class testButton extends button{
   void hover(){
     _draw();
   }
+  void _draw(){
+    super._draw();
+    text("start",x,y,100,100);
+  }
 }
 class muteButton extends button{
   muteButton(int x,int y){

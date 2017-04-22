@@ -35,6 +35,17 @@ class testEnvironment extends mode{
   void tick(){
   }
 }
+class tempTestEnvironment extends testEnvironment{
+  delay x;
+  void _setup(){
+    x = new delay(1);
+  }
+  void tick(){
+    if(x.every()){
+      println(mouseX + " " + mouseY);
+    }
+  }
+}
 class scrapTestEnvironment extends testEnvironment{
   void _setup(){
     System.out.println(10.5 % 5);

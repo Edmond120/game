@@ -98,3 +98,49 @@ class testUnit extends player{
     }
   }
 }
+class testUnitA extends testUnit{
+  windowMob test = null;
+  testUnitA(entity parent,battleMode field,float xcor,float ycor,float size,float displaySize){
+    super(parent,field,xcor,ycor,size,displaySize);
+    test = new windowMob(this);
+    test.getSurface().setVisible(false);
+  }
+  testUnitA(battleMode field,float xcor,float ycor,float size,float displaySize){
+    super(field,xcor,ycor,size,displaySize);
+    test = new windowMob(this);
+    test.getSurface().setVisible(false);
+  }
+  boolean visiable = false;
+  void _draw(){
+    super._draw();
+    if(out && !visiable){
+      test.getSurface().setVisible(true);
+      visiable = true;
+    }
+    if(!out && visiable){
+      test.getSurface().setVisible(false);
+      visiable = false;
+    }
+    if(out){
+      test.redraw();
+    }
+  }
+  boolean out = false;
+  boolean update(){
+    if(pushed(CONTROL)){
+      faceLock = !faceLock;
+    }
+    move();
+    if(inBounds(this,field)){
+      out = false;
+    }
+    else{
+      out = true;
+    }
+    if(zCooldown.cooldown(keys[keyZ])){
+      //System.out.print("shoot");
+      shoot();
+    }
+    return false;
+  }
+}

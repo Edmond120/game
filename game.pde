@@ -4,6 +4,8 @@ import processing.sound.*;
 import java.lang.Math;
 import javax.sound.sampled.*;
 import java.awt.event.KeyEvent;
+import java.awt.MouseInfo;
+import java.awt.Point;
 int scale = 20;
 int fieldHeight;
 int fieldWidth;
@@ -31,14 +33,17 @@ void settings(){
   size(frameSizeX,frameSizeY);
 }
 Robot robot;
+PApplet mainWindow;
 void setup(){
   frameRate(60);
+  mainWindow = this;
   expectedFrameRate = 60;
   surface.setResizable(true);
   centerWindow();
   //frame.setSize(1000,1000);
   //frame.setLocation(100,100);
   Mode = new mainMenu();
+  //Mode = new tempTestEnvironment();
   //Mode = new robotTestEnvironment();
   //Mode = new pushedTestEnvironment();
   //Mode = new soundTestEnvironment();
@@ -81,27 +86,33 @@ codedAndPushed[1] == if there is a key pushed right now.
 codedAndPushed[1] is set to false at draw*/
 //^^^ the function these are used for are located at the tab helper
 int releasedTick;
-void keyPressed(){
-  checkKey(true);
+void KP(PApplet x){
+  checkKey(true,x);
 }
-void keyReleased(){
+void KR(PApplet x){
   releasedTick = tick;
-  if(key == CODED){
+  if(x.key == CODED){
     //System.out.println(keyCode + " Coded");
-    keyPushed = keyCode;
+    keyPushed = x.keyCode;
     codedAndPushed = true;
   }
   else{
     //System.out.println(key + " normal");
-    keyPushed = key;
+    keyPushed = x.key;
     codedAndPushed = false;
   }
-  checkKey(false);
+  checkKey(false,x);
 }
-void checkKey(boolean setValue){
-  if(key == CODED){
+void keyPressed(){
+  KP(mainWindow);
+}
+void keyReleased(){
+  KR(mainWindow);
+}
+void checkKey(boolean setValue,PApplet x){
+  if(x.key == CODED){
     for(int i = 0; i < _codedKeys.length;i++){
-      if(keyCode == _codedKeys[i]){
+      if(x.keyCode == _codedKeys[i]){
         codedKeys[i] = setValue;
         return;
       }
@@ -109,7 +120,7 @@ void checkKey(boolean setValue){
   }
   else{
     for(int i = 0; i < keys.length;i++){
-      if(java.lang.Character.toLowerCase(key) == _keys[i]){
+      if(java.lang.Character.toLowerCase(x.key) == _keys[i]){
         keys[i] = setValue;
         return;
       }
