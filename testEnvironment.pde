@@ -35,6 +35,16 @@ class testEnvironment extends mode{
   void tick(){
   }
 }
+class experimentTestEnironment extends testEnvironment{
+  int x = 0;
+  void _setup(){
+  }
+  void tick(){
+    if(released('z')){
+      System.out.println(x++);
+    }
+  }
+}
 class tempTestEnvironment extends testEnvironment{
   delay x;
   void _setup(){
@@ -68,7 +78,7 @@ class robotTestEnvironment extends testEnvironment{
        robot.keyRelease(KeyEvent.VK_Z);
        //System.out.println("pressed");
      }
-     if(pushed('z')){
+     if(released('z')){
        System.out.println('z');
      }
      if(keys[keyZ]){
@@ -77,18 +87,39 @@ class robotTestEnvironment extends testEnvironment{
      System.out.println(keys[keyZ]);
    }
 }
+class testBattleMode extends battleMode{
+      randomEdgeSpawner spawn;
+  void _setup(){
+    super._setup();
+    playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
+    bullets = new oneWayLinkedList<unit>();
+    playerBullets = new oneWayLinkedList<unit>();
+    enemies = new oneWayLinkedList<unit>();
+    players = new oneWayLinkedList<unit>();
+    anime = new oneWayLinkedList<unit>();
+    unit a = new testUnitA(this,0.5,0.5,0.20,0.5);
+    players.add(a);
+    spawn = new randomEdgeSpawner(this,a);
+    spawn.create();
+    background(0);
+  }
+  void tick(){
+    spawn.spawn();
+    super.tick();
+  }
+}
 class pushedTestEnvironment extends testEnvironment{
   void tick(){
-    if(pushed('z')){
+    if(released('z')){
       System.out.println('z');
     }
-    if(pushed('x')){
+    if(released('x')){
       System.out.println('x');
     }
-    if(pushed(UP)){
+    if(released(UP)){
       System.out.println("up");
     }
-    if(pushed(DOWN)){
+    if(released(DOWN)){
       System.out.println("down");
     }
   }

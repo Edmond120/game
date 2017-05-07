@@ -17,9 +17,9 @@ SoundFile bgm;
       bgm.play();
     }
     catch(NullPointerException e){
-      if(!fileName.equals("error.mp3")){
-        playBgm("error.mp3");
-      }
+      //if(!fileName.equals("error.mp3")){
+        //playBgm("error.mp3");
+      //}
     }
   }
   void refreshBgmVolume(){

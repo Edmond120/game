@@ -72,6 +72,11 @@ class testUnit extends player{
       }
     }
   }
+  bullet createBullet(){
+    return new bullet(this,field,xcor,ycor,0.2 * scale,BxVector * scale,ByVector * scale,10);
+  }
+  float BxVector;
+  float ByVector;
   float spread = 0.05;
   boolean faceLock = false;
   void shoot(){
@@ -81,9 +86,9 @@ class testUnit extends player{
     else{
       spread = 0.05;
     }
-    float xVector = (face[1] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
-      float yVector = (face[0] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
-      field.playerBullets.add(new bullet(this,field,xcor,ycor,0.2 * scale,xVector * scale,yVector * scale,10));
+    BxVector = (face[1] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
+      ByVector = (face[0] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
+      field.playerBullets.add(createBullet());
   }
   charge zCooldown = new charge(0.1);
   void death(){
@@ -94,7 +99,7 @@ class testUnit extends player{
     if(health <=0){
       return true;
     }
-    if(pushed(CONTROL)){
+    if(released(CONTROL)){
       faceLock = !faceLock;
     }
     move();
@@ -111,6 +116,7 @@ class testUnit extends player{
     }
     return false;
   }
+  String achievement = "status: trapped in a box of death";
   void _draw(){
     fill(#00D81B);
     ellipse(xcor,ycor,displaySize,displaySize);
@@ -118,6 +124,14 @@ class testUnit extends player{
       fill(#FFFFFF);
       ellipse(xcor,ycor,size,size);
     }
+    if(health > 25){
+      fill(255);
+    }
+    else{
+      fill(#FF0000);
+    }
+    textSize(25);
+    text("hp: " + health + " kills: " + points + " time: " + tick / expectedFrameRate + " " + achievement,0,25);
   }
 }
 class testUnitA extends testUnit{
@@ -132,27 +146,49 @@ class testUnitA extends testUnit{
     test = new windowMob(this);
     test.getSurface().setVisible(false);
   }
+  bullet createBullet(){
+    return new testBullet(this,field,xcor,ycor,0.2 * scale,BxVector * scale,ByVector * scale,10);
+  }
   boolean visiable = false;
+  int riftwalks = 0;
   void _draw(){
     super._draw();
     if(out && !visiable){
       test.getSurface().setVisible(true);
       visiable = true;
+      test.loop();
+      if(riftwalks++ < 10){
+          achievement = "status: error404 player not found";
+      }
+      else{
+          achievement = "D:< come back and die plz";
+      }
     }
     if(!out && visiable){
       test.getSurface().setVisible(false);
       visiable = false;
+      test.noLoop();
+      if(riftwalks++ < 10){
+        achievement = "status: hacks detected";
+      }
+      else{
+        achievement = "so, how's the outside world?";
+      }
     }
     if(out){
-      test.redraw();
+      
     }
   }
   boolean out = false;
   boolean update(){
-    if(pushed(CONTROL)){
+    if(health <= 0){
+      return true;
+    }
+    if(released(CONTROL)){
       faceLock = !faceLock;
     }
     move();
+    checkDisplayBounds(this);
     if(inBounds(this,field)){
       out = false;
     }

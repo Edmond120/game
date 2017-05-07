@@ -13,7 +13,8 @@ class entity{
 }
 class unit extends entity{
   battleMode field;
-  int health = 10;
+  int health;
+  int points;
   float size;
   float xcor;
   float ycor;
@@ -31,20 +32,11 @@ class battleMode extends mode{
   oneWayLinkedList<unit> players;
   oneWayLinkedList<unit> anime; //this "anime" stands for animation, not the anime anime
   void _setup(){
-    //testing only <start>
-    playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
-    bullets = new oneWayLinkedList<unit>();
-    playerBullets = new oneWayLinkedList<unit>();
-    enemies = new oneWayLinkedList<unit>();
-    players = new oneWayLinkedList<unit>();
-    anime = new oneWayLinkedList<unit>();
-    players.add(new testUnit(this,0.5,0.5,0.20,0.5));
-    //players.add(new testUnitA(this,0.5,0.5,0.20,0.5));
-    background(0);
-    //testing only <end>
+    tick = 0;
   }
   void tick(){
     background(0);
+    try{
     update(playerBullets,enemies);
     update(bullets,players);
     update(players);
@@ -56,10 +48,14 @@ class battleMode extends mode{
     _draw(enemies);
     _draw(players);
     _draw(bullets);
+    }
+    catch(NullPointerException e){
+    }
   }
   void update(oneWayLinkedList<unit> a,oneWayLinkedList<unit> b){
     while(a.hasNext()){
       if(a.next().update(b)){
+        a.getCurrent().death();
         a.remove();
       }
     }

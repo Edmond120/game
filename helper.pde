@@ -11,7 +11,7 @@ class Timer{
 }
 void centerWindow(){
   if(surface != null){
-    surface.setLocation(displayWidth/2-width/2,displayHeight/2-height/2);
+    surface.setLocation(centerX,centerY);
   }
 }
 void centerWindow(PApplet x){
@@ -22,7 +22,7 @@ void centerWindow(PApplet x){
 String randomSelect(String[]x){
   return x[int(random(x.length))];
 }
-boolean pushed(char targetKey){//for regular keys
+boolean released(char targetKey){//for regular keys
   if(releasedTick != tick){
     return false;
   }
@@ -35,7 +35,7 @@ boolean pushed(char targetKey){//for regular keys
     }
   }
 }
-boolean pushed(int targetKey){//for codedKeys
+boolean released(int targetKey){//for codedKeys
   if(releasedTick != tick){
     return false;
   }

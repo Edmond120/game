@@ -31,7 +31,11 @@ void settings(){
   frameSizeX = 16 * scale;
   frameSizeY = 9 * scale;
   size(frameSizeX,frameSizeY);
+  centerX = displayWidth/2-width/2;
+  centerY = displayHeight/2-height/2;
 }
+int centerX;
+int centerY;
 Robot robot;
 PApplet mainWindow;
 void setup(){
@@ -43,6 +47,7 @@ void setup(){
   //frame.setSize(1000,1000);
   //frame.setLocation(100,100);
   Mode = new mainMenu();
+  //Mode = new experimentTestEnironment();
   //Mode = new gameOver();
   //Mode = new tempTestEnvironment();
   //Mode = new robotTestEnvironment();

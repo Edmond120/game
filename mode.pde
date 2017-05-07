@@ -29,7 +29,7 @@ class testButton extends button{
     super(x,y,xSize,ySize);
   }
   void action(){
-    Mode = new battleMode();
+    Mode = new testBattleMode();
     Mode._setup();
   }
   void pushed(){
