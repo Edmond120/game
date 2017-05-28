@@ -76,7 +76,7 @@ class bomb extends unit{
         fill(#FF0000);
     }
     else{
-        fill(#000000);
+        fill(#85E898);
     }
     ellipse(xcor,ycor,size,size);
   }
