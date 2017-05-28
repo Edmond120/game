@@ -10,6 +10,8 @@ class mode{
     }
   }
 }
+
+
 class gameOver extends mode{
   void _setup(){
     background(#FF0000);
@@ -24,6 +26,8 @@ class gameOver extends mode{
     updateButtons();
   }
 }
+
+
 class testButton extends button{
   testButton(int x, int y,int xSize,int ySize){
     super(x,y,xSize,ySize);
@@ -42,6 +46,8 @@ class testButton extends button{
     text("start",x,y,100,100);
   }
 }
+
+
 class muteButton extends button{
   muteButton(int x,int y){
     super(x,y,1,1);
@@ -74,6 +80,8 @@ class muteButton extends button{
     }
   }
 }
+
+
 class mainMenu extends mode{
   void _setup(){
     buttons.add(new testButton(1,6,3,2));

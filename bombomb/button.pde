@@ -20,7 +20,7 @@ class button{
     _draw();
   }
   void _draw(){
-    fill(#FFFFFF);
+    fill(#08a84d);
     rect(x,y,sizeX,sizeY);
   }
   void tick(){

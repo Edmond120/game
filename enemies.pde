@@ -60,16 +60,18 @@ class grunt extends unit{
     ellipse(xcor,ycor,size,size);
   }
 }
+
+
 class randomEdgeSpawner{
   charge spawnRate = new charge(5);
   battleMode field;
   unit player;
-  randomEdgeSpawner(battleMode field,unit player){
+  randomEdgeSpawner(battleMode field, unit player){
     this.field = field;
     this.player = player;
   }
   void create(){
-    field.enemies.add(new grunt(field,random(width),random(height / 20),0.5,10,player));
+    field.enemies.add(new grunt(field, random(width), random(height / 20),0.5,10,player));
   }
   void spawn(){
     if(spawnRate.cooldown(field.enemies.size <= 10)){

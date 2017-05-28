@@ -1,4 +1,3 @@
-//bounds
 boolean checkBounds(unit x,battleMode field){
   boolean r = false;
   if(x.xcor > field._width - (x.size / 2)){

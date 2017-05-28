@@ -10,6 +10,7 @@ class oneWayLinkedList<E>{
     }
     Lnode after = null;
   }
+  
   int size = 0;
   Lnode end = new Lnode(null);
   Lnode start = new Lnode(null,end);

@@ -1,4 +1,5 @@
 class bullet extends unit{
+  //constructors + variables
   int damage;
   float[] vector = new float[2];
   bullet(){
@@ -24,6 +25,8 @@ class bullet extends unit{
     vector[1] = yVector * scale;
     this.damage = damage;
   }
+  
+  //methods
   boolean hit(unit target){
     target.health -= damage;
     return true;
@@ -61,7 +64,10 @@ class bullet extends unit{
     ellipse(xcor,ycor,size,size);
   }
 }
+
+
 class testBullet extends bullet{
+  //constructors
   testBullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
     super(parent,field,xcor,ycor,size,xVector,yVector,damage);
    
@@ -70,13 +76,14 @@ class testBullet extends bullet{
     super(field,xcor,ycor,size,xVector,yVector, damage);
     
   }
+  
+  //methods
   void _draw(){
     fill(#FF0000);
     if(!checkBoundsGhost(this,field)){
       ellipse(xcor,ycor,size,size);
     }
   }
-  
   boolean update(){
     xcor += vector[0];
     ycor += vector[1];
@@ -88,11 +95,10 @@ class testBullet extends bullet{
     }
   }
 }
+
+
 class Ebullet extends bullet{
-  void _draw(){
-    fill(#1A03FC);
-    ellipse(xcor,ycor,size,size);
-  }
+  //constructors
    Ebullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
     this.parent = parent;
     this.field = field;
@@ -113,5 +119,11 @@ class Ebullet extends bullet{
     vector[0] = xVector * scale;
     vector[1] = yVector * scale;
     this.damage = damage;
+  }
+  
+  //methods
+  void _draw(){
+    fill(#1A03FC);
+    ellipse(xcor,ycor,size,size);
   }
 }
