@@ -24,6 +24,7 @@ class oneWayLinkedList<E>{
     }
     synchronized  boolean hasNext(){
       if(current.after == null || current.after.value == null){
+        rewind();
         return false;
       }
       else{

@@ -15,6 +15,7 @@ class flipbook{
  int index = 0;
  boolean hasNext(){
    if(index >= book.length){
+     rewind();
      return false;
    }
    else{

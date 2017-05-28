@@ -64,7 +64,7 @@ class battleMode extends mode{
         a.remove();
       }
     }
-    a.rewind();
+    
   }
   void update(oneWayLinkedList<unit> x){
     while(x.hasNext()){
@@ -73,12 +73,12 @@ class battleMode extends mode{
         x.remove();
       }
     }
-    x.rewind();
+    
   }
   void _draw(oneWayLinkedList<unit> x){
     while(x.hasNext()){
       x.next()._draw();
     }
-    x.rewind();
+    
   }
 }

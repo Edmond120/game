@@ -56,7 +56,7 @@ class bullet extends unit{
         }
       }
     }
-    x.rewind();
+   
     return a;
   }
   void _draw(){

@@ -79,6 +79,6 @@ class windowMob extends window{
       catch(NullPointerException e){
       }
     }
-    x.rewind();
+    
   }
 }
