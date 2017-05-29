@@ -263,7 +263,7 @@ class bomb extends bullet{
     }
   }
   void death(){
-    field.anime.add(new boom(field,xcor, ycor, size));
+    field.bullets.add(new boom(field,xcor, ycor, size)); //changed from anime to bullets
   }
   delay noboom = new delay(3);
   boolean update(oneWayLinkedList<unit> x){
@@ -285,28 +285,42 @@ class bomb extends bullet{
 }
 
 
-class boom extends animation{
+class boom extends bullet{
   boom(battleMode field,float xcor,float ycor,float size){
-    super(field,xcor,ycor,size);
+    super();
+    this.field = field;
+    this.xcor = xcor;
+    this.ycor = ycor;
+    this.size = size;
+    damage = 10;
   }
-  
-  delay time = new delay(0.5);
-  boolean update(){
+  delay time = new delay(5); // set to 5 seconds for debugging
+  delay explosionDamageTick = new delay(0.1); //this is for damage over time areas, but in bomberman you take damage only once from each bomb, this is still do-able by giving bombs IDs.
+  boolean update(oneWayLinkedList<unit> x){
     if(time.every()){
-      stroke(#000000);
+      //stroke(#000000);
       return true;
     }
     else{
+      if(explosionDamageTick.every()){
+      while(x.hasNext()){
+        unit target = x.next();
+            if((abs(xcor - target.xcor) <= target.size / 2 && abs(ycor - target.ycor) <= 50) || (abs(ycor - target.ycor) <= target.size / 2 && abs(xcor - target.xcor) <= 50)){
+                 hit(target); 
+            }
+      }
+      }
+      return false;
+    }
+  }
+  void _draw(){
       fill(#FF0000);
       ellipse(xcor,ycor,size,size);
       line(xcor+50,ycor, xcor-50,ycor);
       line(xcor,ycor+50, xcor,ycor-50);      
       stroke(#FF0000);
-      return false;
-    }
   }
-}
-
+   }
 class Bombombutton extends button{
   Bombombutton(float x, float y,float xSize,float ySize){
     super(x,y,xSize,ySize);
