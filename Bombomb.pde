@@ -121,25 +121,14 @@ class PlayerBomber1 extends player{
 }
 
 
-class PlayerBomber2 extends player{
+class PlayerBomber2 extends PlayerBomber1{
   float speed = 0.05 * scale;
   PlayerBomber2(entity parent, battleMode field, float xcor, float ycor, float size, float displaySize){
-    this.parent = parent;
-    this.field = field;
-    this.xcor = xcor;
-    this.ycor = ycor;
-    this.size = size;
-    this.displaySize = displaySize;
-    this.radius = this.size / 2;
+    super(parent,field,xcor,ycor,size,displaySize);
     health = 100;
   }
   PlayerBomber2(battleMode field, float xcor, float ycor, float size, float displaySize){
-    this.field = field;
-    this.xcor = xcor * scale;
-    this.ycor = ycor * scale;
-    this.size = size * scale;
-    this.displaySize = displaySize * scale;
-    this.radius = this.size / 2;
+    super(field,xcor,ycor,size,displaySize);
     health = 100;
   }
   
@@ -168,26 +157,6 @@ class PlayerBomber2 extends player{
    }
   }
   
-  void shoot(){
-    field.bullets.add(createBullet());
-  }
-  
-  bomb createBullet(){
-    if(face[0] == -1 && lastk == 1){
-      return new bomb(this,field,xcor,ycor+(face[0]*displaySize),0.2 * scale,0,0,10);
-    }
-    if(face[0] == 1 && lastk == 2){
-      return new bomb(this,field,xcor,ycor+(face[0]*displaySize),0.2 * scale,0,0,10);
-    }
-    if(face[1] == -1 && lastk == 3){
-      return new bomb(this,field,xcor+(face[1]*displaySize),ycor,0.2 * scale,0,0,10);
-    }
-    if(face[1] == 1 && lastk == 4){
-      return new bomb(this,field,xcor+(face[1]*displaySize),ycor,0.2 * scale,0,0,10);
-    }
-    return new bomb(this,field,xcor+(face[1]*displaySize),ycor,0.2 * scale,0,0,10);
-  }
-  
   charge Cooldown = new charge(1);
   boolean update(){
     if(health <=0){
@@ -214,11 +183,8 @@ class PlayerBomber2 extends player{
     textSize(25);
     text("PL2 hp: " + health + " kills: " + points,0,50);
   }
-  void death(){
-    Mode = new gameOver();
-    Mode._setup();
-  }
 }
+
 
 class bomb extends bullet{
   int damage;
@@ -263,7 +229,7 @@ class bomb extends bullet{
     }
   }
   void death(){
-    field.bullets.add(new boom(field,xcor, ycor, size)); //changed from anime to bullets
+    field.bullets.add(new boom(field,xcor, ycor, size,damage));
   }
   delay noboom = new delay(3);
   boolean update(oneWayLinkedList<unit> x){
@@ -286,14 +252,16 @@ class bomb extends bullet{
 
 
 class boom extends bullet{
-  boom(battleMode field,float xcor,float ycor,float size){
+  boom(battleMode field,float xcor,float ycor,float size,int damage){
     super();
     this.field = field;
     this.xcor = xcor;
     this.ycor = ycor;
     this.size = size;
-    damage = 10;
+    this.damage = damage;
   }
+  
+  //methods
   delay time = new delay(5); // set to 5 seconds for debugging
   delay explosionDamageTick = new delay(0.1); //this is for damage over time areas, but in bomberman you take damage only once from each bomb, this is still do-able by giving bombs IDs.
   boolean update(oneWayLinkedList<unit> x){
@@ -305,14 +273,14 @@ class boom extends bullet{
       if(explosionDamageTick.every()){
       while(x.hasNext()){
         unit target = x.next();
-            if((abs(xcor - target.xcor) <= target.size / 2 && abs(ycor - target.ycor) <= 50) || (abs(ycor - target.ycor) <= target.size / 2 && abs(xcor - target.xcor) <= 50)){
-                 hit(target); 
-            }
+        if((abs(xcor - target.xcor) <= target.size / 2 && abs(ycor - target.ycor) <= 50) || (abs(ycor - target.ycor) <= target.size / 2 && abs(xcor - target.xcor) <= 50)){
+          hit(target);
+        }
       }
-      }
-      return false;
     }
+    return false;
   }
+}
   void _draw(){
       fill(#FF0000);
       ellipse(xcor,ycor,size,size);
@@ -320,7 +288,32 @@ class boom extends bullet{
       line(xcor,ycor+50, xcor,ycor-50);      
       stroke(#FF0000);
   }
-   }
+}
+   
+   
+/*
+class boom extends animation{
+  boom(battleMode field,float xcor,float ycor,float size){
+    super(field,xcor,ycor,size);
+  }
+  
+  delay time = new delay(0.5);
+  boolean update(){
+    if(time.every()){
+      stroke(#000000);
+      return true;
+    }
+    else{
+      fill(#FF0000);
+      ellipse(xcor,ycor,size,size);
+      line(xcor+50,ycor, xcor-50,ycor);
+      line(xcor,ycor+50, xcor,ycor-50);      
+      stroke(#FF0000);
+      return false;
+    }
+  }
+}*/
+
 class Bombombutton extends button{
   Bombombutton(float x, float y,float xSize,float ySize){
     super(x,y,xSize,ySize);
