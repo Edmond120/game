@@ -49,6 +49,12 @@ class animation extends unit{
       currentImage = loadImage("error.png");
     }
   }
+  animation(battleMode field, float xcor, float ycor, float size){
+    this.field = field;
+    this.xcor = xcor;
+    this.ycor = ycor;
+    this.size = size;
+  }
   
   //methods
   boolean update(){

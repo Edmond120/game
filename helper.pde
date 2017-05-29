@@ -78,7 +78,7 @@ int positiveOrNegative(){
 
 class delay{
   int wait;
-  int counter = 0;
+  int counter = 1;
   void setWait(float wait){
     this.wait = int(wait * expectedFrameRate);
   }
