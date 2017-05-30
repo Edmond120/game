@@ -1,4 +1,5 @@
 class Bombomb extends battleMode{
+  oneWayLinkedList<unit> walls; 
   void _setup(){
     super._setup();
     playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
@@ -7,18 +8,49 @@ class Bombomb extends battleMode{
     enemies = new oneWayLinkedList<unit>();
     players = new oneWayLinkedList<unit>();
     anime = new oneWayLinkedList<unit>();
-    unit a = new PlayerBomber1(this,0.5,0.5,0.20,0.5);
+    walls = new oneWayLinkedList<unit>();
+    //this.addwalls();
+    unit a = new PlayerBomber1(this,0.5,0.5,0.45,0.45);
     players.add(a);
-    unit b = new PlayerBomber2(this,displayWidth-20,displayHeight-20,0.20,0.5);
+    unit b = new PlayerBomber2(this,displayWidth-20,displayHeight-20,0.45,0.45);
     players.add(b);
+    wall x = new wall(this,30,30,true,0.55);
+    walls.add(x);
     /*enemies.add(new grunt(this, width-3, height-3,0.5,10,a));
     enemies.add(new grunt(this, 0, height-3,0.5,10,a));
     enemies.add(new grunt(this, width-3, 0,0.5,10,a));*/
-    background(0);
+    background(#9B9999);
   }
   void tick(){
-    super.tick();
+    background(#9B9999);
+    try{
+    update(playerBullets,enemies);
+    update(bullets,players);
+    update(bullets,walls);
+    update(players);
+    update(enemies);
+    update(walls);
+    
+    //note, animations don't use the _draw method, update includes draw. 
+    update(anime);
+    //Hence it must be placed in between the update and draw methods.
+    
+    _draw(playerBullets);
+    _draw(enemies);
+    _draw(players);
+    _draw(bullets);
+    _draw(walls);
+    }
+    catch(NullPointerException e){
+    }
   }
+  /*
+  float nxwalls = width/scale;
+  float nywalls = height/scale;
+  void addwalls(){
+    
+    for width
+    */
 }
 
 class PlayerBomber1 extends player{
@@ -172,7 +204,7 @@ class PlayerBomber2 extends PlayerBomber1{
   }
   
   void _draw(){
-    fill(#00D81B);
+    fill(#00357E);
     ellipse(xcor,ycor,displaySize,displaySize);
     if(health > 25){
       fill(255);
@@ -229,14 +261,14 @@ class bomb extends bullet{
     }
   }
   void death(){
-    field.bullets.add(new boom(field,xcor, ycor, size,damage));
+    field.bullets.add(new boom(field,xcor, ycor, size,damage/5));
   }
   delay noboom = new delay(3);
   boolean update(oneWayLinkedList<unit> x){
     if (noboom.every()){
       while(x.hasNext()){
         unit target = x.next();
-        if((abs(xcor - target.xcor) <= 50 && ycor - target.ycor == 0) || (abs(ycor - target.ycor) <= 50 && xcor - target.xcor == 0)){
+        if((abs(xcor - target.xcor) <= target.size / 2 && abs(ycor - target.ycor) <= 50) || (abs(ycor - target.ycor) <= target.size / 2 && abs(xcor - target.xcor) <= 50)){
           hit(target);
         }
       }
@@ -266,7 +298,7 @@ class boom extends bullet{
   delay explosionDamageTick = new delay(0.1); //this is for damage over time areas, but in bomberman you take damage only once from each bomb, this is still do-able by giving bombs IDs.
   boolean update(oneWayLinkedList<unit> x){
     if(time.every()){
-      //stroke(#000000);
+      stroke(#000000);
       return true;
     }
     else{
@@ -289,30 +321,6 @@ class boom extends bullet{
       stroke(#FF0000);
   }
 }
-   
-   
-/*
-class boom extends animation{
-  boom(battleMode field,float xcor,float ycor,float size){
-    super(field,xcor,ycor,size);
-  }
-  
-  delay time = new delay(0.5);
-  boolean update(){
-    if(time.every()){
-      stroke(#000000);
-      return true;
-    }
-    else{
-      fill(#FF0000);
-      ellipse(xcor,ycor,size,size);
-      line(xcor+50,ycor, xcor-50,ycor);
-      line(xcor,ycor+50, xcor,ycor-50);      
-      stroke(#FF0000);
-      return false;
-    }
-  }
-}*/
 
 class Bombombutton extends button{
   Bombombutton(float x, float y,float xSize,float ySize){
@@ -332,6 +340,43 @@ class Bombombutton extends button{
     fill(0);
     textSize(25);
     text("Bomberman",x+sizeX/4.5,y+sizeY/2.4,300,300);
+  }
+}
+
+class wall extends unit{
+  float health;
+  boolean breakable;
+  PImage wall = loadImage("crackedstone.jpg");
+  PImage Iwall = loadImage("stone.png");
+  float size;
+  
+  
+  wall(battleMode field,float xcor,float ycor,boolean breakable, float size){
+    this.field = field;
+    this.xcor = xcor;
+    this.ycor = ycor;
+    this.health = 1;
+    this.breakable = breakable;
+    this.size = size * scale;
+  }
+  
+  boolean update(oneWayLinkedList<unit> x){
+    if(health <=0 && breakable){
+      return true;
+    }
+    return false;
+  }
+  
+  void death(){
+  }
+  
+  void _draw(){
+    if(breakable){
+      image(wall,xcor,ycor,size,size);
+    }
+    else{
+      image(Iwall,xcor,ycor,size,size);
+    }
   }
 }
 
