@@ -2,6 +2,8 @@ class Bombomb extends battleMode{
   oneWayLinkedList<unit> walls; 
   void _setup(){
     super._setup();
+    wall_wall = loadImage("crackedstone.jpg");
+    wall_Iwall = loadImage("stone.png");
     playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
     bullets = new oneWayLinkedList<unit>();
     playerBullets = new oneWayLinkedList<unit>();
@@ -17,6 +19,7 @@ class Bombomb extends battleMode{
     wall x = new wall(this,30,30,true,0.55);
     walls.add(x);
     walls.add(new wall(this,100,100,false,0.55));
+    walls.add(new wall(this,30,30+scale*0.55,true,0.55));
     /*enemies.add(new grunt(this, width-3, height-3,0.5,10,a));
     enemies.add(new grunt(this, 0, height-3,0.5,10,a));
     enemies.add(new grunt(this, width-3, 0,0.5,10,a));*/
@@ -298,6 +301,7 @@ class boom extends bullet{
   delay time = new delay(5); // set to 5 seconds for debugging
   delay explosionDamageTick = new delay(0.1); //this is for damage over time areas, but in bomberman you take damage only once from each bomb, this is still do-able by giving bombs IDs.
   boolean update(oneWayLinkedList<unit> x){
+    unit above = null,below = null,left = null,right = null;
     if(time.every()){
       stroke(#000000);
       return true;
@@ -306,19 +310,67 @@ class boom extends bullet{
       if(explosionDamageTick.every()){
       while(x.hasNext()){
         unit target = x.next();
-        if((abs(xcor - target.xcor) <= target.size / 2 && abs(ycor - target.ycor) <= 50) || (abs(ycor - target.ycor) <= target.size / 2 && abs(xcor - target.xcor) <= 50)){
-          hit(target);
+        float a = -1,b = -1,l = -1,r = -1;
+        
+        if(target instanceof wall){
+          if(abs(xcor - (target.xcor * 2 + target.size) / 2) < size / 2 && (abs(ycor - (target.ycor * 2 + target.size) / 2) <= lineLength && abs(xcor - (target.xcor * 2 + target.size)) <= target.size / 2)){
+            if(ycor > target.ycor){//above
+              float diff = abs(ycor - target.ycor);
+              if(diff < a || a == -1){
+                 above = target; 
+                 a = diff;
+              }
+            }
+            else{//below
+              float diff = abs(ycor - target.ycor);
+              if(diff < b || b == -1){
+                 below = target; 
+                 b = diff;
+              }
+            }
+          }
+          else{ 
+            if(abs(ycor - (target.ycor * 2 + target.size) / 2) < size / 2 && (abs(xcor - (target.xcor * 2 + target.size) / 2) <= lineLength && abs(ycor - (target.ycor * 2 + target.size)) <= target.size / 2)){
+            if(xcor > target.xcor){//left
+              float diff = abs(xcor - target.xcor);
+              if(diff < l || l == -1){
+                 left = target; 
+                 l = diff;
+               }
+            }
+            else{//right
+              float diff = abs(xcor - target.xcor);
+              if(diff < r || r == -1){
+                 right = target; 
+                 r = diff;
+               }
+              }
+          }
         }
       }
+            
+          
+      else{
+          if((abs(xcor - target.xcor) <= target.size / 2 && abs(ycor - target.ycor) <= lineLength) || (abs(ycor - target.ycor) <= target.size / 2 && abs(xcor - target.xcor) <= lineLength)){
+            hit(target);
+          }
+      }
+        
+      }
+      if(above != null){hit(above);}
+    if(below != null){hit(below);}
+  if(left != null){hit(left);}
+if(right != null){hit(right);}
     }
     return false;
   }
 }
+float lineLength = 150;
   void _draw(){
       fill(#FF0000);
       ellipse(xcor,ycor,size,size);
-      line(xcor+50,ycor, xcor-50,ycor);
-      line(xcor,ycor+50, xcor,ycor-50);      
+      line(xcor+lineLength,ycor, xcor-lineLength,ycor);
+      line(xcor,ycor+lineLength, xcor,ycor-lineLength);      
       stroke(#FF0000);
   }
 }
@@ -343,13 +395,11 @@ class Bombombutton extends button{
     text("Bomberman",x+sizeX/4.5,y+sizeY/2.4,300,300);
   }
 }
-
+PImage wall_wall;
+PImage wall_Iwall;
 class wall extends unit{
   boolean breakable;
-  PImage wall = loadImage("crackedstone.jpg");
-  PImage Iwall = loadImage("stone.png");
-  
-  
+
   wall(battleMode field,float xcor,float ycor,boolean breakable, float size){
     this.field = field;
     this.xcor = xcor;
@@ -372,10 +422,10 @@ class wall extends unit{
   
   void _draw(){
     if(breakable){
-      image(wall,xcor,ycor,size,size);
+      image(wall_wall,xcor,ycor,size,size);
     }
     else{
-      image(Iwall,xcor,ycor,size,size);
+      image(wall_Iwall,xcor,ycor,size,size);
     }
   }
 }
