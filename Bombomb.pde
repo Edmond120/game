@@ -348,7 +348,6 @@ class wall extends unit{
   boolean breakable;
   PImage wall = loadImage("crackedstone.jpg");
   PImage Iwall = loadImage("stone.png");
-  float size;
   
   
   wall(battleMode field,float xcor,float ycor,boolean breakable, float size){
@@ -360,7 +359,7 @@ class wall extends unit{
     this.size = size * scale;
   }
   
-  boolean update(oneWayLinkedList<unit> x){
+  boolean update(){
     if(health <=0 && breakable){
       return true;
     }else{

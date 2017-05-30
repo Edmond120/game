@@ -48,3 +48,10 @@ class oneWayLinkedList<E>{
       size--;
     }
   }
+  
+class WALLS{
+    wall[][]walls;
+    WALLS(int x,int y){
+     walls = new wall[x][y]; 
+    }
+}
