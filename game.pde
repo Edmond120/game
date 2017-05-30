@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.awt.Robot;
+import java.util.Scanner;
 import processing.sound.*;
 import java.lang.Math;
 import javax.sound.sampled.*;

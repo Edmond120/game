@@ -16,6 +16,7 @@ class Bombomb extends battleMode{
     players.add(b);
     wall x = new wall(this,30,30,true,0.55);
     walls.add(x);
+    walls.add(new wall(this,100,100,false,0.55));
     /*enemies.add(new grunt(this, width-3, height-3,0.5,10,a));
     enemies.add(new grunt(this, 0, height-3,0.5,10,a));
     enemies.add(new grunt(this, width-3, 0,0.5,10,a));*/
@@ -344,7 +345,6 @@ class Bombombutton extends button{
 }
 
 class wall extends unit{
-  float health;
   boolean breakable;
   PImage wall = loadImage("crackedstone.jpg");
   PImage Iwall = loadImage("stone.png");
@@ -363,8 +363,9 @@ class wall extends unit{
   boolean update(oneWayLinkedList<unit> x){
     if(health <=0 && breakable){
       return true;
-    }
+    }else{
     return false;
+    }
   }
   
   void death(){
@@ -379,6 +380,19 @@ class wall extends unit{
     }
   }
 }
-
-    
-      
+ /*
+class wallconstruct {
+  int dimension;
+  ArrayList<wall> xboard;
+  ArrayList<wall> yboard;
+  
+  wallconstruct(int dimension){
+    this.dimension = dimension;
+    xboard = new ArrayList<wall>(dimension);
+    yboard = new ArrayList<wall>(dimension);
+  }
+ 
+  
+  
+}
+*/
