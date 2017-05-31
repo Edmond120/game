@@ -1,10 +1,27 @@
 class window extends PApplet{
-  window(){
+  window(String name){
     super();
-    PApplet.runSketch(new String[]{"window"},this);
+    PApplet.runSketch(new String[]{name},this);
   }
   int sizeX;
   int sizeY;
+  void settings(){
+  }
+  void setup(){
+  }
+  void draw(){
+  }
+  void keyPressed(){
+    KP(this);
+  }
+  void keyReleased(){
+    KR(this);
+  }
+}
+class fieldPart extends window{
+  fieldPart(String name){
+    super(name);
+  }
   void settings(){
   }
   void setup(){
@@ -17,7 +34,7 @@ class windowMob extends window{
   //either the equation is slightly off or there is a small percentage error due to only being to use ints when setting location
   unit target;
   windowMob(unit target){
-   super();
+   super("windowMob");
    this.target = target;
  }
  void settings(){

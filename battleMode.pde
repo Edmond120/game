@@ -10,6 +10,8 @@ class entity{
   }
   void _draw(){
   }
+  void trueDraw(){ 
+  }
 }
 
 class unit extends entity{
