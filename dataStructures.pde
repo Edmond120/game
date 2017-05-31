@@ -55,10 +55,10 @@ class oneWayLinkedList<E>{
     try{
       File file = new File ("C:/Users/Me/Desktop/directory/file.txt");
       PrintWriter writer = new PrintWriter (file);
-      for(
-      writer.println("The first line");
-      writer.println("The second line");
-      writer.close();
+      //for(
+      //writer.println("The first line");
+      //writer.println("The second line");
+      //writer.close();
     } catch (IOException e) {
     }
   }

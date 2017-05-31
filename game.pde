@@ -9,7 +9,8 @@ import java.awt.Point;
 import java.io.PrintWriter;
 import java.io.File;
 
-ArrayList<boolean> levels;
+boolean[] levels;
+int levelnumber = 1; //maunually increase?
 
 boolean muted = true;
 
