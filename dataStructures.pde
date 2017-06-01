@@ -49,11 +49,14 @@ class oneWayLinkedList<E>{
     }
   }
   
-  class SaveSystem{
-  SaveSystem(){}
+class SaveSystem{
+  String filename;
+  SaveSystem(String name){
+  filename = name + "";
+}
   void save(){
     try{
-      File file = new File (dataPath("savefile.txt"));
+      File file = new File (dataPath(filename));
       file.createNewFile();
       PrintWriter writer = new PrintWriter (file);
       for(int counter = 0; counter < levels.length ; counter++){

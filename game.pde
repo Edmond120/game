@@ -48,8 +48,9 @@ void settings(){
   
   //SAVE SYSTEM TEST
   levels[0] = true;
-  levels[1] = false;
-  SaveSystem a = new SaveSystem();
+  levels[1] = true;
+  levels[2] = true;
+  SaveSystem a = new SaveSystem("savefile.txt");
   a.save();
 }
 
