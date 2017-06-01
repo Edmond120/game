@@ -46,9 +46,9 @@ void settings(){
   centerX = displayWidth/2-width/2;
   centerY = displayHeight/2-height/2;
   
-  //SAVE SYSTEM TEST
+  
   levels[0] = true;
-  levels[1] = false;
+  levels[1] = true;
   SaveSystem a = new SaveSystem();
   a.save();
 }

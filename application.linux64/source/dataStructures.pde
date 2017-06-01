@@ -53,7 +53,8 @@ class oneWayLinkedList<E>{
   SaveSystem(){}
   void save(){
     try{
-      File file = new File (dataPath("savefile.txt"));
+     //Command("pwd");
+      File file = new File ("savefile.txt");
       file.createNewFile();
       PrintWriter writer = new PrintWriter (file);
       for(int counter = 0; counter < levels.length ; counter++){
@@ -63,10 +64,33 @@ class oneWayLinkedList<E>{
     } catch (IOException e) {
     }
   }
-}
+  }
   
 
 
 
+    public void Command(String arg) {
+  try{
+      String command = arg;
 
+      Process proc = Runtime.getRuntime().exec(command);
+
+      // Read the output
+
+      BufferedReader reader =
+    new BufferedReader(new InputStreamReader(proc.getInputStream()));
+    BufferedWriter reader1 = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream()));
+
+      String line = "";
+      String line1 = "";
+      while((line = reader.readLine()) != null) {
+          System.out.print(line + "\n");
+
+      }
+      proc.waitFor();
+  }
+  catch(Throwable e){
+      e.printStackTrace();
+  }
+    }
  

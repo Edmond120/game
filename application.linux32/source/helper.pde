@@ -223,29 +223,3 @@ boolean inBounds(unit x,battleMode field){
   }
   return true;
 }
-
-
-public String Command(String arg) {
-  String something = "";
-  try{
-    String command = arg;
-    Process proc = Runtime.getRuntime().exec(command);
-
-      // Read the output
-
-    BufferedReader reader =
-    new BufferedReader(new InputStreamReader(proc.getInputStream()));
-    BufferedWriter reader1 = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream()));
-
-    String line = "";
-    String line1 = "";
-    while((line = reader.readLine()) != null) {
-      something += line + "\n";
-    }
-    proc.waitFor();
-  }
-  catch(Throwable e){
-    e.printStackTrace();
-  }
-  return something;
-}

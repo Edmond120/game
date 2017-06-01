@@ -1,0 +1,2 @@
+class player extends unit{
+}
