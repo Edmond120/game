@@ -1,3 +1,9 @@
+class newWindowTestEnvironment extends testEnvironment{
+  fieldPart x;
+ void _setup(){
+  //x = new fieldPart("test",500,500,500,100);
+ }
+}
 class oneWayLinkedListTestEnvironment extends testEnvironment{
   void _setup(){
     oneWayLinkedList<Integer> x = new oneWayLinkedList<Integer>();
@@ -89,23 +95,32 @@ class robotTestEnvironment extends testEnvironment{
 }
 class testBattleMode extends battleMode{
       randomEdgeSpawner spawn;
+      fieldPart window;
   void _setup(){
     super._setup();
     playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
-    bullets = new oneWayLinkedList<unit>();
-    playerBullets = new oneWayLinkedList<unit>();
-    enemies = new oneWayLinkedList<unit>();
-    players = new oneWayLinkedList<unit>();
-    anime = new oneWayLinkedList<unit>();
     unit a = new testUnitA(this,0.5,0.5,0.20,0.5);
     players.add(a);
-    spawn = new randomEdgeSpawner(this,a);
-    spawn.create();
+    window = createFieldPart(this,"test",500,500,displayWidth / 2,displayHeight / 2,true);
+    //spawn = new randomEdgeSpawner(this,a);
+    //spawn.create();
     background(0);
   }
   void tick(){
-    spawn.spawn();
+    //spawn.spawn();
     super.tick();
+    if(keys[keyW]){
+      window.move(0,-2);
+    }
+    if(keys[keyA]){
+      window.move(-2,0);
+    }
+    if(keys[keyS]){
+     window.move(0,2);
+    }
+    if(keys[keyD]){
+      window.move(2,0);
+    }
   }
 }
 class pushedTestEnvironment extends testEnvironment{
@@ -259,7 +274,7 @@ class testUnit extends player{
     return false;
   }
   String achievement = "status: trapped in a box of death";
-  void _draw(){
+  void trueDraw(float xcor, float ycor){ 
     fill(#00D81B);
     ellipse(xcor,ycor,displaySize,displaySize);
     if(codedKeys[cKeySHIFT]){
@@ -293,7 +308,7 @@ class testUnitA extends testUnit{
   }
   boolean visiable = false;
   int riftwalks = 0;
-  void _draw(){
+  void trueDraw(float xcor, float ycor){
     super._draw();
     if(out && !visiable){
       test.getSurface().setVisible(true);

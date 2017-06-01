@@ -59,7 +59,7 @@ class bullet extends unit{
    
     return a;
   }
-  void _draw(){
+  void trueDraw(float xcor, float ycor){ 
     fill(#FF0000);
     ellipse(xcor,ycor,size,size);
   }
@@ -78,7 +78,7 @@ class testBullet extends bullet{
   }
   
   //methods
-  void _draw(){
+  void trueDraw(float xcor, float ycor){ 
     fill(#FF0000);
     if(!checkBoundsGhost(this,field)){
       ellipse(xcor,ycor,size,size);
@@ -122,7 +122,7 @@ class Ebullet extends bullet{
   }
   
   //methods
-  void _draw(){
+  void trueDraw(float xcor, float ycor){ 
     fill(#1A03FC);
     ellipse(xcor,ycor,size,size);
   }

@@ -65,6 +65,6 @@ class animation extends unit{
     }
   }
   void _draw(){
-    throw new UnsupportedOperationException();
+    update();
   }
 }
