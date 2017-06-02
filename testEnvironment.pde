@@ -274,21 +274,21 @@ class testUnit extends player{
     return false;
   }
   String achievement = "status: trapped in a box of death";
-  void trueDraw(float xcor, float ycor){ 
-    fill(#00D81B);
-    ellipse(xcor,ycor,displaySize,displaySize);
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(#00D81B);
+    applet.ellipse(xcor,ycor,displaySize,displaySize);
     if(codedKeys[cKeySHIFT]){
-      fill(#FFFFFF);
-      ellipse(xcor,ycor,size,size);
+      applet.fill(#FFFFFF);
+      applet.ellipse(xcor,ycor,size,size);
     }
     if(health > 25){
-      fill(255);
+      applet.fill(255);
     }
     else{
-      fill(#FF0000);
+      applet.fill(#FF0000);
     }
-    textSize(25);
-    text("hp: " + health + " kills: " + points + " time: " + tick / expectedFrameRate + " " + achievement,0,25);
+    applet.textSize(25);
+    applet.text("hp: " + health + " kills: " + points + " time: " + tick / expectedFrameRate + " " + achievement,0,25);
   }
 }
 class testUnitA extends testUnit{
@@ -308,7 +308,7 @@ class testUnitA extends testUnit{
   }
   boolean visiable = false;
   int riftwalks = 0;
-  void trueDraw(float xcor, float ycor){
+  void trueDraw(float xcor, float ycor,PApplet applet){
     super._draw();
     if(out && !visiable){
       test.getSurface().setVisible(true);

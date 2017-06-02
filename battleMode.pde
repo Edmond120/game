@@ -11,9 +11,9 @@ class entity{
     return false;
   }
   void _draw(){
-    trueDraw(xcor,ycor);
+    trueDraw(xcor,ycor,mainWindow);
   }
-  void trueDraw(float xcor, float ycor){ 
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
   }
 }
 
@@ -36,9 +36,9 @@ class battleMode extends mode{
   oneWayLinkedList<unit> enemies = new oneWayLinkedList<unit>();
   oneWayLinkedList<unit> players = new oneWayLinkedList<unit>();
   oneWayLinkedList<unit> anime = new oneWayLinkedList<unit>(); //this "anime" stands for animation, not the anime anime (lol)
-  oneWayLinkedList<unit>[] drawables = new oneWayLinkedList<unit>[5];
+  oneWayLinkedList[] drawables = {anime,playerBullets,enemies,players,bullets};
   void _setup(){
-    drawables[0]=anime;drawables[1]=playerBullets;drawables[2]=enemies;drawables[3]=players;drawables[4]=bullets;
+   
   }
   void tick(){
     background(0);

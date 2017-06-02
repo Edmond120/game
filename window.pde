@@ -52,7 +52,7 @@ class fieldPart extends PApplet{
   }
   void drawAll(battleMode field){
    for(int i = 0; i < field.drawables.length; i++){
-    _draw(field.drawables[i]);
+    _draw((oneWayLinkedList<unit>)field.drawables[i]);
    }
   }
   void keyPressed(){
@@ -76,7 +76,7 @@ class fieldPart extends PApplet{
       int trueXcor = int(b.xcor + centerX);
       int trueYcor = int(b.ycor + centerY);
       if(trueXcor < xcor + width && trueXcor >=xcor && trueYcor < ycor + height && trueYcor >= ycor){
-        b.trueDraw(trueXcor - xcor,trueYcor - ycor);
+        b.trueDraw(trueXcor - xcor,trueYcor - ycor,this);
       }
       }
       catch(NullPointerException e){

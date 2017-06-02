@@ -49,22 +49,24 @@ class animation extends unit{
       currentImage = loadImage("error.png");
     }
   }
-  
   //methods
   boolean update(){
+   return update(mainWindow); 
+  }
+  boolean update(PApplet applet){
     if(!wait.every()){
-      image(currentImage,xcor,ycor,size,size);
+      applet.image(currentImage,xcor,ycor,size,size);
       return false;
     }
     if(movie.hasNext()){
-      image(currentImage = movie.next(),xcor,ycor,size,size);
+      applet.image(currentImage = movie.next(),xcor,ycor,size,size);
       return false;
     }
     else{
       return true;
     }
   }
-  void _draw(){
-    update();
+  void trueDraw(float xcor,float ycor,PApplet applet){
+    update(applet);
   }
 }

@@ -58,7 +58,7 @@ class oneWayLinkedList<E>{
       //for(
       //writer.println("The first line");
       //writer.println("The second line");
-      //writer.close();
+      writer.close();
     } catch (IOException e) {
     }
   }

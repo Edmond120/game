@@ -55,9 +55,9 @@ class grunt extends unit{
       }
       field.bullets.add(new Ebullet(this,field,xcor,ycor,size,sin(radians(fireAngle)) * speed,cos(radians(fireAngle)) * speed,damage));
   }
-  void trueDraw(float xcor, float ycor){ 
-    fill(#00FAF8);
-    ellipse(xcor,ycor,size,size);
+  void trueDraw(float xcor, float ycor, PApplet applet){ 
+    applet.fill(#00FAF8);
+    applet.ellipse(xcor,ycor,size,size);
   }
 }
 
