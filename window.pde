@@ -50,7 +50,11 @@ class fieldPart extends PApplet{
     drawAll(field);
     
   }
+  void skin(){
+    field._background(this);
+  }
   void drawAll(battleMode field){
+    skin();
    for(int i = 0; i < field.drawables.length; i++){
     _draw((oneWayLinkedList<unit>)field.drawables[i]);
    }

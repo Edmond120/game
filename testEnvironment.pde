@@ -309,7 +309,7 @@ class testUnitA extends testUnit{
   boolean visiable = false;
   int riftwalks = 0;
   void trueDraw(float xcor, float ycor,PApplet applet){
-    super._draw();
+    super.trueDraw(xcor,ycor,applet);
     if(out && !visiable){
       test.getSurface().setVisible(true);
       visiable = true;

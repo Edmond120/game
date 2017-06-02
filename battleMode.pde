@@ -31,6 +31,7 @@ class unit extends entity{
 class battleMode extends mode{
   int _width = width;
   int _height = height;
+  PApplet selectedWindow = mainWindow;
   oneWayLinkedList<unit> bullets = new oneWayLinkedList<unit>();
   oneWayLinkedList<unit> playerBullets = new oneWayLinkedList<unit>();
   oneWayLinkedList<unit> enemies = new oneWayLinkedList<unit>();
@@ -40,8 +41,11 @@ class battleMode extends mode{
   void _setup(){
    
   }
+  void _background(PApplet applet){
+    applet.background(0);
+  }
   void tick(){
-    background(0);
+    _background(selectedWindow);
     try{
     update(playerBullets,enemies);
     update(bullets,players);

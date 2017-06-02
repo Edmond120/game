@@ -51,9 +51,9 @@ class animation extends unit{
   }
   //methods
   boolean update(){
-   return update(mainWindow); 
+   return update(xcor,ycor,mainWindow); 
   }
-  boolean update(PApplet applet){
+  boolean update(float xcor, float ycor,PApplet applet){
     if(!wait.every()){
       applet.image(currentImage,xcor,ycor,size,size);
       return false;
@@ -67,6 +67,6 @@ class animation extends unit{
     }
   }
   void trueDraw(float xcor,float ycor,PApplet applet){
-    update(applet);
+    update(xcor,ycor,applet);
   }
 }
