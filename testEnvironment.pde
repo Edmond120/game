@@ -1,3 +1,9 @@
+class newWindowTestEnvironment extends testEnvironment{
+  fieldPart x;
+ void _setup(){
+  //x = new fieldPart("test",500,500,500,100);
+ }
+}
 class oneWayLinkedListTestEnvironment extends testEnvironment{
   void _setup(){
     oneWayLinkedList<Integer> x = new oneWayLinkedList<Integer>();
@@ -89,23 +95,32 @@ class robotTestEnvironment extends testEnvironment{
 }
 class testBattleMode extends battleMode{
       randomEdgeSpawner spawn;
+      fieldPart window;
   void _setup(){
     super._setup();
     playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
-    bullets = new oneWayLinkedList<unit>();
-    playerBullets = new oneWayLinkedList<unit>();
-    enemies = new oneWayLinkedList<unit>();
-    players = new oneWayLinkedList<unit>();
-    anime = new oneWayLinkedList<unit>();
     unit a = new testUnitA(this,0.5,0.5,0.20,0.5);
     players.add(a);
-    spawn = new randomEdgeSpawner(this,a);
-    spawn.create();
+    window = createFieldPart(this,"test",500,500,displayWidth / 2,displayHeight / 2,true);
+    //spawn = new randomEdgeSpawner(this,a);
+    //spawn.create();
     background(0);
   }
   void tick(){
-    spawn.spawn();
+    //spawn.spawn();
     super.tick();
+    if(keys[keyW]){
+      window.move(0,-2);
+    }
+    if(keys[keyA]){
+      window.move(-2,0);
+    }
+    if(keys[keyS]){
+     window.move(0,2);
+    }
+    if(keys[keyD]){
+      window.move(2,0);
+    }
   }
 }
 class pushedTestEnvironment extends testEnvironment{
@@ -259,21 +274,21 @@ class testUnit extends player{
     return false;
   }
   String achievement = "status: trapped in a box of death";
-  void _draw(){
-    fill(#00D81B);
-    ellipse(xcor,ycor,displaySize,displaySize);
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(#00D81B);
+    applet.ellipse(xcor,ycor,displaySize,displaySize);
     if(codedKeys[cKeySHIFT]){
-      fill(#FFFFFF);
-      ellipse(xcor,ycor,size,size);
+      applet.fill(#FFFFFF);
+      applet.ellipse(xcor,ycor,size,size);
     }
     if(health > 25){
-      fill(255);
+      applet.fill(255);
     }
     else{
-      fill(#FF0000);
+      applet.fill(#FF0000);
     }
-    textSize(25);
-    text("hp: " + health + " kills: " + points + " time: " + tick / expectedFrameRate + " " + achievement,0,25);
+    applet.textSize(25);
+    applet.text("hp: " + health + " kills: " + points + " time: " + tick / expectedFrameRate + " " + achievement,0,25);
   }
 }
 class testUnitA extends testUnit{
@@ -293,7 +308,7 @@ class testUnitA extends testUnit{
   }
   boolean visiable = false;
   int riftwalks = 0;
-  void _draw(){
+  void trueDraw(float xcor, float ycor,PApplet applet){
     super._draw();
     if(out && !visiable){
       test.getSurface().setVisible(true);

@@ -78,6 +78,7 @@ void setup(){
   //Mode = new delayAndCooldownTestEnvironment();
   //Mode = new scrapTestEnvironment();
   //Mode = new oneWayLinkedListTestEnvironment();
+  //Mode = new newWindowTestEnvironment();
   Mode._setup();
   try{
   robot = new Robot();
@@ -103,8 +104,8 @@ void draw(){
 }
 
 //keyboard + variables
-char[]_keys = {'z','x','c'};
-int keyZ = 0;int keyX = 1;int keyC = 2;
+char[]_keys = {'z','x','c','w','a','s','d'};
+int keyZ = 0;int keyX = 1;int keyC = 2;int keyW = 3;int keyA = 4;int keyS = 5;int keyD = 6;
 boolean[]keys = new boolean[_keys.length];
 int[] _codedKeys = {UP,DOWN,LEFT,RIGHT,SHIFT,CONTROL,ALT};
 int cKeyUP = 0;int cKeyDOWN = 1;int cKeyLEFT = 2;int cKeyRIGHT = 3;int cKeySHIFT = 4;int cKeyCONTROL = 5;

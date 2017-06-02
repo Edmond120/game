@@ -18,15 +18,70 @@ class window extends PApplet{
     KR(this);
   }
 }
-class fieldPart extends window{
-  fieldPart(String name){
-    super(name);
+synchronized fieldPart createFieldPart(battleMode field,String name, int Width, int Height, int xcor, int ycor,boolean onTop){
+  newWindowWidth = Width;
+  newWindowHeight = Height;
+  return new fieldPart(field,name,xcor,ycor,onTop);
+}
+int newWindowWidth,newWindowHeight;//to be used only by fieldPart;
+class fieldPart extends PApplet{
+  fieldPart(battleMode field,String name,int xcor, int ycor, boolean onTop){
+    super();
+    this.xcor = xcor;
+    this.ycor = ycor;
+    this.onTop = onTop;
+    this.name = name;
+    this.field = field;
+    PApplet.runSketch(new String[]{name},this);
   }
+  String name;
+  int Width,Height,xcor,ycor;
+  boolean onTop;
+  battleMode field;
   void settings(){
+    size(newWindowWidth,newWindowHeight);
   }
   void setup(){
+    getSurface().setAlwaysOnTop(onTop);
+    getSurface().setLocation(xcor,ycor);
   }
   void draw(){
+    getSurface().setLocation(xcor,ycor);
+    drawAll(field);
+    
+  }
+  void drawAll(battleMode field){
+   for(int i = 0; i < field.drawables.length; i++){
+    _draw((oneWayLinkedList<unit>)field.drawables[i]);
+   }
+  }
+  void keyPressed(){
+    KP(this);
+  }
+  void keyReleased(){
+    KR(this);
+  }
+  void move(int x, int y){
+   xcor = xcor + x;
+   ycor = ycor + y;
+  }
+  void setLocation(int x,int y){
+   xcor = x;
+   ycor = y;
+  }
+  void _draw(oneWayLinkedList<unit>x){
+   while(x.hasNext()){
+      try{
+      unit b = x.next();
+      int trueXcor = int(b.xcor + centerX);
+      int trueYcor = int(b.ycor + centerY);
+      if(trueXcor < xcor + width && trueXcor >=xcor && trueYcor < ycor + height && trueYcor >= ycor){
+        b.trueDraw(trueXcor - xcor,trueYcor - ycor,this);
+      }
+      }
+      catch(NullPointerException e){
+      }
+    } 
   }
 }
 class windowMob extends window{

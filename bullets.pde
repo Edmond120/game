@@ -59,9 +59,9 @@ class bullet extends unit{
    
     return a;
   }
-  void _draw(){
-    fill(#FF0000);
-    ellipse(xcor,ycor,size,size);
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(#FF0000);
+    applet.ellipse(xcor,ycor,size,size);
   }
 }
 
@@ -78,10 +78,10 @@ class testBullet extends bullet{
   }
   
   //methods
-  void _draw(){
-    fill(#FF0000);
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(#FF0000);
     if(!checkBoundsGhost(this,field)){
-      ellipse(xcor,ycor,size,size);
+      applet.ellipse(xcor,ycor,size,size);
     }
   }
   boolean update(){
@@ -122,8 +122,8 @@ class Ebullet extends bullet{
   }
   
   //methods
-  void _draw(){
-    fill(#1A03FC);
-    ellipse(xcor,ycor,size,size);
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(#1A03FC);
+    applet.ellipse(xcor,ycor,size,size);
   }
 }

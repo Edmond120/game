@@ -1,5 +1,7 @@
 class entity{
   entity parent = null;
+  float xcor;
+  float ycor;
   boolean update(){
     //true if unit is to be removed
     return false;
@@ -9,8 +11,9 @@ class entity{
     return false;
   }
   void _draw(){
+    trueDraw(xcor,ycor,mainWindow);
   }
-  void trueDraw(){ 
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
   }
 }
 
@@ -19,8 +22,6 @@ class unit extends entity{
   int health;
   int points;
   float size;
-  float xcor;
-  float ycor;
   float radius;
   float displaySize;
   void death(){
@@ -30,14 +31,14 @@ class unit extends entity{
 class battleMode extends mode{
   int _width = width;
   int _height = height;
-  oneWayLinkedList<unit> bullets;
-  oneWayLinkedList<unit> playerBullets;
-  oneWayLinkedList<unit> enemies;
-  oneWayLinkedList<unit> players;
-  oneWayLinkedList<unit> anime; //this "anime" stands for animation, not the anime anime (lol)
-  
+  oneWayLinkedList<unit> bullets = new oneWayLinkedList<unit>();
+  oneWayLinkedList<unit> playerBullets = new oneWayLinkedList<unit>();
+  oneWayLinkedList<unit> enemies = new oneWayLinkedList<unit>();
+  oneWayLinkedList<unit> players = new oneWayLinkedList<unit>();
+  oneWayLinkedList<unit> anime = new oneWayLinkedList<unit>(); //this "anime" stands for animation, not the anime anime (lol)
+  oneWayLinkedList[] drawables = {anime,playerBullets,enemies,players,bullets};
   void _setup(){
-    tick = 0;
+   
   }
   void tick(){
     background(0);
@@ -50,6 +51,7 @@ class battleMode extends mode{
     //note, animations don't use the _draw method, update includes draw. 
     update(anime);
     //Hence it must be placed in between the update and draw methods.
+    //update: anime._draw() now calls anime.update()
     
     _draw(playerBullets);
     _draw(enemies);
