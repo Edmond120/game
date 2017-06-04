@@ -30,12 +30,12 @@ class flipbook{
  }
 }
 
-class animation extends unit{
+class Animation extends unit{
   //constructor + variables
   flipbook movie;
   delay wait;
   PImage currentImage;
-  animation(battleMode field,flipbook movie,int xcor,int ycor,int size,int _delay){//_delay is in 60ths of a second
+  Animation(battleMode field,flipbook movie,int xcor,int ycor,int size,int _delay){//_delay is in 60ths of a second
     this.field = field;
     this.movie = movie;
     this.xcor = xcor;

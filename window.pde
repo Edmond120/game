@@ -38,17 +38,21 @@ class fieldPart extends PApplet{
   int Width,Height,xcor,ycor;
   boolean onTop;
   battleMode field;
+  oneWayLinkedListKey<unit>[] keys;
   void settings(){
     size(newWindowWidth,newWindowHeight);
   }
   void setup(){
     getSurface().setAlwaysOnTop(onTop);
     getSurface().setLocation(xcor,ycor);
+    keys = new oneWayLinkedListKey[field.drawables.length];
+    for(int i = 0;i < keys.length;i++){
+     keys[i] = field.drawables[i].createKey();
+    }
   }
   void draw(){
     getSurface().setLocation(xcor,ycor);
     drawAll(field);
-    
   }
   void skin(){
     field._background(this);
@@ -56,7 +60,7 @@ class fieldPart extends PApplet{
   void drawAll(battleMode field){
     skin();
    for(int i = 0; i < field.drawables.length; i++){
-    _draw((oneWayLinkedList<unit>)field.drawables[i]);
+    _draw((oneWayLinkedList<unit>)field.drawables[i],keys[i]);
    }
   }
   void keyPressed(){
@@ -73,10 +77,14 @@ class fieldPart extends PApplet{
    xcor = x;
    ycor = y;
   }
-  void _draw(oneWayLinkedList<unit>x){
-   while(x.hasNext()){
+  void _exit(){
+   dispose();
+   getSurface().setVisible(false); 
+  }
+  void _draw(oneWayLinkedList<unit>x,oneWayLinkedListKey<unit> k){
+   while(x.hasNext(k)){
       try{
-      unit b = x.next();
+      unit b = x.next(k);
       int trueXcor = int(b.xcor + centerX);
       int trueYcor = int(b.ycor + centerY);
       if(trueXcor < xcor + width && trueXcor >=xcor && trueYcor < ycor + height && trueYcor >= ycor){
@@ -135,6 +143,10 @@ class windowMob extends window{
       ellipse(sizeX/2,sizeY/2,target.size,target.size);
     }
   }
+  void _exit(){
+   dispose();
+   getSurface().setVisible(false); 
+  }
   void keyPressed(){
     KP(this);
   }
@@ -142,9 +154,10 @@ class windowMob extends window{
     KR(this);
   }
   void _draw(oneWayLinkedList<unit> x,color ccc){
-    while(x.hasNext()){
+    oneWayLinkedListKey<unit> k = x.createKey();
+    while(x.hasNext(k)){
       try{
-      unit b = x.next();
+      unit b = x.next(k);
       int trueXcor = int(b.xcor + centerX);
       int trueYcor = int(b.ycor + centerY);
       if(trueXcor < xcor + width && trueXcor >=xcor && trueYcor < ycor + height && trueYcor >= ycor){

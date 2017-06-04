@@ -77,8 +77,10 @@ void setup(){
   //Mode = new sizeTestEnvironment();
   //Mode = new delayAndCooldownTestEnvironment();
   //Mode = new scrapTestEnvironment();
-  //Mode = new oneWayLinkedListTestEnvironment();
+  //Mode = new OneWayLinkedListTestEnvironment();
   //Mode = new newWindowTestEnvironment();
+  //Mode = new giantWormBossTestEnvironment();
+  //Mode = new oneWayLinkedListTestEnvironment(); 
   Mode._setup();
   try{
   robot = new Robot();

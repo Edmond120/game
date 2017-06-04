@@ -1,3 +1,36 @@
+class giantWormBossTestEnvironment extends battleMode{
+  @Override
+  void _setup(){
+    
+  }
+  @Override
+  void tick(){
+    super.tick();
+  }
+}
+class worm extends unit{
+ class segment extends unit{
+   float halfHeight;
+   segment(entity parent,battleMode field,float xcor,float ycor,float size,int health){
+     super(parent,field,xcor,ycor);
+     this.size = size;this.health = health;
+     halfHeight = size / 2;
+   }
+ }
+ worm(battleMode field,float xcor,float ycor){
+  super(field,xcor,ycor);
+ }
+ worm(entity parent,battleMode field,float xcor,float ycor){
+   super(parent,field,xcor,ycor);
+ }
+}
+class giantWormBoss extends worm{
+  giantWormBoss(battleMode field,float xcor,float ycor){
+    super(field,xcor,ycor);
+  }
+}
+
+
 class newWindowTestEnvironment extends testEnvironment{
   fieldPart x;
  void _setup(){
@@ -7,6 +40,7 @@ class newWindowTestEnvironment extends testEnvironment{
 class oneWayLinkedListTestEnvironment extends testEnvironment{
   void _setup(){
     oneWayLinkedList<Integer> x = new oneWayLinkedList<Integer>();
+    oneWayLinkedListKey<Integer> k = x.createKey();
     x.add(0);
     x.add(1);
     x.add(2);
@@ -15,20 +49,15 @@ class oneWayLinkedListTestEnvironment extends testEnvironment{
     x.add(5);
     x.add(6);
     String r = "";
-    while(x.hasNext()){
-      Integer a = x.next();
-      if(a == 6){
-        x.remove();
-      }
-      else{
+    while(x.hasNext(k)){
+      Integer a = x.next(k);
       r += a + " ";
       }
-    }
     System.out.println(r);
-    x.rewind();
+    //x.rewind(k);
     r = "";
-    while(x.hasNext()){
-      r += x.next() + " ";
+    while(x.hasNext(k)){
+      r += x.next(k) + " ";
     }
     System.out.println(r);
   }
@@ -99,15 +128,16 @@ class testBattleMode extends battleMode{
   void _setup(){
     super._setup();
     playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
-    unit a = new testUnitA(this,0.5,0.5,0.20,0.5);
+    unit a = new testunitA(this,0.5,0.5,0.20,0.5);
+    a.health = 100000;
     players.add(a);
     window = createFieldPart(this,"test",500,500,displayWidth / 2,displayHeight / 2,true);
-    //spawn = new randomEdgeSpawner(this,a);
-    //spawn.create();
+    spawn = new randomEdgeSpawner(this,a);
+    spawn.create();
     background(0);
   }
   void tick(){
-    //spawn.spawn();
+    spawn.spawn();
     super.tick();
     if(keys[keyW]){
       window.move(0,-2);
@@ -157,9 +187,9 @@ class delayAndCooldownTestEnvironment extends testEnvironment{
     }
   }
 }
-class testUnit extends player{
+class testunit extends player{
   float speed = 0.1 * scale;
-  testUnit(entity parent,battleMode field,float xcor,float ycor,float size,float displaySize){
+  testunit(entity parent,battleMode field,float xcor,float ycor,float size,float displaySize){
     this.parent = parent;
     this.field = field;
     this.xcor = xcor;
@@ -169,7 +199,7 @@ class testUnit extends player{
     this.radius = this.size / 2;
     health = 100;
   }
-  testUnit(battleMode field,float xcor,float ycor,float size,float displaySize){
+  testunit(battleMode field,float xcor,float ycor,float size,float displaySize){
     this.field = field;
     this.xcor = xcor * scale;
     this.ycor = ycor * scale;
@@ -229,7 +259,7 @@ class testUnit extends player{
       }
     }
   }
-  bullet createBullet(){
+  bullet createbullet(){
     return new bullet(this,field,xcor,ycor,0.2 * scale,BxVector * scale,ByVector * scale,10);
   }
   float BxVector;
@@ -245,7 +275,7 @@ class testUnit extends player{
     }
     BxVector = (face[1] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
       ByVector = (face[0] * (0.3 + random(0.1))) + (random(spread) * positiveOrNegative());
-      field.playerBullets.add(createBullet());
+      field.playerBullets.add(createbullet());
   }
   charge zCooldown = new charge(0.1);
   void death(){
@@ -291,20 +321,24 @@ class testUnit extends player{
     applet.text("hp: " + health + " kills: " + points + " time: " + tick / expectedFrameRate + " " + achievement,0,25);
   }
 }
-class testUnitA extends testUnit{
+class testunitA extends testunit{
   windowMob test = null;
-  testUnitA(entity parent,battleMode field,float xcor,float ycor,float size,float displaySize){
+  testunitA(entity parent,battleMode field,float xcor,float ycor,float size,float displaySize){
     super(parent,field,xcor,ycor,size,displaySize);
     test = new windowMob(this);
     test.getSurface().setVisible(false);
   }
-  testUnitA(battleMode field,float xcor,float ycor,float size,float displaySize){
+  testunitA(battleMode field,float xcor,float ycor,float size,float displaySize){
     super(field,xcor,ycor,size,displaySize);
     test = new windowMob(this);
     test.getSurface().setVisible(false);
   }
-  bullet createBullet(){
-    return new testBullet(this,field,xcor,ycor,0.2 * scale,BxVector * scale,ByVector * scale,10);
+  bullet createbullet(){
+    return new testbullet(this,field,xcor,ycor,0.2 * scale,BxVector * scale,ByVector * scale,10);
+  }
+  void death(){
+    super.death();
+    test._exit();
   }
   boolean visiable = false;
   int riftwalks = 0;
@@ -357,5 +391,62 @@ class testUnitA extends testUnit{
       shoot();
     }
     return false;
+  }
+}
+
+class testbullet extends bullet{
+  //constructors
+  testbullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
+    super(parent,field,xcor,ycor,size,xVector,yVector,damage);
+   
+  }
+  testbullet(battleMode field,float xcor,float ycor,float size,float xVector,float yVector, int damage){
+    this(null,field,xcor,ycor,size,xVector,yVector,damage);
+    scaleVars();
+  }
+  
+  //methods
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(colour);
+    //if(!checkBoundsGhost(this,field)){
+      applet.ellipse(xcor,ycor,displaySize,displaySize);
+    //}
+  }
+  boolean update(){
+    xcor += vector[0];
+    ycor += vector[1];
+    if(checkDisplayBounds(this)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+}
+
+
+class Ebullet extends bullet{
+  //constructors
+   Ebullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
+    this.parent = parent;
+    this.field = field;
+    this.xcor = xcor;
+    this.ycor = ycor;
+    this.size = size;
+    this.radius = this.size / 2;
+    vector[0] = xVector;
+    vector[1] = yVector;
+    this.damage = damage;
+    displaySize = size;
+  }
+  Ebullet(battleMode field,float xcor,float ycor,float size,float xVector,float yVector, int damage){
+    this(null,field,xcor,ycor,size,xVector,yVector,damage);
+    scaleVars();
+  }
+  
+  //methods
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(#1A03FC);
+    applet.ellipse(xcor,ycor,displaySize,displaySize);
   }
 }

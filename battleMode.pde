@@ -16,14 +16,36 @@ class entity{
   void trueDraw(float xcor, float ycor,PApplet applet){ 
   }
 }
-
 class unit extends entity{
+  unit(){}
+  unit(battleMode field,float xcor,float ycor){
+    this(null,field,xcor,ycor);
+    scaleVars();
+  }
+  unit(entity parent,battleMode field,float xcor,float ycor){
+   this.parent = parent;this.field = field;this.xcor = xcor;this.ycor = ycor;
+  }
+  boolean hitCheckCircle(bullet Bullet){
+    return Bullet.strikeCircle(this);
+  }
   battleMode field;
   int health;
   int points;
   float size;
   float radius;
   float displaySize;
+  void scaleVars(){
+    size *= scale;
+    radius = size / 2;
+    if(displaySize == 0){
+      displaySize = size;
+    }
+    else{
+      displaySize *= scale;
+    }
+    xcor *= scale;
+    ycor *= scale;
+  }
   void death(){
   }
 }

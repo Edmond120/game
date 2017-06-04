@@ -43,7 +43,7 @@ class grunt extends unit{
     player.points++;
   }
   void shoot(float size,int damage,float speed){
-      field.players.rewind();
+      //field.players.rewind();
       float BxVector = player.xcor - xcor;
       float ByVector = player.ycor - ycor;
       float fireAngle;
@@ -53,15 +53,15 @@ class grunt extends unit{
       else{
         fireAngle = (degrees(atan(BxVector / ByVector))+(positiveOrNegative() * random(2))) % 360;
       }
-      field.bullets.add(new Ebullet(this,field,xcor,ycor,size,sin(radians(fireAngle)) * speed,cos(radians(fireAngle)) * speed,damage));
+      testbullet x = (new testbullet(this,field,xcor,ycor,size,sin(radians(fireAngle)) * speed,cos(radians(fireAngle)) * speed,damage));
+      x.colour = #1A03FC;
+      field.bullets.add(x);
   }
   void trueDraw(float xcor, float ycor, PApplet applet){ 
     applet.fill(#00FAF8);
     applet.ellipse(xcor,ycor,size,size);
   }
 }
-
-
 class randomEdgeSpawner{
   charge spawnRate = new charge(5);
   battleMode field;
