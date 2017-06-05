@@ -1,3 +1,9 @@
+interface circle{
+ float xcor;float ycor;float size;
+}
+interface rectangle{
+  float xcor,float ycor;float sizeX;float sizeY;float angle;
+}
 class entity{
   entity parent = null;
   float xcor;

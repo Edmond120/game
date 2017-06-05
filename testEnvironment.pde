@@ -158,7 +158,7 @@ class delayAndCooldownTestEnvironment extends testEnvironment{
     }
   }
 }
-class testunit extends player{
+class testunit extends player implements circle{
   float speed = 0.1 * scale;
   testunit(entity parent,battleMode field,float xcor,float ycor,float size,float displaySize){
     this.parent = parent;
@@ -365,7 +365,7 @@ class testunitA extends testunit{
   }
 }
 
-class testbullet extends bullet{
+class testbullet extends bullet implements circle{
   //constructors
   testbullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
     super(parent,field,xcor,ycor,size,xVector,yVector,damage);
@@ -396,7 +396,7 @@ class testbullet extends bullet{
 }
 
 
-class Ebullet extends bullet{
+class Ebullet extends bullet implements circle{
   //constructors
    Ebullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
     this.parent = parent;

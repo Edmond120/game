@@ -17,17 +17,15 @@ class wormHead extends wormSegment{
      super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
    }
 }
-class wormSegment extends unit{
-   float halfHeight,angle,sizeX,sizeY;
+class wormSegment extends unit implements rectangle{
+   float angle,sizeX,sizeY;
    wormSegment(){}
    wormSegment(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
      super(parent,field,xcor,ycor);
      this.sizeX = sizeX;this.sizeY = sizeY;this.health = health;this.angle = angle;
-     halfHeight = sizeY / 2;
    }
    void scaleVars(){
     super.scaleVars();
-    halfHeight *= scale;
     sizeX *= scale;
     sizeY *= scale;
    }

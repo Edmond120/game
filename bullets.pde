@@ -40,14 +40,17 @@ class bullet extends unit{
   }
   void death(){
   }
-  boolean strikeCircle(unit hitbox){//hitbox is cicular
+  boolean strikeCircle(circle hitbox){//target's hitbox is cicular
    return abs(xcor - hitbox.xcor) + abs(ycor - hitbox.ycor) <= (size / 2) + (hitbox.size / 2); 
+  }
+  boolean strikeRectangle(rectangle hitbox){
+    float a = tan(
   }
   boolean update(oneWayLinkedList<unit> x){
     boolean a = update();
     while(x.hasNext()){
       unit target = x.next();
-      if(target.hitCheckCircle(this)){
+      if(target.hitCheckCircle(this)){//bullet is cicular
         if(hit(target)){
           return true;
         }

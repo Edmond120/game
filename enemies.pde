@@ -1,4 +1,4 @@
-class grunt extends unit{
+class grunt extends unit implements circle{
   grunt(battleMode field, float xcor, float ycor, float size,int health,unit player){
     this.health = health;// + int(tick / 60 * 0.1);
     this.field = field;
