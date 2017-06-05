@@ -40,7 +40,7 @@ class bullet extends unit{
   }
   void death(){
   }
-  boolean strikeCircle(unit hitbox){
+  boolean strikeCircle(unit hitbox){//hitbox is cicular
    return abs(xcor - hitbox.xcor) + abs(ycor - hitbox.ycor) <= (size / 2) + (hitbox.size / 2); 
   }
   boolean update(oneWayLinkedList<unit> x){

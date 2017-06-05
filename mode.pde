@@ -1,3 +1,47 @@
+class button{
+  //constructor + variables
+  float sizeX,sizeY,x,y,x1,y1;
+  //include pic, hover animation, and pressed pic
+  button(float x,float y,float sizeX,float sizeY){
+    this.x = x * scale;
+    this.y = y * scale;
+    this.sizeX = sizeX * scale;
+    this.sizeY = sizeY * scale;
+    x1 = this.x + this.sizeX;
+    y1 = this.y + this.sizeY;
+  }
+  
+  //methods
+  void action(){
+  }
+  void pushed(){
+  }
+  void hover(){
+    _draw();
+  }
+  void _draw(){
+    fill(#FFFFFF);
+    rect(x,y,sizeX,sizeY);
+  }
+  void tick(){
+    if(mouseX >= x && mouseX <= x1 && mouseY >= y && mouseY <= y1){
+      if(mousePressed){
+        pushed();
+      }
+      else{
+        if(pmousePressed){
+          action();
+        }
+        else{
+          hover();
+        }
+      }
+    }
+    else{
+      _draw();
+    }
+  }
+}
 class mode{
   ArrayList<button>buttons = new ArrayList<button>();
   void _setup(){
@@ -29,7 +73,7 @@ class gameOver extends mode{
 
 
 class testButton extends button{
-  testButton(int x, int y,int xSize,int ySize){
+  testButton(float x, float y,float xSize,float ySize){
     super(x,y,xSize,ySize);
   }
   void action(){
@@ -49,10 +93,10 @@ class testButton extends button{
 
 
 class muteButton extends button{
-  muteButton(int x,int y){
+  muteButton(float x,float y){
     super(x,y,1,1);
   }
-  muteButton(int x,int y,int w,int h){
+  muteButton(float x,float y,float w,float h){
     super(x,y,w,h);
   }
   PImage mutedButton = loadImage("muteButtonMuted.png");

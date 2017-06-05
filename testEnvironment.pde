@@ -1,36 +1,3 @@
-class giantWormBossTestEnvironment extends battleMode{
-  @Override
-  void _setup(){
-    
-  }
-  @Override
-  void tick(){
-    super.tick();
-  }
-}
-class worm extends unit{
- class segment extends unit{
-   float halfHeight;
-   segment(entity parent,battleMode field,float xcor,float ycor,float size,int health){
-     super(parent,field,xcor,ycor);
-     this.size = size;this.health = health;
-     halfHeight = size / 2;
-   }
- }
- worm(battleMode field,float xcor,float ycor){
-  super(field,xcor,ycor);
- }
- worm(entity parent,battleMode field,float xcor,float ycor){
-   super(parent,field,xcor,ycor);
- }
-}
-class giantWormBoss extends worm{
-  giantWormBoss(battleMode field,float xcor,float ycor){
-    super(field,xcor,ycor);
-  }
-}
-
-
 class newWindowTestEnvironment extends testEnvironment{
   fieldPart x;
  void _setup(){
@@ -137,6 +104,10 @@ class testBattleMode extends battleMode{
     background(0);
   }
   void tick(){
+    //System.out.println(frameRate);
+    if(released('z')){
+      //window = createFieldPart(this,"test",500,500,window.xcor,window.ycor,true);
+    }
     spawn.spawn();
     super.tick();
     if(keys[keyW]){

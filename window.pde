@@ -43,6 +43,7 @@ class fieldPart extends PApplet{
     size(newWindowWidth,newWindowHeight);
   }
   void setup(){
+    frameRate(20);
     getSurface().setAlwaysOnTop(onTop);
     getSurface().setLocation(xcor,ycor);
     keys = new oneWayLinkedListKey[field.drawables.length];
@@ -117,7 +118,7 @@ class windowMob extends window{
     size(sizeX,sizeY);
   }
   void setup(){
-    frameRate(60);
+    frameRate(30);
     centerWindow();
     getSurface().setAlwaysOnTop(true);
     noLoop();
