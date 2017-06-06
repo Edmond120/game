@@ -44,7 +44,23 @@ class bullet extends unit{
    return abs(xcor - hitbox.xcor) + abs(ycor - hitbox.ycor) <= (size / 2) + (hitbox.size / 2); 
   }
   boolean strikeRectangle(rectangle hitbox){
-    float a = tan(
+    float rectLongSlope = tan(radians(hitbox.angle));
+    float rectShortSlope = tan(radians(hitbox.angle + 90));
+    float rectLongIntercept = hitbox.ycor - hitbox.xcor * rectLongSlope;
+    float rectShortIntercept = hitbox.ycor - hitbox.xcor * rectShortSlope;
+    float bulletLongIntercept = ycor - xcor * rectLongSlope;
+    float bulletShortIntercept = ycor - xcor * rectShortSlope;
+    float longInterceptX = (bulletShortIntercept - rectLongIntercept) / (rectShortSlope + rectLongSlope);
+    float longInterceptY = longInterceptX * rectLongSlope + rectLongIntercept;
+    if(abs(longInterceptX - xcor) + abs(longInterceptY - ycor) <= size/2 + hitbox.sizeX/2){
+      return true;
+    }
+    float shortInterceptX = (bulletLongIntercept - rectshortIntercept) / (rectLongslope + rectShortSlope);
+    float shortInterceptY = sortInterceptX * rectShortSlope + rectShortIntercept;
+    if(abs(shortInterceptX - xcor) + abs(shortInterceptY - ycor) <= size/2 + hitbox.sizeY/2){
+      return true;
+    }
+    return false;
   }
   boolean update(oneWayLinkedList<unit> x){
     boolean a = update();
