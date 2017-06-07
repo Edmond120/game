@@ -31,6 +31,7 @@ class flipbook{
 }
 
 class Animation extends unit{
+  boolean hitCheckCircle(bullet Bullet){return false;}
   //constructor + variables
   flipbook movie;
   delay wait;

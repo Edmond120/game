@@ -81,6 +81,7 @@ void setup(){
   //Mode = new newWindowTestEnvironment();
   //Mode = new giantWormBossTestEnvironment();
   //Mode = new oneWayLinkedListTestEnvironment(); 
+  Mode = new giantWormBossLevel();
   Mode._setup();
   try{
   robot = new Robot();

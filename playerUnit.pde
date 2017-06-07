@@ -1,2 +1,3 @@
-class player extends unit{
+abstract class player extends unit{
+  
 }

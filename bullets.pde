@@ -18,6 +18,9 @@ class bullet extends unit{
     this(null,field,xcor,ycor,size,xVector,yVector,damage);
     scaleVars();
   }
+  boolean hitCheckCircle(bullet Bullet){
+    throw new UnsupportedOperationException();
+  }
   void scaleVars(){
    super.scaleVars();
    vector[0] *= scale;
@@ -41,23 +44,23 @@ class bullet extends unit{
   void death(){
   }
   boolean strikeCircle(circle hitbox){//target's hitbox is cicular
-   return abs(xcor - hitbox.xcor) + abs(ycor - hitbox.ycor) <= (size / 2) + (hitbox.size / 2); 
+   return abs(xcor - hitbox.getXcor()) + abs(ycor - hitbox.getYcor()) <= (size / 2) + (hitbox.getSize() / 2); 
   }
   boolean strikeRectangle(rectangle hitbox){
-    float rectLongSlope = tan(radians(hitbox.angle));
-    float rectShortSlope = tan(radians(hitbox.angle + 90));
-    float rectLongIntercept = hitbox.ycor - hitbox.xcor * rectLongSlope;
-    float rectShortIntercept = hitbox.ycor - hitbox.xcor * rectShortSlope;
+    float rectLongSlope = tan(radians(hitbox.getAngle()));
+    float rectShortSlope = tan(radians(hitbox.getAngle() + 90));
+    float rectLongIntercept = hitbox.getYcor() - hitbox.getXcor() * rectLongSlope;
+    float rectShortIntercept = hitbox.getYcor() - hitbox.getXcor() * rectShortSlope;
     float bulletLongIntercept = ycor - xcor * rectLongSlope;
     float bulletShortIntercept = ycor - xcor * rectShortSlope;
     float longInterceptX = (bulletShortIntercept - rectLongIntercept) / (rectShortSlope + rectLongSlope);
     float longInterceptY = longInterceptX * rectLongSlope + rectLongIntercept;
-    if(abs(longInterceptX - xcor) + abs(longInterceptY - ycor) <= size/2 + hitbox.sizeX/2){
+    if(abs(longInterceptX - xcor) + abs(longInterceptY - ycor) <= size/2 + hitbox.getSizeX()/2){
       return true;
     }
-    float shortInterceptX = (bulletLongIntercept - rectshortIntercept) / (rectLongslope + rectShortSlope);
-    float shortInterceptY = sortInterceptX * rectShortSlope + rectShortIntercept;
-    if(abs(shortInterceptX - xcor) + abs(shortInterceptY - ycor) <= size/2 + hitbox.sizeY/2){
+    float shortInterceptX = (bulletLongIntercept - rectShortIntercept) / (rectLongSlope + rectShortSlope);
+    float shortInterceptY = shortInterceptX * rectShortSlope + rectShortIntercept;
+    if(abs(shortInterceptX - xcor) + abs(shortInterceptY - ycor) <= size/2 + hitbox.getSizeY()/2){
       return true;
     }
     return false;

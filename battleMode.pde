@@ -1,8 +1,8 @@
 interface circle{
- float xcor;float ycor;float size;
+ float getXcor();float getYcor();float getSize();
 }
 interface rectangle{
-  float xcor,float ycor;float sizeX;float sizeY;float angle;
+  float getXcor();float getYcor();float getSizeX();float getSizeY();float getAngle();
 }
 class entity{
   entity parent = null;
@@ -22,7 +22,7 @@ class entity{
   void trueDraw(float xcor, float ycor,PApplet applet){ 
   }
 }
-class unit extends entity{
+abstract class unit extends entity{
   unit(){}
   unit(battleMode field,float xcor,float ycor){
     this(null,field,xcor,ycor);
@@ -31,9 +31,9 @@ class unit extends entity{
   unit(entity parent,battleMode field,float xcor,float ycor){
    this.parent = parent;this.field = field;this.xcor = xcor;this.ycor = ycor;
   }
-  boolean hitCheckCircle(bullet Bullet){//bullet is cicular
-    return Bullet.strikeCircle(this);
-  }
+  abstract boolean hitCheckCircle(bullet Bullet);//{bullet is cicular
+    //return Bullet.strikeCircle(this);
+  //}
   battleMode field;
   int health;
   int points;

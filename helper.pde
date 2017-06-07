@@ -1,3 +1,26 @@
+/*
+CopyPasta
+
+Circle:
+
+float getXcor(){return xcor;}
+float getYcor(){return ycor;}
+float getSize(){return size;}
+boolean hitCheckCircle(bullet Bullet){
+  return Bullet.strikeCircle(this); 
+}
+
+Rectangle:
+float getXcor(){return xcor;}
+float getYcor(){return ycor;}
+float getSizeX(){return sizeX;}
+float getSizeY(){return sizeY;}
+float getAngle(){return angle;}
+boolean hitCheckCircle(bullet Bullet){
+   return Bullet.strikeRectangle(this);
+}
+*/
+
 class Timer{
   public Timer(){
     }

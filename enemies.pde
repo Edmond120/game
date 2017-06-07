@@ -1,4 +1,10 @@
 class grunt extends unit implements circle{
+  float getXcor(){return xcor;}
+   float getYcor(){return ycor;}
+   float getSize(){return size;}
+   boolean hitCheckCircle(bullet Bullet){
+    return Bullet.strikeCircle(this); 
+   }
   grunt(battleMode field, float xcor, float ycor, float size,int health,unit player){
     this.health = health;// + int(tick / 60 * 0.1);
     this.field = field;

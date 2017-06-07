@@ -159,6 +159,12 @@ class delayAndCooldownTestEnvironment extends testEnvironment{
   }
 }
 class testunit extends player implements circle{
+  float getXcor(){return xcor;}
+float getYcor(){return ycor;}
+float getSize(){return size;}
+boolean hitCheckCircle(bullet Bullet){
+  return Bullet.strikeCircle(this); 
+}
   float speed = 0.1 * scale;
   testunit(entity parent,battleMode field,float xcor,float ycor,float size,float displaySize){
     this.parent = parent;
@@ -366,6 +372,12 @@ class testunitA extends testunit{
 }
 
 class testbullet extends bullet implements circle{
+  float getXcor(){return xcor;}
+float getYcor(){return ycor;}
+float getSize(){return size;}
+boolean hitCheckCircle(bullet Bullet){
+  return Bullet.strikeCircle(this); 
+}
   //constructors
   testbullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
     super(parent,field,xcor,ycor,size,xVector,yVector,damage);
@@ -397,6 +409,12 @@ class testbullet extends bullet implements circle{
 
 
 class Ebullet extends bullet implements circle{
+  float getXcor(){return xcor;}
+float getYcor(){return ycor;}
+float getSize(){return size;}
+boolean hitCheckCircle(bullet Bullet){
+  return Bullet.strikeCircle(this); 
+}
   //constructors
    Ebullet(entity parent,battleMode field,float xcor,float ycor,float size,float xVector,float yVector,int damage){
     this.parent = parent;
