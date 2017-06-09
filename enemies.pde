@@ -68,6 +68,8 @@ class grunt extends unit implements circle{
     applet.ellipse(xcor,ycor,size,size);
   }
 }
+
+
 class randomEdgeSpawner{
   charge spawnRate = new charge(5);
   battleMode field;

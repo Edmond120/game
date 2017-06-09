@@ -2,7 +2,6 @@
 CopyPasta
 
 Circle:
-
 float getXcor(){return xcor;}
 float getYcor(){return ycor;}
 float getSize(){return size;}

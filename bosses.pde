@@ -12,6 +12,7 @@ class giantWormBossLevel extends battleMode{
     head.angle++;
   }
 }
+
 class wormHead extends wormSegment{
   wormHead(battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
     this(null,field,xcor,ycor,sizeX,sizeY,angle,health);
@@ -59,5 +60,33 @@ class giantWormBossHead extends wormHead{
   }
   giantWormBossHead(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
     super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
+  }
+}
+
+
+
+
+class Metropolis extends battleMode{
+  @Override
+  void _setup(){
+    enemies.add(Lula(this,stuff));
+    enemies.add(BunBun(this,stuff));
+  }
+  @Override
+  void tick(){
+    super.tick();
+  }
+}
+class Lula extends unit implements rectangle{
+  float sizeX,sizeY;
+  unit player;
+  
+  float speed = 0.075 * scale;
+  float angle = radians(0);
+  Lula(battleMode field,float xcor,float ycor,float _width,float _height,unit player){
+    super(field,xcor,ycor);
+    this.player = player;
+    this.sizeX = _width*scale;
+    this.sizeY = _height*scale;
   }
 }

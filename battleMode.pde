@@ -31,9 +31,9 @@ abstract class unit extends entity{
   unit(entity parent,battleMode field,float xcor,float ycor){
    this.parent = parent;this.field = field;this.xcor = xcor;this.ycor = ycor;
   }
-  abstract boolean hitCheckCircle(bullet Bullet);//{bullet is cicular
-    //return Bullet.strikeCircle(this);
-  //}
+  abstract boolean hitCheckCircle(bullet Bullet);/*{bullet is cicular
+    return Bullet.strikeCircle(this);
+  }*/
   battleMode field;
   int health;
   int points;
