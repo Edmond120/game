@@ -3,14 +3,21 @@ class giantWormBossLevel extends battleMode{
   @Override
   void _setup(){
     super._setup();
-    head = new wormHead(this,8.0,4.5,2.5,1.75,45,100);
+    head = new wormHead(this,8.0,4.5,2.5,1.75,0,100);
     enemies.add(head);
     players.add(new testunit(this,0.5,0.5,0.20,0.5));
+    enemies.add(head.backNode);
   }
   @Override
   void tick(){
     super.tick();
-    head.angle++;
+    println(head.getAngle());
+    if(keys[keyB]){
+      head.turnRight(1);
+    }
+    if(keys[keyV]){
+      head.turnLeft(1);
+    }
   }
 }
 
@@ -18,17 +25,19 @@ class wormHead extends wormSegment{
   wormHead(battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
     this(null,field,xcor,ycor,sizeX,sizeY,angle,health);
     scaleVars();
-    frontNode = new wormNode(this,field,xcor + sizeX/2 + nodeSize/2,ycor,nodeSize,int(health * 0.75));
-    backNode = new wormNode(this,field,xcor - sizeX/2 - nodeSize/2,ycor,nodeSize,int(health * 0.75));
+    //frontNode = new wormNode(this,field,xcor + sizeX/2 + nodeSize/2,ycor,nodeSize,int(health * 0.75));
+    backNode = new wormNode(this,field,this.xcor - cos(radians(this.angle))*((this.sizeX + nodeSize)/2),this.ycor - sin(radians(this.angle))*((this.sizeX + nodeSize)/2),nodeSize,int(health * 0.75));
   }
   wormHead(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
      super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
    }
-   void turnLeft(float degrees){
-   
+   void turnLeft(float degrees){//degrees is less than 90
+     angle -= degrees;
+     setBackNode();
    }
-   void turnRight(float degrees){
-     
+   void turnRight(float degrees){//degress is less than 90
+     angle += degrees;
+     setBackNode();
    }
 }
 class wormNode extends unit implements circle{
@@ -52,7 +61,7 @@ class wormNode extends unit implements circle{
 class wormSegment extends unit implements rectangle{
    wormNode frontNode;
    wormNode backNode;
-   float nodeSize = 0.2 * scale;
+   float nodeSize = 0.5 * scale;
    float velocityX = 0;
    float velocityY = 0;
    float angle,sizeX,sizeY;
@@ -73,6 +82,10 @@ class wormSegment extends unit implements rectangle{
     super.scaleVars();
     sizeX *= scale;
     sizeY *= scale;
+   }
+   void setBackNode(){
+    backNode.xcor = xcor - cos(radians(angle))*((sizeX + nodeSize)/2);
+    backNode.ycor = ycor - sin(radians(angle))*((sizeX + nodeSize)/2); 
    }
    @Override
    void trueDraw(float xcor,float ycor,PApplet applet){

@@ -28,6 +28,7 @@ int frameSizeX;
 int frameSizeY;
 int centerX;
 int centerY;
+boolean debug = true;
 void settings(){
   //screen resolution ratio is 16:9
   //to do: store settings in file
@@ -107,8 +108,8 @@ void draw(){
 }
 
 //keyboard + variables
-char[]_keys = {'z','x','c','w','a','s','d'};
-int keyZ = 0;int keyX = 1;int keyC = 2;int keyW = 3;int keyA = 4;int keyS = 5;int keyD = 6;
+char[]_keys = {'z','x','c','w','a','s','d','v','b'};
+int keyZ = 0;int keyX = 1;int keyC = 2;int keyW = 3;int keyA = 4;int keyS = 5;int keyD = 6;int keyV = 7;int keyB = 8;
 boolean[]keys = new boolean[_keys.length];
 int[] _codedKeys = {UP,DOWN,LEFT,RIGHT,SHIFT,CONTROL,ALT};
 int cKeyUP = 0;int cKeyDOWN = 1;int cKeyLEFT = 2;int cKeyRIGHT = 3;int cKeySHIFT = 4;int cKeyCONTROL = 5;
@@ -152,6 +153,7 @@ void checkKey(boolean setValue,PApplet x){
         return;
       }
     }
+    if(debug){System.out.println(keyCode);}
   }
   else{
     for(int i = 0; i < keys.length;i++){
@@ -160,5 +162,6 @@ void checkKey(boolean setValue,PApplet x){
         return;
       }
     }
+    if(debug){System.out.println(key);}
   }
 }

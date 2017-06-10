@@ -46,7 +46,27 @@ class bullet extends unit{
   boolean strikeCircle(circle hitbox){//target's hitbox is cicular
    return abs(xcor - hitbox.getXcor()) + abs(ycor - hitbox.getYcor()) <= (size / 2) + (hitbox.getSize() / 2); 
   }
+  boolean strikeStandingRect(rectangle hitbox){//if angle is 90 or 270 degrees then tan(angle) will cause problems
+    if(xcor >= hitbox.getXcor() - hitbox.getSizeY()/2 && xcor <= hitbox.getXcor() + hitbox.getSizeY()/2
+      && ycor >= hitbox.getYcor() - hitbox.getSizeX()/2 && ycor <= hitbox.getYcor() + hitbox.getSizeX()/2){
+       return true; 
+      }
+      return false;
+  }
+  boolean strikeLayingRect(rectangle hitbox){//if angle is 0 ir 180 then slopeShort will have to divide by 0
+     if(xcor >= hitbox.getXcor() - hitbox.getSizeX()/2 && xcor <= hitbox.getXcor() + hitbox.getSizeX()/2
+      && ycor >= hitbox.getYcor() - hitbox.getSizeY()/2 && ycor <= hitbox.getYcor() + hitbox.getSizeY()/2){
+       return true; 
+      }
+      return false;
+  }
   boolean strikeRectangle(rectangle hitbox){
+    if(hitbox.getAngle() % 90 == 0 && hitbox.getAngle() % 180 != 0){
+      return strikeStandingRect(hitbox);
+    }
+    else if(hitbox.getAngle() % 180 == 0){
+      return strikeLayingRect(hitbox);
+    }
     float slopeLong = tan(radians(hitbox.getAngle()));
     float interceptLong = hitbox.getYcor() - (hitbox.getXcor() * slopeLong);
     float slopeShort = -1/slopeLong;
