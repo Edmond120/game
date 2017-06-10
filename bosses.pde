@@ -11,7 +11,7 @@ class giantWormBossLevel extends battleMode{
   @Override
   void tick(){
     super.tick();
-    println(head.getAngle());
+    //println(head.getAngle());
     if(keys[keyB]){
       head.turnRight(1);
     }
