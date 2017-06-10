@@ -5,6 +5,7 @@ class giantWormBossLevel extends battleMode{
     super._setup();
     head = new wormHead(this,8.0,4.5,2.5,1.75,45,100);
     enemies.add(head);
+    players.add(new testunit(this,0.5,0.5,0.20,0.5));
   }
   @Override
   void tick(){
@@ -17,12 +18,43 @@ class wormHead extends wormSegment{
   wormHead(battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
     this(null,field,xcor,ycor,sizeX,sizeY,angle,health);
     scaleVars();
+    frontNode = new wormNode(this,field,xcor + sizeX/2 + nodeSize/2,ycor,nodeSize,int(health * 0.75));
+    backNode = new wormNode(this,field,xcor - sizeX/2 - nodeSize/2,ycor,nodeSize,int(health * 0.75));
   }
   wormHead(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
      super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
    }
+   void turnLeft(float degrees){
+   
+   }
+   void turnRight(float degrees){
+     
+   }
+}
+class wormNode extends unit implements circle{
+  float getXcor(){return xcor;}
+  float getYcor(){return ycor;}
+  float getSize(){return size;}
+  boolean hitCheckCircle(bullet Bullet){
+    return Bullet.strikeCircle(this); 
+  }
+  wormNode(entity parent,battleMode field,float xcor,float ycor,float size,int health){
+    super(parent,field,xcor,ycor);
+    this.size = size;this.health = health;
+  }
+  @Override
+  void trueDraw(float xcor,float ycor,PApplet applet){
+    applet.fill(#300DFF);
+    applet.stroke(#300DFF);
+    applet.ellipse(xcor,ycor,size,size);
+  }
 }
 class wormSegment extends unit implements rectangle{
+   wormNode frontNode;
+   wormNode backNode;
+   float nodeSize = 0.2 * scale;
+   float velocityX = 0;
+   float velocityY = 0;
    float angle,sizeX,sizeY;
    float getXcor(){return xcor;}
    float getYcor(){return ycor;}
@@ -69,8 +101,9 @@ class giantWormBossHead extends wormHead{
 class Metropolis extends battleMode{
   @Override
   void _setup(){
-    enemies.add(Lula(this,stuff));
-    enemies.add(BunBun(this,stuff));
+    //so the code compiles
+    //enemies.add(Lula(this,stuff));
+    //enemies.add(BunBun(this,stuff));
   }
   @Override
   void tick(){
@@ -78,6 +111,15 @@ class Metropolis extends battleMode{
   }
 }
 class Lula extends unit implements rectangle{
+  //so the code compiles
+  float getXcor(){return xcor;}
+  float getYcor(){return ycor;}
+  float getSizeX(){return sizeX;}
+  float getSizeY(){return sizeY;}
+  float getAngle(){return angle;}
+  boolean hitCheckCircle(bullet Bullet){
+     return Bullet.strikeRectangle(this);
+  }
   float sizeX,sizeY;
   unit player;
   

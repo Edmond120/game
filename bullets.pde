@@ -47,24 +47,24 @@ class bullet extends unit{
    return abs(xcor - hitbox.getXcor()) + abs(ycor - hitbox.getYcor()) <= (size / 2) + (hitbox.getSize() / 2); 
   }
   boolean strikeRectangle(rectangle hitbox){
-    float rectLongSlope = tan(radians(hitbox.getAngle()));
-    float rectShortSlope = tan(radians(hitbox.getAngle() + 90));
-    float rectLongIntercept = hitbox.getYcor() - hitbox.getXcor() * rectLongSlope;
-    float rectShortIntercept = hitbox.getYcor() - hitbox.getXcor() * rectShortSlope;
-    float bulletLongIntercept = ycor - xcor * rectLongSlope;
-    float bulletShortIntercept = ycor - xcor * rectShortSlope;
-    float longInterceptX = (bulletShortIntercept - rectLongIntercept) / (rectShortSlope + rectLongSlope);
-    float longInterceptY = longInterceptX * rectLongSlope + rectLongIntercept;
-    if(abs(longInterceptX - xcor) + abs(longInterceptY - ycor) <= size/2 + hitbox.getSizeX()/2){
-      return true;
+    float slopeLong = tan(radians(hitbox.getAngle()));
+    float interceptLong = hitbox.getYcor() - (hitbox.getXcor() * slopeLong);
+    float slopeShort = -1/slopeLong;
+    float intersectX = (interceptLong - (ycor - (xcor * slopeShort)))/(slopeShort - slopeLong);
+    float intersectY = intersectX * slopeLong + interceptLong;
+    if(!(distanceEq(intersectX,intersectY,xcor,ycor) <= (hitbox.getSizeY() / 2) + (size / 2))){
+      return false;
     }
-    float shortInterceptX = (bulletLongIntercept - rectShortIntercept) / (rectLongSlope + rectShortSlope);
-    float shortInterceptY = shortInterceptX * rectShortSlope + rectShortIntercept;
-    if(abs(shortInterceptX - xcor) + abs(shortInterceptY - ycor) <= size/2 + hitbox.getSizeY()/2){
-      return true;
+      float interceptShort = hitbox.getYcor() - (hitbox.getXcor() * slopeShort);
+      intersectX = (interceptShort - (ycor - (xcor * slopeLong)))/(slopeLong - slopeShort);
+      intersectY = intersectX * slopeShort + interceptShort;
+      if(distanceEq(intersectX,intersectY,xcor,ycor) <= (hitbox.getSizeX() / 2) + (size / 2)){
+       return true; 
+      }
+      else{
+        return false;
+      }
     }
-    return false;
-  }
   boolean update(oneWayLinkedList<unit> x){
     boolean a = update();
     while(x.hasNext()){
