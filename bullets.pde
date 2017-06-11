@@ -1,4 +1,4 @@
-class bullet extends unit{
+abstract class bullet extends unit{
   //constructors + variables
   int damage;
   float[] vector = new float[2];
@@ -35,7 +35,8 @@ class bullet extends unit{
     target.health -= damage;
     return true;
   }
-  boolean update(){
+  abstract boolean update();
+  /*
     xcor += vector[0];
     ycor += vector[1];
     if(checkBounds(this,field)){
@@ -43,8 +44,7 @@ class bullet extends unit{
     }
     else{
       return false;
-    }
-  }
+    }*/
   void death(){
   }
   boolean strikeCircle(circle hitbox){//target's hitbox is cicular

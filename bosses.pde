@@ -193,7 +193,7 @@ class Metropolis extends battleMode{
     super._setup();
     player a = new testunit(this,0.5,0.5,0.20,0.5);
     players.add(a);
-    enemies.add(new Lula(this,2,2,0.4,0.6,a));
+    enemies.add(new Lula(this,10,5,0.4,0.6,a));
     //enemies.add(BunBun(Lula,stuff));
     //Lula.setChild(BunBun);
   }
@@ -223,12 +223,11 @@ class Lula extends unit implements rectangle{
   
   
   float sizeX,sizeY;
-  float mvtspeed = 0.75;
+  float mvtspeed = 2;
   PVector ploc;
   PVector location;
   PVector velocity;
-  PVector direction;
-  boolean[] ActOptions = new boolean[5]; //0 p>2.5x, 1 p>1.5x, 2 p>r, 3 p<=r, 4 is BunBun alive?
+  boolean[] ActOptions = new boolean[5]; //0 p>2.5x, 1 p>1.5x, 2 p>r, 3 is BunBun alive?
   boolean[] isAttackingStill = new boolean[5]; //0 miniCBs, 1 DuoAttack
   Lula child;
   boolean alive = true;
@@ -247,7 +246,6 @@ class Lula extends unit implements rectangle{
     health = 100;
     setXcor(xcor*scale);
     setYcor(ycor*scale);
-    ActOptions[2] = true;
   }
   Lula(){}
   
@@ -259,18 +257,16 @@ class Lula extends unit implements rectangle{
     velocity = direction;
   }
   
-  
-  
   void actions(){
     if (ActOptions[0]){
-      attack();
+      //attack();
     }
     if(ActOptions[1]){
       if(isAttackingStill[0]){
-        attack();
+        //attack();
       }else{
         if((int)(Math.random()*2) == 0){
-          attack();
+          //attack();
           move();
         }else{
           move();
@@ -280,12 +276,11 @@ class Lula extends unit implements rectangle{
     if(ActOptions[2]){
       move();
     }
-    if(ActOptions[3]){
+    if(indanger){
       if(isAttackingStill[1]){
-        DuoAttack();
+        //DuoAttack();
       }else{
-        indanger = true;
-        DuoAttack();
+        //DuoAttack();
       }
     }
   }
@@ -355,14 +350,29 @@ class Lula extends unit implements rectangle{
   void throwMiniCB(){}
   void throwBigCB(){}
   void DuoAttack(){}
+  float r = 2*scale;
   void boundsCheck(){
+    if(abs(ploc.x-getXcor())+abs(ploc.y-getYcor())<(4.5*r)){
+      ActOptions[0] = false;
+      if(abs(ploc.x-getXcor())+abs(ploc.y-getYcor())<(2.5*r)){
+        ActOptions[1] = false;
+        if(abs(ploc.x-getXcor())+abs(ploc.y-getYcor())<r){
+          ActOptions[2] = false;
+          indanger = true;
+        }else{ActOptions[2] = true;}
+      }else{ActOptions[1] = true;ActOptions[2] = false;}
+    }else{ActOptions[0] = true;ActOptions[1] = false;ActOptions[2] = false;}
+    
+    if(ActOptions[3]){
+      checkStatus();
+    }
   }
   
   boolean update(){ 
     if(ActOptions[4] == false && health < 0){return true;}
     ploc = new PVector(player.getXcor(), player.getYcor());
-    //boundsCheck(); //checks if Lula's on screen and updates ActOptions
-    //actions();
+    boundsCheck(); //checks if Lula's on screen and updates ActOptions
+    actions();
     return false;
   }
   @Override
