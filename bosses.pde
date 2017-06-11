@@ -12,11 +12,17 @@ class giantWormBossLevel extends battleMode{
   void tick(){
     super.tick();
     //println(head.getAngle());
+    if(keys[keyN]){
+     head.accelerate(head.accel); 
+    }
     if(keys[keyB]){
-      head.turnRight(1);
+      head.turnRight(head.turnRate);
     }
     if(keys[keyV]){
-      head.turnLeft(1);
+      head.turnLeft(head.turnRate);
+    }
+    if(keys[keyM]){
+      head.decelerate(head.decel);
     }
   }
 }
@@ -31,16 +37,53 @@ class wormHead extends wormSegment{
   wormHead(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
      super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
    }
+   float accel = 0.1;
+   float decel = 0.1;
+   float turnRate = 4;
+   void accelerate(float x){
+     float speed = velocity.mag();
+     if(speed + x < 0){
+       velocity.setMag(0);
+       return;
+     }
+     if(speed == 0){
+      velocity = PVector.fromAngle(radians(angle));
+      velocity.setMag(x);
+      return;
+     }
+     if(speed < limit){
+       if(speed + x < limit){
+         velocity.setMag(speed + x);
+       }
+       else{
+         velocity.setMag(limit);
+       }
+     }
+     else{
+       velocity.setMag(limit);
+     }
+   }
+   void decelerate(float x){
+    accelerate(-1*x); 
+   }
+   boolean update(){
+     xcor += velocity.x;
+     ycor += velocity.y;
+     setBackNode();
+     return false;
+   }
    void turnLeft(float degrees){//degrees is less than 90
      angle -= degrees;
-     setBackNode();
+     velocity.rotate(radians(-1*degrees));
    }
    void turnRight(float degrees){//degress is less than 90
      angle += degrees;
-     setBackNode();
+     velocity.rotate(radians(degrees));
    }
 }
 class wormNode extends unit implements circle{
+  PVector velocity = new PVector(0,0);
+  float limit = 10;//change limit in wormSegment too
   float getXcor(){return xcor;}
   float getYcor(){return ycor;}
   float getSize(){return size;}
@@ -59,6 +102,8 @@ class wormNode extends unit implements circle{
   }
 }
 class wormSegment extends unit implements rectangle{
+  PVector velocity = new PVector(0,0);
+  float limit = 10;//change limit in wormNode too
    wormNode frontNode;
    wormNode backNode;
    float nodeSize = 0.5 * scale;
