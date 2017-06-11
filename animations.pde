@@ -50,6 +50,10 @@ class Animation extends unit{
       currentImage = loadImage("error.png");
     }
   }
+  float getXcor(){return xcor;}
+  float getYcor(){return ycor;}
+  void setXcor(float x){xcor = x;};
+  void setYcor(float x){ycor = x;};
   //methods
   boolean update(){
    return update(xcor,ycor,mainWindow); 

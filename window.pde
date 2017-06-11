@@ -86,8 +86,8 @@ class fieldPart extends PApplet{
    while(x.hasNext(k)){
       try{
       unit b = x.next(k);
-      int trueXcor = int(b.xcor + centerX);
-      int trueYcor = int(b.ycor + centerY);
+      int trueXcor = int(b.getXcor() + centerX);
+      int trueYcor = int(b.getYcor() + centerY);
       if(trueXcor < xcor + width && trueXcor >=xcor && trueYcor < ycor + height && trueYcor >= ycor){
         b.trueDraw(trueXcor - xcor,trueYcor - ycor,this);
       }

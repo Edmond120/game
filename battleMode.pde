@@ -1,12 +1,20 @@
-interface circle{
- float getXcor();      float getYcor();      float getSize();
- void setXcor(float x);void setYcor(float x);void setSize(float x);
+interface shape{
+  float getXcor();float getYcor();
+  void setXcor(float x);void setYcor(float x);
 }
-interface rectangle{
-  float getXcor();      float getYcor();      float getSizeX();      float getSizeY();      float getAngle();
-  void setXcor(float x);void setYcor(float x);void setSizeX(float x);void setSizeY(float x);void setAngle(float x);
+interface circle extends shape{
+ float getSize();
+ void setSize(float x);
 }
-class entity{
+interface rectangle extends shape{
+  float getSizeX();      float getSizeY();      float getAngle();
+  void setSizeX(float x);void setSizeY(float x);void setAngle(float x);
+}
+abstract class entity implements shape{
+  abstract float getXcor();
+  abstract float getYcor();
+  abstract void setXcor(float x);
+  abstract void setYcor(float x);
   entity parent = null;
   float xcor;
   float ycor;
@@ -19,7 +27,7 @@ class entity{
     return false;
   }
   void _draw(){
-    trueDraw(xcor,ycor,mainWindow);
+    trueDraw(getXcor(),getYcor(),mainWindow);
   }
   void trueDraw(float xcor, float ycor,PApplet applet){ 
   }

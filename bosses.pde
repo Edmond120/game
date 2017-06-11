@@ -89,9 +89,12 @@ class wormNode extends unit implements circle{
   PVector location;
   PVector velocity = new PVector(0,0);
   float limit = 10;//change limit in wormSegment too
-  float getXcor(){return xcor;}
-  float getYcor(){return ycor;}
+  float getXcor(){return location.x;}
+  float getYcor(){return location.y;}
   float getSize(){return size;}
+  void setXcor(float x){location.x = x;}
+  void setYcor(float x){location.y = x;}
+  void setSize(float x){size = x;}
   boolean hitCheckCircle(bullet Bullet){
     return Bullet.strikeCircle(this); 
   }
@@ -129,6 +132,11 @@ class wormSegment extends unit implements rectangle{
    float getSizeX(){return sizeX;}
    float getSizeY(){return sizeY;}
    float getAngle(){return angle;}
+   void setXcor(float x){location.x = x;}
+   void setYcor(float x){location.y = x;}
+   void setSizeX(float x){sizeX = x;}
+   void setSizeY(float x){sizeY = x;}
+   void setAngle(float x){angle = x;}
    boolean hitCheckCircle(bullet Bullet){
     return Bullet.strikeRectangle(this);
    }
@@ -148,8 +156,8 @@ class wormSegment extends unit implements rectangle{
     location.mult(scale);
    }
    void setBackNode(){
-    backNode.setXcor() = getXcor() - cos(radians(angle))*((sizeX + nodeSize)/2);
-    backNode.setYcor() = getYcor() - sin(radians(angle))*((sizeX + nodeSize)/2); 
+    backNode.setXcor(getXcor() - cos(radians(angle))*((sizeX + nodeSize)/2));
+    backNode.setYcor(getYcor() - sin(radians(angle))*((sizeX + nodeSize)/2)); 
    }
    @Override
    void _draw(){
@@ -178,7 +186,7 @@ class giantWormBossHead extends wormHead{
 
 
 
-
+/*
 class Metropolis extends battleMode{
   @Override
   void _setup(){
@@ -229,7 +237,7 @@ class Lula extends unit implements rectangle{
     health = 100;
   }
   Lula(){}
-  /*
+  
   void getVelocityTo(float _speed){
     PVector direction = location.sub(ploc);
     direction.normalize();
@@ -329,7 +337,7 @@ class Lula extends unit implements rectangle{
   void DuoAttack(){}
   void boundsCheck(){}
   */
-  
+  /*
   boolean update(){ 
     //if(ActOptions[4] == false && health < 0){return true;}
     //boundsCheck(); //checks if Lula's on screen and updates ActOptions
@@ -347,7 +355,7 @@ class Lula extends unit implements rectangle{
     popMatrix();
   }
 }
-
+*/
 
 
 /*

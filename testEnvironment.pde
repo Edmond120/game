@@ -162,6 +162,9 @@ class testunit extends player implements circle{
   float getXcor(){return xcor;}
 float getYcor(){return ycor;}
 float getSize(){return size;}
+void setXcor(float x){xcor = x;}
+void setYcor(float x){ycor = x;}
+void setSize(float x){size = x;}
 boolean hitCheckCircle(bullet Bullet){
   return Bullet.strikeCircle(this); 
 }
@@ -375,6 +378,9 @@ class testbullet extends bullet implements circle{
   float getXcor(){return xcor;}
 float getYcor(){return ycor;}
 float getSize(){return size;}
+void setXcor(float x){xcor = x;}
+void setYcor(float x){ycor = x;}
+void setSize(float x){size = x;}
 boolean hitCheckCircle(bullet Bullet){
   return Bullet.strikeCircle(this); 
 }
@@ -412,6 +418,9 @@ class Ebullet extends bullet implements circle{
   float getXcor(){return xcor;}
 float getYcor(){return ycor;}
 float getSize(){return size;}
+void setXcor(float x){xcor = x;}
+void setYcor(float x){ycor = x;}
+void setSize(float x){size = x;}
 boolean hitCheckCircle(bullet Bullet){
   return Bullet.strikeCircle(this); 
 }

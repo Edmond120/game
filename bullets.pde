@@ -18,6 +18,10 @@ class bullet extends unit{
     this(null,field,xcor,ycor,size,xVector,yVector,damage);
     scaleVars();
   }
+  float getXcor(){return xcor;}
+  float getYcor(){return ycor;}
+  void setXcor(float x){xcor = x;}
+  void setYcor(float x){ycor = x;}
   boolean hitCheckCircle(bullet Bullet){
     throw new UnsupportedOperationException();
   }
