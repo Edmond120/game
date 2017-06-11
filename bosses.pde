@@ -259,14 +259,14 @@ class Lula extends unit implements rectangle{
   
   void actions(){
     if (ActOptions[0]){
-      //attack();
+      attack();
     }
     if(ActOptions[1]){
       if(isAttackingStill[0]){
-        //attack();
+        attack();
       }else{
         if((int)(Math.random()*2) == 0){
-          //attack();
+          attack();
           move();
         }else{
           move();
@@ -325,12 +325,12 @@ class Lula extends unit implements rectangle{
         throwMiniCB();
         miniCBamt++;
         isAttackingStill[0] = true;
-      }else{
+      }/*else{
         if(special.cooldown()){
           special.resetCooldown();
           throwBigCB();
         }
-      }
+      }*/
     }
   }
   
@@ -347,7 +347,12 @@ class Lula extends unit implements rectangle{
   }
   
   void death(){}
-  void throwMiniCB(){}
+  void throwMiniCB(){
+    field.playerBullets.add(createMiniCB());
+  }
+  bullet createMiniCB(){//gotta modify this
+    return new testbullet(this,field,getXcor(),getYcor(),0.2 * scale,ploc.x * scale,ploc.y * scale,10);
+  }
   void throwBigCB(){}
   void DuoAttack(){}
   float r = 2*scale;
