@@ -186,13 +186,14 @@ class giantWormBossHead extends wormHead{
 
 
 
-/*
+
 class Metropolis extends battleMode{
   @Override
   void _setup(){
     super._setup();
-    //enemies.add(new Lula(this,20.0,20.0,5.0,6.0,new PVector(centerX,centerY)));
-    //players.add(new testunit(this,0.5,0.5,0.20,0.5));
+    player a = new testunit(this,0.5,0.5,0.20,0.5);
+    players.add(a);
+    enemies.add(new Lula(this,2,2,0.4,0.6,a));
     //enemies.add(BunBun(Lula,stuff));
     //Lula.setChild(BunBun);
   }
@@ -211,37 +212,50 @@ class Lula extends unit implements rectangle{
   float getSizeX(){return sizeX;}
   float getSizeY(){return sizeY;}
   float getAngle(){return radians(0);}
+  void setXcor(float x){xcor = x;}
+  void setYcor(float x){ycor = x;}
+  void setSizeX(float x){sizeX = x;}
+  void setSizeY(float x){sizeY = x;}
+  void setAngle(float x){float angle = x;}
   boolean hitCheckCircle(bullet Bullet){
      return Bullet.strikeRectangle(this);
   }
   
   
   float sizeX,sizeY;
-  float mvtspeed = 0.75 * scale;
+  float mvtspeed = 0.75;
   PVector ploc;
   PVector location;
   PVector velocity;
+  PVector direction;
   boolean[] ActOptions = new boolean[5]; //0 p>2.5x, 1 p>1.5x, 2 p>r, 3 p<=r, 4 is BunBun alive?
   boolean[] isAttackingStill = new boolean[5]; //0 miniCBs, 1 DuoAttack
   Lula child;
   boolean alive = true;
   boolean indanger;
+  entity player;
   
-  Lula(battleMode field,float xcor,float ycor,float _width,float _height,PVector playerlocation){
-    super(field,xcor,ycor);
+  Lula(battleMode field,float xcor,float ycor,float _width,float _height,entity player){
+    super();
+    this.field = field;
     this.sizeX = _width*scale;
     this.sizeY = _height*scale;
     location = new PVector(xcor*scale,ycor*scale);
     velocity = new PVector(0,0);
-    ploc = playerlocation;
+    this.player = player;
+    ploc = new PVector(player.getXcor(),player.getYcor());
     health = 100;
+    setXcor(xcor*scale);
+    setYcor(ycor*scale);
+    ActOptions[2] = true;
   }
   Lula(){}
   
+  
   void getVelocityTo(float _speed){
-    PVector direction = location.sub(ploc);
+    PVector direction = ploc.sub(location);
     direction.normalize();
-    direction.mult(_speed);
+    direction.mult(-1*_speed);
     velocity = direction;
   }
   
@@ -279,13 +293,19 @@ class Lula extends unit implements rectangle{
  
   void move(){
     getVelocityTo(mvtspeed);
-    if(abs(location.x-0)<abs(location.y-0) || abs(location.x-0)<abs(location.y-height) || abs(location.x-width)<abs(location.y-0) || abs(location.x-width)<abs(location.y-height)){
+    /*if(abs(location.x-0)<abs(location.y-0) || 
+       abs(location.x-0)<abs(location.y-height) || 
+       abs(location.x-width)<abs(location.y-0) || 
+       abs(location.x-width)<abs(location.y-height)){
       PVector a = new PVector(-1*velocity.y, velocity.x);
       location.add(a);
+      System.out.println(location);
     }else{
       PVector b = new PVector(velocity.y,-1*velocity.x);
       location.add(b);
-    }
+      System.out.println(location);
+    }*/
+    location.add(velocity);
   }
   
   charge basic = new charge(7);
@@ -335,11 +355,12 @@ class Lula extends unit implements rectangle{
   void throwMiniCB(){}
   void throwBigCB(){}
   void DuoAttack(){}
-  void boundsCheck(){}
-  */
-  /*
+  void boundsCheck(){
+  }
+  
   boolean update(){ 
-    //if(ActOptions[4] == false && health < 0){return true;}
+    if(ActOptions[4] == false && health < 0){return true;}
+    ploc = new PVector(player.getXcor(), player.getYcor());
     //boundsCheck(); //checks if Lula's on screen and updates ActOptions
     //actions();
     return false;
@@ -355,7 +376,6 @@ class Lula extends unit implements rectangle{
     popMatrix();
   }
 }
-*/
 
 
 /*

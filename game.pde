@@ -79,7 +79,7 @@ void setup(){
   //Mode = new giantWormBossTestEnvironment();
   //Mode = new oneWayLinkedListTestEnvironment(); 
   Mode = new giantWormBossLevel();
-  //Mode = new Metropolis();
+  Mode = new Metropolis();
   Mode._setup();
   try{
   robot = new Robot();
