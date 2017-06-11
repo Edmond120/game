@@ -154,15 +154,16 @@ class giantWormBossHead extends wormHead{
 }
 
 
-/*
+
 
 class Metropolis extends battleMode{
   @Override
   void _setup(){
-    /*oops sorry ^^;
-    enemies.add(Lula(this,stuff));
-    enemies.add(BunBun(Lula,stuff));
-    Lula.setChild(BunBun);/
+    super._setup();
+    //enemies.add(new Lula(this,20.0,20.0,5.0,6.0,new PVector(centerX,centerY)));
+    //players.add(new testunit(this,0.5,0.5,0.20,0.5));
+    //enemies.add(BunBun(Lula,stuff));
+    //Lula.setChild(BunBun);
   }
   @Override
   void tick(){
@@ -170,7 +171,7 @@ class Metropolis extends battleMode{
   }
 }
 class Lula extends unit implements rectangle{
-  void setChild(entity _child){
+  void setChild(Lula _child){
     this.child = _child;
   }
   
@@ -185,24 +186,27 @@ class Lula extends unit implements rectangle{
   
   
   float sizeX,sizeY;
-  float speed = 0.075 * scale;
+  float mvtspeed = 0.75 * scale;
   PVector ploc;
   PVector location;
   PVector velocity;
   boolean[] ActOptions = new boolean[5]; //0 p>2.5x, 1 p>1.5x, 2 p>r, 3 p<=r, 4 is BunBun alive?
-  boolean isAttackingStill;
-  entity child;
+  boolean[] isAttackingStill = new boolean[5]; //0 miniCBs, 1 DuoAttack
+  Lula child;
+  boolean alive = true;
+  boolean indanger;
   
   Lula(battleMode field,float xcor,float ycor,float _width,float _height,PVector playerlocation){
     super(field,xcor,ycor);
     this.sizeX = _width*scale;
     this.sizeY = _height*scale;
-    location = new PVector(xcor,ycor);
+    location = new PVector(xcor*scale,ycor*scale);
     velocity = new PVector(0,0);
     ploc = playerlocation;
     health = 100;
   }
-  
+  Lula(){}
+  /*
   void getVelocityTo(float _speed){
     PVector direction = location.sub(ploc);
     direction.normalize();
@@ -210,19 +214,14 @@ class Lula extends unit implements rectangle{
     velocity = direction;
   }
   
-  boolean update(){ 
-    if(ActOptions[4] == false && health < 0){return true;}
-    boundsCheck(); //checks if Lula's on screen and updates ActOptions
-    actions();
-    return false;
-  }
+  
   
   void actions(){
     if (ActOptions[0]){
       attack();
     }
     if(ActOptions[1]){
-      if(isAttackingStill){
+      if(isAttackingStill[0]){
         attack();
       }else{
         if((int)(Math.random()*2) == 0){
@@ -237,13 +236,18 @@ class Lula extends unit implements rectangle{
       move();
     }
     if(ActOptions[3]){
-      child.danger();
-      DuoAttack();
+      if(isAttackingStill[1]){
+        DuoAttack();
+      }else{
+        indanger = true;
+        DuoAttack();
+      }
     }
   }
   
  
   void move(){
+    getVelocityTo(mvtspeed);
     if(abs(location.x-0)<abs(location.y-0) || abs(location.x-0)<abs(location.y-height) || abs(location.x-width)<abs(location.y-0) || abs(location.x-width)<abs(location.y-height)){
       PVector a = new PVector(-1*velocity.y, velocity.x);
       location.add(a);
@@ -258,7 +262,7 @@ class Lula extends unit implements rectangle{
   charge basiclength = new charge(2);
   int miniCBamt = 0;
   void attack(){
-    if(isAttackingStill){
+    if(isAttackingStill[0]){
       if(basiclength.cooldown()){
         basiclength.resetCooldown();
         throwMiniCB();
@@ -267,14 +271,14 @@ class Lula extends unit implements rectangle{
       if(miniCBamt == 3){
         basiclength.resetCooldown();
         miniCBamt = 0;
-        isAttackingStill = false;
+        isAttackingStill[0] = false;
       }
     }else{
       if(basic.cooldown()){
         basic.resetCooldown();
         throwMiniCB();
         miniCBamt++;
-        isAttackingStill = true;
+        isAttackingStill[0] = true;
       }else{
         if(special.cooldown()){
           special.resetCooldown();
@@ -289,20 +293,43 @@ class Lula extends unit implements rectangle{
     this.health = 15;
   }
   
+  void checkStatus(){//in boundscheck check if ActOptions[4] then checkStatus()
+    alive = child.alive;
+    if(!alive){
+      bunBunDied();
+    }
+  }
+  
   void death(){}
   void throwMiniCB(){}
   void throwBigCB(){}
   void DuoAttack(){}
   void boundsCheck(){}
+  */
   
-  void trueDraw(){}
+  boolean update(){ 
+    //if(ActOptions[4] == false && health < 0){return true;}
+    //boundsCheck(); //checks if Lula's on screen and updates ActOptions
+    //actions();
+    return false;
+  }
+  @Override
+  void trueDraw(float xcor,float ycor,PApplet applet){
+    pushMatrix();
+    stroke(#000000);
+    fill(#E07407);
+    translate(xcor,ycor);
+    rotate(radians(0));
+    rect(sizeX/-2,sizeY/-2,sizeX,sizeY);
+    popMatrix();
+  }
 }
 
 
 
-
-class BunBun extends unit implements rectangle{
-float getXcor(){return location.x;}
+/*
+class BunBun extends Lula implements rectangle{
+  float getXcor(){return location.x;}
   float getYcor(){return location.y;}
   float getSizeX(){return sizeX;}
   float getSizeY(){return sizeY;}
@@ -311,73 +338,66 @@ float getXcor(){return location.x;}
      return Bullet.strikeRectangle(this);
   }
   
-BunBun(entity parent, battleMode field,float xcor,float ycor,float _width,float _height,PVector playerlocation){
-    super(field,xcor,ycor);
+  float sizeX,sizeY;
+  float mvtspeed = 0.75 * scale;
+  PVector ploc;
+  PVector location;
+  PVector velocity;
+  boolean[] ActOptions = new boolean[3]; //0 p>=2.5x, 1 p>x, 2 p<=x
+  boolean[] isAttackingStill = new boolean[5]; //0 charge, 1 kicks, 2 punchcombo, 3 armhammer
+  boolean alive = true;
+  Lula parent;
+  
+  BunBun(Lula parent, battleMode field,float xcor,float ycor,float _width,float _height,PVector playerlocation){
+    super();
+    this.field = field;
+    location = new PVector(xcor,ycor);
+    this.xcor = location.x;
+    this.ycor = location.y;
     this.sizeX = _width*scale;
     this.sizeY = _height*scale;
-    location = new PVector(xcor,ycor);
     velocity = new PVector(0,0);
     ploc = playerlocation;
     health = 100;
-  }
-  
-  void getVelocityTo(float _speed){
-    PVector direction = location.sub(ploc);
-    direction.normalize();
-    direction.mult(_speed);
-    velocity = direction;
+    this.parent = parent;
   }
   
   boolean update(){ 
-    if(ActOptions[4] == false && health < 0){return true;}
-    boundsCheck(); //checks if Lula's on screen and updates ActOptions
+    if(health < 0){alive = !alive; return true;}
+    boundsCheck(); //checks if BunBun's on screen and updates ActOptions
     actions();
     return false;
   }
   
   void actions(){
-    if (ActOptions[0]){
-      attack();
+    if (ActOptions[0] || isAttackingStill[0]){
+      chargeattack();
     }
-    if(ActOptions[1]){
-      if(isAttackingStill){
-        attack();
-      }else{
-        if((int)(Math.random()*2) == 0){
-          attack();
-          move();
-        }else{
-          move();
-        }
-      }
+    if(ActOptions[1] || isAttackingStill[1]){
+      kickattack();
     }
-    if(ActOptions[2]){
-      move();
+    if(ActOptions[2] || isAttackingStill[2] || isAttackingStill[3]){
+      armsattack();
     }
-    if(ActOptions[3]){
-      child.danger();
+    if(parent.indanger){
       DuoAttack();
     }
   }
   
  
-  void move(){
-    if(abs(location.x-0)<abs(location.y-0) || abs(location.x-0)<abs(location.y-height) || abs(location.x-width)<abs(location.y-0) || abs(location.x-width)<abs(location.y-height)){
-      PVector a = new PVector(-1*velocity.y, velocity.x);
-      location.add(a);
-    }else{
-      PVector b = new PVector(velocity.y,-1*velocity.x);
-      location.add(b);
+  void move(speed){
+    if(abs(ploc.x-locationx)+abs(ploc.y-location.y)>(sizeX*2)){
+      getVelocityTo(speed);
+      location.add(velocity);
     }
   }
   
   charge basic = new charge(7);
   charge special = new charge(15);
   charge basiclength = new charge(2);
-  int miniCBamt = 0;
-  void attack(){
-    if(isAttackingStill){
-      if(basiclength.cooldown()){
+  void chargeattack(){
+    if(isAttackingStill[0]){
+      location.add(velocity);
         basiclength.resetCooldown();
         throwMiniCB();
         miniCBamt++;
@@ -402,9 +422,8 @@ BunBun(entity parent, battleMode field,float xcor,float ycor,float _width,float 
     }
   }
   
-  void bunBunDied(){
-    this.ActOptions[4] = false;
-    this.health = 15;
+  void switchStatus(){
+    alive = !alive;
   }
   
   void death(){}
@@ -415,7 +434,6 @@ BunBun(entity parent, battleMode field,float xcor,float ycor,float _width,float 
   
   void trueDraw(){}
 }
-
 
 
 */

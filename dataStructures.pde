@@ -76,19 +76,40 @@ class oneWayLinkedList<E>{//only one thread should be adding or removing from th
 class SaveSystem{
   String filename;
   SaveSystem(String name){
-  filename = name + "";
-}
+    filename = name + "";
+  }
   void save(){
     try{
       File file = new File (dataPath(filename));
       file.createNewFile();
       PrintWriter writer = new PrintWriter (file);
       for(int counter = 0; counter < levels.length ; counter++){
-        writer.println("" + levels[counter] + " ");
+        writer.println("" + levels[counter]);
       }
       writer.close();
     } catch (IOException e) {
     }
+  }
+  boolean[] load(boolean[] levels){
+    try{
+      File file = new File (dataPath(filename));
+      file.createNewFile();
+      FileReader fr = new FileReader(file); 
+      BufferedReader br = new BufferedReader(fr); 
+      String s; 
+      int i = 0;
+      while((s = br.readLine()) != null) { 
+        if(s.equals("true")){
+          levels[i] = true;
+        }else{
+          levels[i] = false;
+        }
+        i++;
+      }
+      fr.close();
+    } catch (IOException e) {
+    }
+    return levels;
   }
 }
   

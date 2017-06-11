@@ -6,12 +6,7 @@ import javax.sound.sampled.*;
 import java.awt.event.KeyEvent;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.io.PrintWriter;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 
 int levelnumber = 3; //maunually increase?
@@ -48,10 +43,11 @@ void settings(){
   centerY = displayHeight/2-height/2;
   
   //SAVE SYSTEM TEST
+  SaveSystem a = new SaveSystem("savefile.txt");
+  levels = a.load(levels);
   levels[0] = true;
   levels[1] = true;
   levels[2] = true;
-  SaveSystem a = new SaveSystem("savefile.txt");
   a.save();
 }
 
@@ -83,6 +79,7 @@ void setup(){
   //Mode = new giantWormBossTestEnvironment();
   //Mode = new oneWayLinkedListTestEnvironment(); 
   Mode = new giantWormBossLevel();
+  //Mode = new Metropolis();
   Mode._setup();
   try{
   robot = new Robot();
