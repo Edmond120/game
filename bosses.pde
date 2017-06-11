@@ -36,6 +36,7 @@ class wormHead extends wormSegment{
   }
   wormHead(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
      super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
+     
    }
    float accel = 0.1;
    float decel = 0.1;
@@ -66,10 +67,13 @@ class wormHead extends wormSegment{
    void decelerate(float x){
     accelerate(-1*x); 
    }
-   boolean update(){
-     xcor += velocity.x;
-     ycor += velocity.y;
+   void move(){
+     setXcor(getXcor() + velocity.x);
+     setYcor(getYcor() + velocity.y);
      setBackNode();
+   }
+   boolean update(){
+     move();
      return false;
    }
    void turnLeft(float degrees){//degrees is less than 90
@@ -82,6 +86,7 @@ class wormHead extends wormSegment{
    }
 }
 class wormNode extends unit implements circle{
+  PVector location;
   PVector velocity = new PVector(0,0);
   float limit = 10;//change limit in wormSegment too
   float getXcor(){return xcor;}
@@ -93,6 +98,14 @@ class wormNode extends unit implements circle{
   wormNode(entity parent,battleMode field,float xcor,float ycor,float size,int health){
     super(parent,field,xcor,ycor);
     this.size = size;this.health = health;
+    location = new PVector(xcor,ycor);
+  }
+  void move(){
+    
+  }
+  @Override
+  void _draw(){
+   trueDraw(location.x,location.y,mainWindow); 
   }
   @Override
   void trueDraw(float xcor,float ycor,PApplet applet){
@@ -103,6 +116,7 @@ class wormNode extends unit implements circle{
 }
 class wormSegment extends unit implements rectangle{
   PVector velocity = new PVector(0,0);
+  PVector location;
   float limit = 10;//change limit in wormNode too
    wormNode frontNode;
    wormNode backNode;
@@ -110,8 +124,8 @@ class wormSegment extends unit implements rectangle{
    float velocityX = 0;
    float velocityY = 0;
    float angle,sizeX,sizeY;
-   float getXcor(){return xcor;}
-   float getYcor(){return ycor;}
+   float getXcor(){return location.x;}
+   float getYcor(){return location.y;}
    float getSizeX(){return sizeX;}
    float getSizeY(){return sizeY;}
    float getAngle(){return angle;}
@@ -122,15 +136,24 @@ class wormSegment extends unit implements rectangle{
    wormSegment(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
      super(parent,field,xcor,ycor);
      this.sizeX = sizeX;this.sizeY = sizeY;this.health = health;this.angle = angle;
+     location = new PVector(xcor,ycor);
+   }
+   void move(){
+     
    }
    void scaleVars(){
     super.scaleVars();
     sizeX *= scale;
     sizeY *= scale;
+    location.mult(scale);
    }
    void setBackNode(){
-    backNode.xcor = xcor - cos(radians(angle))*((sizeX + nodeSize)/2);
-    backNode.ycor = ycor - sin(radians(angle))*((sizeX + nodeSize)/2); 
+    backNode.setXcor() = getXcor() - cos(radians(angle))*((sizeX + nodeSize)/2);
+    backNode.setYcor() = getYcor() - sin(radians(angle))*((sizeX + nodeSize)/2); 
+   }
+   @Override
+   void _draw(){
+       trueDraw(location.x,location.y,mainWindow); 
    }
    @Override
    void trueDraw(float xcor,float ycor,PApplet applet){

@@ -5,6 +5,9 @@ Circle:
 float getXcor(){return xcor;}
 float getYcor(){return ycor;}
 float getSize(){return size;}
+void setXcor(float x){xcor = x;}
+void setYcor(float x){ycor = x;}
+void setSize(float x){size = x;}
 boolean hitCheckCircle(bullet Bullet){
   return Bullet.strikeCircle(this); 
 }
@@ -15,6 +18,11 @@ float getYcor(){return ycor;}
 float getSizeX(){return sizeX;}
 float getSizeY(){return sizeY;}
 float getAngle(){return angle;}
+void setXcor(float x){xcor = x;}
+void setYcor(float x){ycor = x;}
+void setSizeX(float x){sizeX = x;}
+void setSizeY(float x){sizeY = x;}
+void setAngle(float x){angle = x;}
 boolean hitCheckCircle(bullet Bullet){
    return Bullet.strikeRectangle(this);
 }

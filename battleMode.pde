@@ -1,8 +1,10 @@
 interface circle{
- float getXcor();float getYcor();float getSize();
+ float getXcor();      float getYcor();      float getSize();
+ void setXcor(float x);void setYcor(float x);void setSize(float x);
 }
 interface rectangle{
-  float getXcor();float getYcor();float getSizeX();float getSizeY();float getAngle();
+  float getXcor();      float getYcor();      float getSizeX();      float getSizeY();      float getAngle();
+  void setXcor(float x);void setYcor(float x);void setSizeX(float x);void setSizeY(float x);void setAngle(float x);
 }
 class entity{
   entity parent = null;
