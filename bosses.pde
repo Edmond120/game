@@ -154,14 +154,15 @@ class giantWormBossHead extends wormHead{
 }
 
 
-
+/*
 
 class Metropolis extends battleMode{
   @Override
   void _setup(){
-    //so the code compiles
-    //enemies.add(Lula(this,stuff));
-    //enemies.add(BunBun(this,stuff));
+    /*oops sorry ^^;
+    enemies.add(Lula(this,stuff));
+    enemies.add(BunBun(Lula,stuff));
+    Lula.setChild(BunBun);/
   }
   @Override
   void tick(){
@@ -169,24 +170,252 @@ class Metropolis extends battleMode{
   }
 }
 class Lula extends unit implements rectangle{
-  //so the code compiles
-  float getXcor(){return xcor;}
-  float getYcor(){return ycor;}
+  void setChild(entity _child){
+    this.child = _child;
+  }
+  
+  float getXcor(){return location.x;}
+  float getYcor(){return location.y;}
   float getSizeX(){return sizeX;}
   float getSizeY(){return sizeY;}
-  float getAngle(){return angle;}
+  float getAngle(){return radians(0);}
   boolean hitCheckCircle(bullet Bullet){
      return Bullet.strikeRectangle(this);
   }
-  float sizeX,sizeY;
-  unit player;
   
+  
+  float sizeX,sizeY;
   float speed = 0.075 * scale;
-  float angle = radians(0);
-  Lula(battleMode field,float xcor,float ycor,float _width,float _height,unit player){
+  PVector ploc;
+  PVector location;
+  PVector velocity;
+  boolean[] ActOptions = new boolean[5]; //0 p>2.5x, 1 p>1.5x, 2 p>r, 3 p<=r, 4 is BunBun alive?
+  boolean isAttackingStill;
+  entity child;
+  
+  Lula(battleMode field,float xcor,float ycor,float _width,float _height,PVector playerlocation){
     super(field,xcor,ycor);
-    this.player = player;
     this.sizeX = _width*scale;
     this.sizeY = _height*scale;
+    location = new PVector(xcor,ycor);
+    velocity = new PVector(0,0);
+    ploc = playerlocation;
+    health = 100;
   }
+  
+  void getVelocityTo(float _speed){
+    PVector direction = location.sub(ploc);
+    direction.normalize();
+    direction.mult(_speed);
+    velocity = direction;
+  }
+  
+  boolean update(){ 
+    if(ActOptions[4] == false && health < 0){return true;}
+    boundsCheck(); //checks if Lula's on screen and updates ActOptions
+    actions();
+    return false;
+  }
+  
+  void actions(){
+    if (ActOptions[0]){
+      attack();
+    }
+    if(ActOptions[1]){
+      if(isAttackingStill){
+        attack();
+      }else{
+        if((int)(Math.random()*2) == 0){
+          attack();
+          move();
+        }else{
+          move();
+        }
+      }
+    }
+    if(ActOptions[2]){
+      move();
+    }
+    if(ActOptions[3]){
+      child.danger();
+      DuoAttack();
+    }
+  }
+  
+ 
+  void move(){
+    if(abs(location.x-0)<abs(location.y-0) || abs(location.x-0)<abs(location.y-height) || abs(location.x-width)<abs(location.y-0) || abs(location.x-width)<abs(location.y-height)){
+      PVector a = new PVector(-1*velocity.y, velocity.x);
+      location.add(a);
+    }else{
+      PVector b = new PVector(velocity.y,-1*velocity.x);
+      location.add(b);
+    }
+  }
+  
+  charge basic = new charge(7);
+  charge special = new charge(15);
+  charge basiclength = new charge(2);
+  int miniCBamt = 0;
+  void attack(){
+    if(isAttackingStill){
+      if(basiclength.cooldown()){
+        basiclength.resetCooldown();
+        throwMiniCB();
+        miniCBamt++;
+      }
+      if(miniCBamt == 3){
+        basiclength.resetCooldown();
+        miniCBamt = 0;
+        isAttackingStill = false;
+      }
+    }else{
+      if(basic.cooldown()){
+        basic.resetCooldown();
+        throwMiniCB();
+        miniCBamt++;
+        isAttackingStill = true;
+      }else{
+        if(special.cooldown()){
+          special.resetCooldown();
+          throwBigCB();
+        }
+      }
+    }
+  }
+  
+  void bunBunDied(){
+    this.ActOptions[4] = false;
+    this.health = 15;
+  }
+  
+  void death(){}
+  void throwMiniCB(){}
+  void throwBigCB(){}
+  void DuoAttack(){}
+  void boundsCheck(){}
+  
+  void trueDraw(){}
 }
+
+
+
+
+class BunBun extends unit implements rectangle{
+float getXcor(){return location.x;}
+  float getYcor(){return location.y;}
+  float getSizeX(){return sizeX;}
+  float getSizeY(){return sizeY;}
+  float getAngle(){return radians(0);}
+  boolean hitCheckCircle(bullet Bullet){
+     return Bullet.strikeRectangle(this);
+  }
+  
+BunBun(entity parent, battleMode field,float xcor,float ycor,float _width,float _height,PVector playerlocation){
+    super(field,xcor,ycor);
+    this.sizeX = _width*scale;
+    this.sizeY = _height*scale;
+    location = new PVector(xcor,ycor);
+    velocity = new PVector(0,0);
+    ploc = playerlocation;
+    health = 100;
+  }
+  
+  void getVelocityTo(float _speed){
+    PVector direction = location.sub(ploc);
+    direction.normalize();
+    direction.mult(_speed);
+    velocity = direction;
+  }
+  
+  boolean update(){ 
+    if(ActOptions[4] == false && health < 0){return true;}
+    boundsCheck(); //checks if Lula's on screen and updates ActOptions
+    actions();
+    return false;
+  }
+  
+  void actions(){
+    if (ActOptions[0]){
+      attack();
+    }
+    if(ActOptions[1]){
+      if(isAttackingStill){
+        attack();
+      }else{
+        if((int)(Math.random()*2) == 0){
+          attack();
+          move();
+        }else{
+          move();
+        }
+      }
+    }
+    if(ActOptions[2]){
+      move();
+    }
+    if(ActOptions[3]){
+      child.danger();
+      DuoAttack();
+    }
+  }
+  
+ 
+  void move(){
+    if(abs(location.x-0)<abs(location.y-0) || abs(location.x-0)<abs(location.y-height) || abs(location.x-width)<abs(location.y-0) || abs(location.x-width)<abs(location.y-height)){
+      PVector a = new PVector(-1*velocity.y, velocity.x);
+      location.add(a);
+    }else{
+      PVector b = new PVector(velocity.y,-1*velocity.x);
+      location.add(b);
+    }
+  }
+  
+  charge basic = new charge(7);
+  charge special = new charge(15);
+  charge basiclength = new charge(2);
+  int miniCBamt = 0;
+  void attack(){
+    if(isAttackingStill){
+      if(basiclength.cooldown()){
+        basiclength.resetCooldown();
+        throwMiniCB();
+        miniCBamt++;
+      }
+      if(miniCBamt == 3){
+        basiclength.resetCooldown();
+        miniCBamt = 0;
+        isAttackingStill = false;
+      }
+    }else{
+      if(basic.cooldown()){
+        basic.resetCooldown();
+        throwMiniCB();
+        miniCBamt++;
+        isAttackingStill = true;
+      }else{
+        if(special.cooldown()){
+          special.resetCooldown();
+          throwBigCB();
+        }
+      }
+    }
+  }
+  
+  void bunBunDied(){
+    this.ActOptions[4] = false;
+    this.health = 15;
+  }
+  
+  void death(){}
+  void throwMiniCB(){}
+  void throwBigCB(){}
+  void DuoAttack(){}
+  void boundsCheck(){}
+  
+  void trueDraw(){}
+}
+
+
+
+*/

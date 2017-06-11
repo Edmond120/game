@@ -22,6 +22,7 @@ class entity{
   void trueDraw(float xcor, float ycor,PApplet applet){ 
   }
 }
+
 abstract class unit extends entity{
   unit(){}
   unit(battleMode field,float xcor,float ycor){
