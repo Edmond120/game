@@ -53,7 +53,7 @@ class giantWormBossLevel extends battleMode{
                              //sizeX,sizeY,angle,health,segments
 float[] wormBossStats = {1,    0.5,  0,    2000,  16};
 float wormBossOpening = 0 * scale;
-float friction = 0.95;
+float friction = 0.98;
 wormHead makeWorm(battleMode field){
   float[]s = wormBossStats;
   wormHead head = new wormHead(field,width/scale - s[0]/2,s[1]/2,s[0],s[1],s[2],int(s[3]));
@@ -67,6 +67,7 @@ wormHead makeWorm(battleMode field){
     field.enemies.addLast(currentNode);
     currentNode = currentNode.backSegment.backNode;
   }
+   field.enemies.addLast(tail.backNode);//debug
    field.enemies.addLast(tail);
   currentSegment = head.backNode.backSegment;
   for(int n = 0;n < s[4] - 2;n++){
@@ -141,7 +142,7 @@ class wormTail extends wormSegment{
      createBackNode();
    }
    boolean update(){
-     backNode.update();
+     //backNode.update();
      return super.update();
    }
 }
