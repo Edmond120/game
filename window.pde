@@ -32,15 +32,25 @@ class fieldPart extends PApplet{
     this.onTop = onTop;
     this.name = name;
     this.field = field;
+    visiable = true;
     PApplet.runSketch(new String[]{name},this);
   }
   String name;
   int Width,Height,xcor,ycor;
   boolean onTop;
+  boolean visiable;
   battleMode field;
   oneWayLinkedListKey<unit>[] keys;
   void settings(){
     size(newWindowWidth,newWindowHeight);
+  }
+  void invis(){
+   visiable = false;
+   getSurface().setVisible(false);
+  }
+  void vis(){
+   visiable = true;
+   getSurface().setVisible(true);
   }
   void setup(){
     frameRate(20);

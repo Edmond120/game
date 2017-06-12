@@ -285,6 +285,26 @@ boolean checkBounds(circle x,battleMode field){
   }
   return r;
 }
+boolean checkDisplayBounds(PVector x){//assumes its main window
+  boolean r = false;
+  if(x.x > mainWindow.width + centerX){
+    x.x = (mainWindow.width + centerX);
+    r = true;
+  }
+  else if(x.x < 0 - centerX){
+    x.x = 0 - centerX;
+    r = true;
+  }
+  if(x.y > mainWindow.height + centerY){
+    x.y=(mainWindow.height + centerY);
+    r = true;
+  }
+  else if(x.y < 0-centerY){
+    x.y = 0-centerY;
+    r = true;
+  }
+  return r;
+}
 int checkBoundsAdvanced(circle x,battleMode field){
   int r = 0;
   if(x.getXcor() > field._width - (x.getSize() / 2)){

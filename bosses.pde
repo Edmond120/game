@@ -1,10 +1,11 @@
 class giantWormBossLevel extends battleMode{
-  wormHead head;
+  wormHead head;fieldPart fp;
   @Override
   void _setup(){
     super._setup();
     players.add(new testunit(this,0.5,0.5,0.20,0.5));
     head = makeWorm(this);
+    fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
   }
   @Override
   void tick(){
@@ -31,12 +32,28 @@ class giantWormBossLevel extends battleMode{
        wormBossOpening = 0; 
       }
     }
+    if(!out){
+      if(head.getXcor() < 0 || head.getXcor() > width || head.getYcor() < 0 || head.getYcor() > height){
+        out = true;
+        fp.vis();
+      }
+    }
+    else{
+      if(head.getXcor() >= 0 && head.getXcor() <= width && head.getYcor() >= 0 && head.getYcor() <= height){
+       out = false;
+       fp.invis();
+      }
+    }
+    checkDisplayBounds(head.location);
+    centerWindow(mainWindow);
+    fp.setLocation(int(head.getXcor() + centerX - fp.width/2),int(head.getYcor() + centerY - fp.height/2));
   }
+  boolean out = false;
 }                           
                              //sizeX,sizeY,angle,health,segments
 float[] wormBossStats = {1,    0.5,  0,    2000,  16};
 float wormBossOpening = 0 * scale;
-float friction = 0.98;
+float friction = 0.95;
 wormHead makeWorm(battleMode field){
   float[]s = wormBossStats;
   wormHead head = new wormHead(field,width/scale - s[0]/2,s[1]/2,s[0],s[1],s[2],int(s[3]));
@@ -201,8 +218,8 @@ class wormNode extends unit implements circle{
         //  x = !x;
         //}
        // PVector oldLocation = location;
-       /*
-        if(diff <= 0){
+       
+        /*if(diff <= 0){
          location = angle2.rotate(-1*HALF_PI).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
         }
         else if (diff > 0){
@@ -296,13 +313,13 @@ class wormSegment extends unit implements rectangle{
    }
    @Override
    void trueDraw(float xcor,float ycor,PApplet applet){
-     pushMatrix();
-     stroke(#00F2FC);
-     fill(#FFFFFF);
-     translate(xcor,ycor);
-     rotate(radians(angle));
-     rect(sizeX/-2,sizeY/-2,sizeX,sizeY);
-     popMatrix();
+     applet.pushMatrix();
+     applet.stroke(#00F2FC);
+     applet.fill(#FFFFFF);
+     applet.translate(xcor,ycor);
+     applet.rotate(radians(angle));
+     applet.rect(sizeX/-2,sizeY/-2,sizeX,sizeY);
+     applet.popMatrix();
    }
 }
 
