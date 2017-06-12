@@ -3,7 +3,7 @@ class giantWormBossLevel extends battleMode{
   @Override
   void _setup(){
     super._setup();
-    players.add(new testunit(this,0.5,0.5,0.20,0.5));
+    players.add(new testunitA(this,0.5,0.5,0.20,0.5));
     head = makeWorm(this);
     fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
   }
@@ -344,7 +344,7 @@ class Metropolis extends battleMode{
   @Override
   void _setup(){
     super._setup();
-    player a = new testunit(this,0.5,0.5,0.20,0.5);
+    player a = new testunitA(this,0.5,0.5,0.20,0.5);
     players.add(a);
     enemies.add(new Lula(this,10,5,0.4,0.6,a));
     //enemies.add(BunBun(Lula,stuff));
