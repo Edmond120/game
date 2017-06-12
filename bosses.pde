@@ -53,9 +53,9 @@ class giantWormBossLevel extends battleMode{
                              //sizeX,sizeY,angle,health,segments
 float[] wormBossStats = {1,    0.5,  0,    2000,  16};
 float wormBossOpening = 0 * scale;
-float endFriction = 0.95;
+float endFriction = 0.85;
 float constantFriction = 0.97;
-float useConstantFriction = false;
+boolean useConstantFriction = false;
 wormHead makeWorm(battleMode field){
   float[]s = wormBossStats;
   wormHead head = new wormHead(field,width/scale - s[0]/2,s[1]/2,s[0],s[1],s[2],int(s[3]));
