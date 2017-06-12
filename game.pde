@@ -42,13 +42,10 @@ void settings(){
   centerX = displayWidth/2-width/2;
   centerY = displayHeight/2-height/2;
   
-  //SAVE SYSTEM TEST
+  /*SAVE SYSTEM TEST
   SaveSystem a = new SaveSystem("savefile.txt");
   levels = a.load(levels);
-  levels[0] = true;
-  levels[1] = true;
-  levels[2] = true;
-  a.save();
+  a.save();*/
 }
 
 //setup + variables

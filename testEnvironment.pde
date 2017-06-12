@@ -240,7 +240,7 @@ boolean hitCheckCircle(bullet Bullet){
     }
   }
   bullet createbullet(){
-    return new bullet(this,field,xcor,ycor,0.2 * scale,BxVector * scale,ByVector * scale,10);
+    return new testbullet(this,field,xcor,ycor,0.2 * scale,BxVector * scale,ByVector * scale,10);
   }
   float BxVector;
   float ByVector;
@@ -440,6 +440,17 @@ boolean hitCheckCircle(bullet Bullet){
   Ebullet(battleMode field,float xcor,float ycor,float size,float xVector,float yVector, int damage){
     this(null,field,xcor,ycor,size,xVector,yVector,damage);
     scaleVars();
+  }
+  
+  boolean update(){
+    xcor += vector[0];
+    ycor += vector[1];
+    if(checkBounds(this,field)){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
   
   //methods

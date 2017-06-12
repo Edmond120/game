@@ -167,7 +167,7 @@ class charge{
   }
 }
 //bounds
-boolean checkBounds(unit x,battleMode field){
+/*boolean checkBounds(unit x,battleMode field){
   boolean r = false;
   if(x.xcor > field._width - (x.size / 2)){
     x.xcor = field._width - (x.size / 2);
@@ -206,7 +206,7 @@ int checkBoundsAdvanced(unit x,battleMode field){
     r = 4;
   }
   return r;
-}
+}*/
 boolean checkBoundsGhost(unit x,battleMode field){
   if(x.xcor > field._width - (x.size / 2)){
     return true;
@@ -264,6 +264,47 @@ boolean inBounds(unit x,battleMode field){
   return true;
 }
 
+//circle bounds
+boolean checkBounds(circle x,battleMode field){
+  boolean r = false;
+  if(x.getXcor() > field._width - (x.getSize() / 2)){
+    x.setXcor(field._width - (x.getSize() / 2));
+    r = true;
+  }
+  else if(x.getXcor() < x.getSize() / 2){
+    x.setXcor(x.getSize() / 2);
+    r = true;
+  }
+  if(x.getYcor() > field._height - (x.getSize() / 2)){
+    x.setYcor(field._height - (x.getSize() / 2));
+    r = true;
+  }
+  else if(x.getYcor() < x.getSize() / 2){
+    x.setYcor(x.getSize() / 2);
+    r = true;
+  }
+  return r;
+}
+int checkBoundsAdvanced(circle x,battleMode field){
+  int r = 0;
+  if(x.getXcor() > field._width - (x.getSize() / 2)){
+    x.setXcor(field._width - (x.getSize() / 2));
+    r = 1;
+  }
+  else if(x.getXcor() < x.getSize() / 2){
+    x.setXcor(x.getSize() / 2);
+    r = 2;
+  }
+  if(x.getYcor() > field._height - (x.getSize() / 2)){
+    x.setYcor(field._height - (x.getSize() / 2));
+    r = 3;
+  }
+  else if(x.getYcor() < x.getSize() / 2){
+    x.setYcor(x.getSize() / 2);
+    r = 4;
+  }
+  return r;
+}
 
 public String Command(String arg) {
   String something = "";
