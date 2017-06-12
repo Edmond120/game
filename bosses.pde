@@ -3,10 +3,8 @@ class giantWormBossLevel extends battleMode{
   @Override
   void _setup(){
     super._setup();
-    head = new wormHead(this,8.0,4.5,2.5,1.75,0,100);
-    enemies.add(head);
     players.add(new testunit(this,0.5,0.5,0.20,0.5));
-    enemies.add(head.backNode);
+    head = makeWorm(this);
   }
   @Override
   void tick(){
@@ -24,22 +22,57 @@ class giantWormBossLevel extends battleMode{
     if(keys[keyM]){
       head.decelerate(head.decel);
     }
+    if(keys[keyL]){
+      wormBossOpening += -0.1 * scale;
+    }
+    if(keys[keyK]){
+      wormBossOpening += 0.3 * scale;
+      if(wormBossOpening > 0){
+       wormBossOpening = 0; 
+      }
+    }
   }
+}                           
+                             //sizeX,sizeY,angle,health,segments
+float[] wormBossStats = {1,    0.5,  0,    2000,  16};
+float wormBossOpening = 0 * scale;
+float friction = 0.98;
+wormHead makeWorm(battleMode field){
+  float[]s = wormBossStats;
+  wormHead head = new wormHead(field,width/scale - s[0]/2,s[1]/2,s[0],s[1],s[2],int(s[3]));
+  wormSegment currentSegment = head.backNode.createSegment(s[0]*scale,s[1]*scale,s[2],int(s[3]));
+  for(int n = 0;n < s[4] - 2;n++){
+    currentSegment = currentSegment.createBackNode().createSegment(s[0]*scale,s[1]*scale,s[2],int(s[3]));
+  }
+  wormTail tail = currentSegment.createBackNode().createTail(s[0],s[1],s[2],int(s[3]));
+  wormNode currentNode = head.backNode;
+  for(int n = 0;n < s[4] - 1;n++){
+    field.enemies.addLast(currentNode);
+    currentNode = currentNode.backSegment.backNode;
+  }
+   field.enemies.addLast(tail);
+  currentSegment = head.backNode.backSegment;
+  for(int n = 0;n < s[4] - 2;n++){
+    field.enemies.addLast(currentSegment);
+    currentSegment = currentSegment.backNode.backSegment;
+  }
+  field.enemies.addLast(head);
+  return head;
 }
-
 class wormHead extends wormSegment{
   wormHead(battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
     this(null,field,xcor,ycor,sizeX,sizeY,angle,health);
     scaleVars();
     //frontNode = new wormNode(this,field,xcor + sizeX/2 + nodeSize/2,ycor,nodeSize,int(health * 0.75));
-    backNode = new wormNode(this,field,this.xcor - cos(radians(this.angle))*((this.sizeX + nodeSize)/2),this.ycor - sin(radians(this.angle))*((this.sizeX + nodeSize)/2),nodeSize,int(health * 0.75));
+    backNode = new wormNode(null,field,this.xcor - cos(radians(this.angle))*((this.sizeX + getSizeY())/2),this.ycor - sin(radians(this.angle))*((this.sizeX + getSizeY())/2),getSizeY(),int(health * 0.75),this);
   }
   wormHead(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
      super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
      
    }
+   float limit = 25;//change limit in wormNode too
    float accel = 0.1;
-   float decel = 0.1;
+   float decel = 0.2;
    float turnRate = 4;
    void accelerate(float x){
      float speed = velocity.mag();
@@ -85,10 +118,22 @@ class wormHead extends wormSegment{
      velocity.rotate(radians(degrees));
    }
 }
+class wormTail extends wormSegment{
+  wormTail(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
+     super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
+     createBackNode();
+   }
+   boolean update(){
+     backNode.update();
+     return super.update();
+   }
+}
 class wormNode extends unit implements circle{
   PVector location;
+  PVector targetLocation;
+  wormSegment frontSegment,backSegment;
   PVector velocity = new PVector(0,0);
-  float limit = 10;//change limit in wormSegment too
+  //float limit = 10;//change limit in wormSegment too
   float getXcor(){return location.x;}
   float getYcor(){return location.y;}
   float getSize(){return size;}
@@ -98,14 +143,92 @@ class wormNode extends unit implements circle{
   boolean hitCheckCircle(bullet Bullet){
     return Bullet.strikeCircle(this); 
   }
-  wormNode(entity parent,battleMode field,float xcor,float ycor,float size,int health){
+  wormSegment createSegment(float sizeX,float sizeY,float angle,int health){
+    PVector l = PVector.add(location,PVector.fromAngle(radians(angle + 180)).mult((sizeX + getSize())/2));
+    wormSegment newSegment = new wormSegment(this,field,l.x,l.y,sizeX,sizeY,angle,health);
+    newSegment.frontNode = this;
+    backSegment = newSegment;
+    return newSegment;
+  }
+  
+  wormTail createTail(float sizeX,float sizeY,float angle,int health){
+    PVector l = PVector.add(location,PVector.fromAngle(radians(angle + 180)).mult((sizeX + getSize())/2));
+    wormTail newSegment = new wormTail(this,field,l.x,l.y,sizeX,sizeY,angle,health);
+    newSegment.frontNode = this;
+    backSegment = newSegment;
+    return newSegment;
+  }
+  //entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health
+  wormNode(wormNode parent,battleMode field,float xcor,float ycor,float size,int health,wormSegment frontSegment){
     super(parent,field,xcor,ycor);
     this.size = size;this.health = health;
     location = new PVector(xcor,ycor);
+    this.frontSegment = frontSegment;
+  }
+  boolean update(){
+    if(parent != null){
+       move();
+    }
+    return false;
   }
   void move(){
-    
+    if(velocity.mag() < 0.15){//friction
+     velocity.set(0,0); 
+    }
+    else{
+     velocity.mult(friction); 
+    }
+    location.add(velocity);
+    wormNode p = ((wormNode)parent);
+    PVector targetLocation = p.location;
+    PVector difference = PVector.sub(targetLocation,location);
+    difference.setMag(difference.mag() - frontSegment.getSizeX() - (getSize() + (p.getSize()))/2 + wormBossOpening);
+    velocity.add(difference);
+    location.add(difference);
+    PVector angle1 = PVector.fromAngle(radians(frontSegment.getAngle()));
+    PVector angle2 = PVector.fromAngle(radians(p.frontSegment.getAngle()));
+    float diff = angle2.heading() - angle1.heading();
+    //println(tan(radians(p.frontSegment.getAngle())));
+    if(abs(diff) > HALF_PI){
+      //float t = tan(radians(p.frontSegment.getAngle()));
+      //pDir = dir;
+      //dir = (t > 0);
+        //dir = true;
+        //boolean x = diff > 0;
+        //if(pDir != dir){x = !x; dir = false;}
+        
+        //if(keys[keyM]){
+        //  x = !x;
+        //}
+       // PVector oldLocation = location;
+       /*
+        if(diff <= 0){
+         location = angle2.rotate(-1*HALF_PI).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
+        }
+        else if (diff > 0){
+         location = angle2.rotate(HALF_PI).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
+        }*/
+        //println(100.0 / scale);
+        //if(abs(getYcor() - pycor) > 1 * scale){
+         // location = oldLocation;
+        //}
+      /*}
+      else{
+       boolean x = diff > 0;
+       if(dir){x = !x; dir = false;}
+        if(x){
+         location = angle2.rotate(HALF_PI).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
+        }
+        else{
+         location = angle2.rotate(-1*HALF_PI).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
+        }
+      }*/
+    }
+    pxcor = getXcor();
+        pycor = getYcor();
   }
+  float pxcor;
+  float pycor;
   @Override
   void _draw(){
    trueDraw(location.x,location.y,mainWindow); 
@@ -120,10 +243,9 @@ class wormNode extends unit implements circle{
 class wormSegment extends unit implements rectangle{
   PVector velocity = new PVector(0,0);
   PVector location;
-  float limit = 10;//change limit in wormNode too
    wormNode frontNode;
    wormNode backNode;
-   float nodeSize = 0.5 * scale;
+   //float nodeSize = 0.5 * scale;
    float velocityX = 0;
    float velocityY = 0;
    float angle,sizeX,sizeY;
@@ -146,8 +268,17 @@ class wormSegment extends unit implements rectangle{
      this.sizeX = sizeX;this.sizeY = sizeY;this.health = health;this.angle = angle;
      location = new PVector(xcor,ycor);
    }
+   wormNode createBackNode(){
+    return backNode = new wormNode(frontNode,field,this.xcor - cos(radians(this.angle))*((this.sizeX + getSizeY())/2),this.ycor - sin(radians(this.angle))*((this.sizeX + getSizeY())/2),getSizeY(),int(health * 0.75),this); 
+   }
+   boolean update(){
+     move();
+     return false;
+   }
    void move(){
-     
+     angle = degrees(PVector.sub(frontNode.location,backNode.location).heading());
+     //location = PVector.fromAngle(radians(angle)).mult(((backNode.getSize() + getSizeX())/2)).add(backNode.location);
+     location = PVector.add(frontNode.location,backNode.location).mult(0.5);
    }
    void scaleVars(){
     super.scaleVars();
@@ -156,8 +287,8 @@ class wormSegment extends unit implements rectangle{
     location.mult(scale);
    }
    void setBackNode(){
-    backNode.setXcor(getXcor() - cos(radians(angle))*((sizeX + nodeSize)/2));
-    backNode.setYcor(getYcor() - sin(radians(angle))*((sizeX + nodeSize)/2)); 
+    backNode.setXcor(getXcor() - cos(radians(angle))*((sizeX + backNode.getSize())/2));
+    backNode.setYcor(getYcor() - sin(radians(angle))*((sizeX + backNode.getSize())/2)); 
    }
    @Override
    void _draw(){
@@ -174,15 +305,7 @@ class wormSegment extends unit implements rectangle{
      popMatrix();
    }
 }
-class giantWormBossHead extends wormHead{
-  giantWormBossHead(battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
-    this(null,field,xcor,ycor,sizeX,sizeY,angle,health);
-    scaleVars();
-  }
-  giantWormBossHead(entity parent,battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
-    super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
-  }
-}
+
 
 
 

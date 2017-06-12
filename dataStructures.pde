@@ -17,11 +17,14 @@ class Lnode<E>{
   }
 class oneWayLinkedList<E>{//only one thread should be adding or removing from the list
   int size = 0;
-  Lnode<E> start = new Lnode<E>(null,null);
+  Lnode<E> end = new Lnode<E>(null,null);
+  Lnode<E> start = new Lnode<E>(null,end);
   oneWayLinkedListKey<E> FirstKey = createKey();//only to be used by the thread that adds or removes from the list
   oneWayLinkedList(){
+    end.after = start;//end's after is actually before
     }
     oneWayLinkedList(E...args){
+      this();
      for(int i = 0; i < args.length;i++){
       add(args[i]); 
      }
@@ -33,8 +36,13 @@ class oneWayLinkedList<E>{//only one thread should be adding or removing from th
       start.after = new Lnode(x,start.after);
       size++;
     }
+    synchronized void addLast(E x){
+      Lnode newNode = new Lnode(x,end);
+      end.after.after = newNode;
+      end.after = newNode;
+    }
     boolean hasNext(oneWayLinkedListKey<E> Key){
-      if(Key.current.after == null){
+      if(Key.current.after == end){
         rewind(Key);
         return false;
       }
