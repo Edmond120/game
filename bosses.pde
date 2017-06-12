@@ -55,6 +55,7 @@ float[] wormBossStats = {1,    0.5,  0,    2000,  16};
 float wormBossOpening = 0 * scale;
 float endFriction = 0.85;
 float constantFriction = 0.97;
+boolean snap = false;
 boolean useConstantFriction = false;
 wormHead makeWorm(battleMode field){
   float[]s = wormBossStats;
@@ -228,7 +229,7 @@ class wormNode extends unit implements circle{
         //  x = !x;
         //}
        // PVector oldLocation = location;
-       
+       if(snap){
         if(diff <= 0){
           PVector a = new PVector(-angle2.y,angle2.x).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
          location = a;
@@ -236,7 +237,7 @@ class wormNode extends unit implements circle{
         else if (diff > 0){
           PVector b = new PVector(-angle2.y,angle2.x).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
          location = b;
-        }
+        }}
         //println(100.0 / scale);
         //if(abs(getYcor() - pycor) > 1 * scale){
          // location = oldLocation;
