@@ -53,7 +53,7 @@ class giantWormBossLevel extends battleMode{
                              //sizeX,sizeY,angle,health,segments
 float[] wormBossStats = {1,    0.5,  0,    2000,  16};
 float wormBossOpening = 0 * scale;
-float endFriction = 0.85;
+float endFriction = 0.90;
 float constantFriction = 0.97;
 boolean snap = false;
 boolean useConstantFriction = false;
