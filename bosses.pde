@@ -418,7 +418,7 @@ class Lula extends unit implements rectangle{
       if(isAttackingStill[0]){
         attack();
       }else{
-        if((int)(Math.random()*2) == 0){
+        if((int)(Math.random()*3) == 0){
           attack();
           move();
         }else{
@@ -456,7 +456,7 @@ class Lula extends unit implements rectangle{
     location.add(velocity);
   }
   
-  charge basic = new charge(7);
+  charge basic = new charge(3);
   charge special = new charge(15);
   charge basiclength = new charge(2);
   int miniCBamt = 0;
@@ -501,10 +501,10 @@ class Lula extends unit implements rectangle{
   
   void death(){}
   void throwMiniCB(){
-    field.playerBullets.add(createMiniCB());
+    field.bullets.add(createMiniCB());
   }
   bullet createMiniCB(){//gotta modify this
-    return new testbullet(this,field,getXcor(),getYcor(),0.2 * scale,ploc.x * scale,ploc.y * scale,10);
+    return new MiniCB(this,field,getXcor(),getYcor(),0.2 * scale,ploc.sub(location).normalize(),10, ploc);
   }
   void throwBigCB(){}
   void DuoAttack(){}
@@ -523,6 +523,19 @@ class Lula extends unit implements rectangle{
     
     if(ActOptions[3]){
       checkStatus();
+    }
+    
+    if(location.x<0){
+      location = new PVector(0,location.y);
+    }
+    if(location.x>width){
+      location = new PVector(width,location.y);
+    }
+    if(location.y<0){
+      location = new PVector(location.x,0);
+    }
+    if(location.y>height){
+      location = new PVector(location.x,height);
     }
   }
   
@@ -544,6 +557,154 @@ class Lula extends unit implements rectangle{
     popMatrix();
   }
 }
+
+class MiniCB extends bullet implements circle{
+  //constructors + variables
+  float getXcor(){return location.x;}
+  float getYcor(){return location.y;}
+  float getSize(){return size;}
+  void setXcor(float x){xcor = x;}
+  void setYcor(float x){ycor = x;}
+  void setSize(float x){size = x;}
+  boolean hitCheckCircle(bullet Bullet){
+    throw new UnsupportedOperationException();
+  }
+  
+  int damage;
+  float[] vector = new float[2];
+  int colour = #FF0000;
+  PVector location;
+  PVector velocity;
+  PVector ploc;
+  MiniCB(){
+  }
+  MiniCB(entity parent,battleMode field,float xcor,float ycor,float size,PVector vector,int damage,PVector _ploc){
+    this.parent = parent;
+    this.field = field;
+    location = new PVector(xcor,ycor);
+    this.size = size;
+    this.radius = this.size / 2;
+    velocity = vector;
+    this.damage = damage;
+    this.displaySize = this.size;
+    ploc = _ploc;
+    setXcor(xcor);
+    setYcor(ycor);
+    velocity.mult(scale*0.05);
+  }
+  MiniCB(battleMode field,float xcor,float ycor,float size,PVector vector,int damage,PVector ploc){
+    this(null,field,xcor,ycor,size,vector,damage,ploc);
+    scaleVars();
+  }
+  void scaleVars(){
+   super.scaleVars();
+   velocity.mult(scale*2);
+  }
+  
+  //methods
+  boolean hit(unit target){
+    target.health -= damage;
+    return true;
+  }
+  boolean update(){
+    travel();
+    if(checkBounds(this,field)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  int t = 0;
+  void travel(){
+    t++;
+    //float z = (0.5*-9.8*t*t) + (velocity.mag()*t);
+    PVector a = new PVector(velocity.x,velocity.y);
+    location.add(a);
+  }
+  void death(){
+  }
+  boolean strikeCircle(circle hitbox){//target's hitbox is cicular
+   return abs(getXcor() - hitbox.getXcor()) + abs(getYcor() - hitbox.getYcor()) <= (getSize() / 2) + (hitbox.getSize() / 2); 
+  }
+  boolean strikeStandingRect(rectangle hitbox){//if angle is 90 or 270 degrees then tan(angle) will cause problems
+    if(getXcor() >= hitbox.getXcor() - hitbox.getSizeY()/2 && getXcor() <= hitbox.getXcor() + hitbox.getSizeY()/2
+      && getYcor() >= hitbox.getYcor() - hitbox.getSizeX()/2 && getYcor() <= hitbox.getYcor() + hitbox.getSizeX()/2){
+       return true; 
+      }
+      return false;
+  }
+  boolean strikeLayingRect(rectangle hitbox){//if angle is 0 ir 180 then slopeShort will have to divide by 0
+     if(getXcor() >= hitbox.getXcor() - hitbox.getSizeX()/2 && getXcor() <= hitbox.getXcor() + hitbox.getSizeX()/2
+      && getYcor() >= hitbox.getYcor() - hitbox.getSizeY()/2 && getYcor() <= hitbox.getYcor() + hitbox.getSizeY()/2){
+       return true; 
+      }
+      return false;
+  }
+  boolean strikeRectangle(rectangle hitbox){
+    if(hitbox.getAngle() % 90 == 0 && hitbox.getAngle() % 180 != 0){
+      return strikeStandingRect(hitbox);
+    }
+    else if(hitbox.getAngle() % 180 == 0){
+      return strikeLayingRect(hitbox);
+    }
+    float slopeLong = tan(radians(hitbox.getAngle()));
+    float interceptLong = hitbox.getYcor() - (hitbox.getXcor() * slopeLong);
+    float slopeShort = -1/slopeLong;
+    float intersectX = (interceptLong - (getYcor() - (getXcor() * slopeShort)))/(slopeShort - slopeLong);
+    float intersectY = intersectX * slopeLong + interceptLong;
+    if(!(distanceEq(intersectX,intersectY,getXcor(),getYcor()) <= (hitbox.getSizeY() / 2) + (getSize() / 2))){
+      return false;
+    }
+      float interceptShort = hitbox.getYcor() - (hitbox.getXcor() * slopeShort);
+      intersectX = (interceptShort - (getYcor() - (getXcor() * slopeLong)))/(slopeLong - slopeShort);
+      intersectY = intersectX * slopeShort + interceptShort;
+      if(distanceEq(intersectX,intersectY,getXcor(),getYcor()) <= (hitbox.getSizeX() / 2) + (getSize() / 2)){
+       return true; 
+      }
+      else{
+        return false;
+      }
+    }
+  boolean update(oneWayLinkedList<unit> x){
+    boolean a = update();
+    while(x.hasNext()){
+      unit target = x.next();
+      if(target.hitCheckCircle(this)){//bullet is cicular
+        if(hit(target)){
+          return true;
+        }
+        else{
+          return a;
+        }
+      }
+    }
+   
+    return a;
+  }
+  void trueDraw(float xcor, float ycor,PApplet applet){ 
+    applet.fill(colour);
+    applet.ellipse(xcor,ycor,displaySize,displaySize);
+  }
+}
+
+
+
+
+/*
+hitCheckCircle(bullet x){
+    if(x.strikeCircle()){
+         if(stamina > 0){
+              stamina--;
+               return false;
+             }
+          else{
+                 return true;
+           }
+         }
+      else{ return false;}
+}
+*/
 
 
 /*
