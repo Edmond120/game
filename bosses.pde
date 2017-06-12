@@ -219,12 +219,14 @@ class wormNode extends unit implements circle{
         //}
        // PVector oldLocation = location;
        
-        /*if(diff <= 0){
-         location = angle2.rotate(-1*HALF_PI).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
+        if(diff <= 0){
+          PVector a = new PVector(-angle2.y,angle2.x).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
+         location = a;
         }
         else if (diff > 0){
-         location = angle2.rotate(HALF_PI).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
-        }*/
+          PVector b = new PVector(-angle2.y,angle2.x).setMag(frontSegment.getSizeX() + (getSize() + p.getSize())/2).add(targetLocation);
+         location = b;
+        }
         //println(100.0 / scale);
         //if(abs(getYcor() - pycor) > 1 * scale){
          // location = oldLocation;
