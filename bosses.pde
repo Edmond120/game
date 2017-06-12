@@ -456,9 +456,9 @@ class Lula extends unit implements rectangle{
     location.add(velocity);
   }
   
-  charge basic = new charge(3);
-  charge special = new charge(15);
-  charge basiclength = new charge(2);
+  charge basic = new charge(4);
+  charge special = new charge(7);
+  charge basiclength = new charge(0.5);
   int miniCBamt = 0;
   void attack(){
     if(isAttackingStill[0]){
@@ -478,12 +478,12 @@ class Lula extends unit implements rectangle{
         throwMiniCB();
         miniCBamt++;
         isAttackingStill[0] = true;
-      }/*else{
+      }else{
         if(special.cooldown()){
           special.resetCooldown();
           throwBigCB();
         }
-      }*/
+      }
     }
   }
   
@@ -504,9 +504,14 @@ class Lula extends unit implements rectangle{
     field.bullets.add(createMiniCB());
   }
   bullet createMiniCB(){//gotta modify this
-    return new MiniCB(this,field,getXcor(),getYcor(),0.2 * scale,ploc.sub(location).normalize(),10, ploc);
+    return new CB(this,field,getXcor(),getYcor(),0.2 * scale,ploc.sub(location).normalize(),10, ploc);
   }
-  void throwBigCB(){}
+  void throwBigCB(){
+    field.bullets.add(createBigCB());
+  }
+  bullet createBigCB(){//gotta modify this
+    return new CB(this,field,getXcor(),getYcor(),0.4 * scale,ploc.sub(location).normalize(),20, ploc);
+  }
   void DuoAttack(){}
   float r = 2*scale;
   void boundsCheck(){
@@ -558,7 +563,7 @@ class Lula extends unit implements rectangle{
   }
 }
 
-class MiniCB extends bullet implements circle{
+class CB extends bullet implements circle{
   //constructors + variables
   float getXcor(){return location.x;}
   float getYcor(){return location.y;}
@@ -576,9 +581,9 @@ class MiniCB extends bullet implements circle{
   PVector location;
   PVector velocity;
   PVector ploc;
-  MiniCB(){
+  CB(){
   }
-  MiniCB(entity parent,battleMode field,float xcor,float ycor,float size,PVector vector,int damage,PVector _ploc){
+  CB(entity parent,battleMode field,float xcor,float ycor,float size,PVector vector,int damage,PVector _ploc){
     this.parent = parent;
     this.field = field;
     location = new PVector(xcor,ycor);
@@ -590,9 +595,9 @@ class MiniCB extends bullet implements circle{
     ploc = _ploc;
     setXcor(xcor);
     setYcor(ycor);
-    velocity.mult(scale*0.05);
+    velocity.mult(scale*0.13);
   }
-  MiniCB(battleMode field,float xcor,float ycor,float size,PVector vector,int damage,PVector ploc){
+  CB(battleMode field,float xcor,float ycor,float size,PVector vector,int damage,PVector ploc){
     this(null,field,xcor,ycor,size,vector,damage,ploc);
     scaleVars();
   }
@@ -618,7 +623,7 @@ class MiniCB extends bullet implements circle{
   int t = 0;
   void travel(){
     t++;
-    //float z = (0.5*-9.8*t*t) + (velocity.mag()*t);
+    //float z = (0.5*-9.8*t*t) + velocity.mag();
     PVector a = new PVector(velocity.x,velocity.y);
     location.add(a);
   }

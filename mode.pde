@@ -137,3 +137,41 @@ class mainMenu extends mode{
     updateButtons();
   }
 }
+
+
+class MetropolisButton extends button{
+  MetropolisButton(float x, float y,float xSize,float ySize){
+    super(x,y,xSize,ySize);
+  }
+  void action(){
+    Mode = new giantWormBossLevel();
+    Mode._setup();
+  }
+  void pushed(){
+  }
+  void hover(){
+    _draw();
+  }
+  void _draw(){
+    super._draw();
+    text("start",x,y,100,100);
+  }
+}
+class WormButton extends button{
+  WormButton(float x, float y,float xSize,float ySize){
+    super(x,y,xSize,ySize);
+  }
+  void action(){
+    Mode = new Metropolis();
+    Mode._setup();
+  }
+  void pushed(){
+  }
+  void hover(){
+    _draw();
+  }
+  void _draw(){
+    super._draw();
+    text("start",x,y,100,100);
+  }
+}
