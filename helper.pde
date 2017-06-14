@@ -27,6 +27,19 @@ CopyPasta
  return Bullet.strikeRectangle(this);
  }
  */
+ 
+void fade(PGraphics pic,float reduction){//beginDraw has already been called
+  if(reduction == 0){
+    return;
+  }
+ 
+ pic.loadPixels();
+ for(int i = 0; i < pic.pixels.length;i++){
+  pic.pixels[i] = color(red(pic.pixels[i]),green(pic.pixels[i]),blue(pic.pixels[i]),alpha(pic.pixels[i]) - (pic.colorModeA * reduction));
+ }
+ pic.updatePixels();
+ 
+}
 boolean circleXcircle(circle a, circle b) {//target's hitbox is cicular
   return abs(a.getXcor() - b.getXcor()) + abs(a.getYcor() - b.getYcor()) <= (a.getSize() / 2) + (b.getSize() / 2);
 }

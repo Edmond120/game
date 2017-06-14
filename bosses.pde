@@ -1,5 +1,6 @@
 class giantWormBossLevel extends battleMode{
   wormHead head;fieldPart fp;
+  charge coilAttack = new charge(3);
   @Override
   void _setup(){
     super._setup();
@@ -28,7 +29,7 @@ class giantWormBossLevel extends battleMode{
     if(keys[keyL]){
       wormBossOpening += -0.1 * scale;
     }
-    if(keys[keyK]){
+    if(coilAttack.cooldown(keys[keyK])){
       wormBossOpening += 0.3 * scale;
       if(wormBossOpening > 0){
        wormBossOpening = 0; 
@@ -128,12 +129,23 @@ class wormNodeCoil extends wormNodeCommand{
  void tick(wormNode x){
     x.move();
  }
+ attractor xx;
  wormNodeCommand _setup(wormHead x){
   useConstantFriction = true;
   constantFriction = 0.7;
   x.limit = (40.0/90)*scale;
-  accel = (x.limit - x.velocity.mag())/(2.5 * expectedFrameRate);
+  x.velocity.setMag(0);
+  //accel = (x.limit - x.velocity.mag())/(2.5 * expectedFrameRate);
+  accel = (x.limit)/(2.5 * expectedFrameRate);
   decel = (x.limit)/(2.5 * expectedFrameRate);
+  xx = new attractor();
+  xx._setup();
+  xx.setForce(50);
+  xx.setDelay(new delay(0.1));
+  xx.setTarget(new PVector(x.getXcor(),x.getYcor()));
+  xx.setFade(0.90);
+  xx.setColour(color(255));
+  x.fxEffects = xx;
   return this;
  }
  float accel,decel;
@@ -146,6 +158,7 @@ class wormNodeCoil extends wormNodeCommand{
    if(coilTime.cooldown()){
      x.faceTarget();
      x.attackMode = x.ATTACKREADY;
+     x.fxEffects = null;
      x.chooseCommand();
    }
    else{
@@ -168,6 +181,7 @@ class wormNodeCoil extends wormNodeCommand{
  }
 }
 class wormHead extends wormSegment{
+  fx fxEffects = null;
   wormHead(battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
     this(null,field,xcor,ycor,sizeX,sizeY,angle,health);
     scaleVars();
@@ -199,6 +213,12 @@ class wormHead extends wormSegment{
       }
     }
     return field.players.getCurrent(k);
+   }
+   void trueDraw(float xcor,float ycor,PApplet applet){
+    super.trueDraw(xcor,ycor,applet);
+    if(fxEffects != null && applet == mainWindow){
+      fxEffects._draw();
+    }
    }
    void faceTarget(){
     if(target == null){

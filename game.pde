@@ -77,6 +77,7 @@ void setup(){
   //Mode = new oneWayLinkedListTestEnvironment(); 
   //Mode = new giantWormBossLevel();
   //Mode = new Metropolis();
+  //Mode = new attractorTestEnvironment();
   Mode._setup();
   try{
   robot = new Robot();

@@ -1,3 +1,18 @@
+class attractorTestEnvironment extends testEnvironment{
+ attractor x;
+ void _setup(){
+  x = new attractor();
+  x._setup();
+  x.setForce(20);
+  x.setDelay(new delay(0.1));
+  x.setTarget(new PVector(8*scale,4.5*scale));
+  x.setFade(0.0);
+  x.setColour(color(0,0,255));
+ }
+ void tick(){
+  x._draw(); 
+ }
+}
 class newWindowTestEnvironment extends testEnvironment{
   fieldPart x;
  void _setup(){
