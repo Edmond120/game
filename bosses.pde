@@ -68,10 +68,6 @@ wormHead makeWorm(battleMode field){
   wormNode currentNode = head.backNode;
   for(int n = 0;n < s[4] - 1;n++){
     field.enemies.addLast(currentNode);
-    if(useConstantFriction){
-      currentNode.friction = constantFriction;
-    }
-    else{
       currentNode.friction = 1 - n*((1 - endFriction)/s[4]);
     }
     currentNode = currentNode.backSegment.backNode;
@@ -204,7 +200,12 @@ class wormNode extends unit implements circle{
      velocity.set(0,0); 
     }
     else{
-     velocity.mult(friction); 
+     if(useConstantFriction){
+       velocity.mult(constantFriction);
+     }
+     else{
+       velocity.mult(friction); 
+     }
     }
     location.add(velocity);
     wormNode p = ((wormNode)parent);
