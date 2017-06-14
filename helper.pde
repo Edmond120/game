@@ -61,7 +61,7 @@ boolean circleXrectangle(circle a,rectangle b) {
   float interceptShort = b.getYcor() - (b.getXcor() * slopeShort);
   intersectX = (interceptShort - (a.getYcor() - (a.getXcor() * slopeLong)))/(slopeLong - slopeShort);
   intersectY = intersectX * slopeShort + interceptShort;
-  if (distanceEq(intersectX, intersectY, a.getXcor(), a.getYcor()) <= (hitbox.getSizeX() / 2) + (a.getSize() / 2)) {
+  if (distanceEq(intersectX, intersectY, a.getXcor(), a.getYcor()) <= (b.getSizeX() / 2) + (a.getSize() / 2)) {
     return true;
   } else {
     return false;

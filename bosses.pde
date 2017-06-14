@@ -32,6 +32,9 @@ class giantWormBossLevel extends battleMode{
        wormBossOpening = 0; 
       }
     }
+    if(keys[keyJ]){
+     head.nodeCommand = new wormNodeCoil()._setup(head);
+    }
     if(!out){
       if(head.getXcor() < 0 || head.getXcor() > width || head.getYcor() < 0 || head.getYcor() > height){
         out = true;
@@ -50,13 +53,13 @@ class giantWormBossLevel extends battleMode{
   }
   boolean out = false;
 }                           
-                             //sizeX,sizeY,angle,health,segments
+                       //sizeX,sizeY,angle,health,segments
 float[] wormBossStats = {1,    0.5,  0,    2000,  16};
 float wormBossOpening = 0 * scale;
 float endFriction = 0.90;
-float constantFriction = 0.97;
+float constantFriction = 0.90;
 boolean snap = false;
-boolean useConstantFriction = false;
+boolean useConstantFriction = true;
 wormHead makeWorm(battleMode field){
   float[]s = wormBossStats;
   wormHead head = new wormHead(field,width/scale - s[0]/2,s[1]/2,s[0],s[1],s[2],int(s[3]));
@@ -69,7 +72,7 @@ wormHead makeWorm(battleMode field){
   for(int n = 0;n < s[4] - 1;n++){
     field.enemies.addLast(currentNode);
       currentNode.friction = 1 - n*((1 - endFriction)/s[4]);
-    }
+    
     currentNode = currentNode.backSegment.backNode;
   }
    field.enemies.addLast(tail.backNode);//debug
@@ -80,7 +83,87 @@ wormHead makeWorm(battleMode field){
     currentSegment = currentSegment.backNode.backSegment;
   }
   field.enemies.addLast(head);
+  currentNode = head.backNode;
+  while(currentNode.backSegment != null){
+    currentNode.leader = head;
+    currentNode.backSegment.leader = head;
+    currentNode = currentNode.backSegment.backNode;
+  }
   return head;
+}
+abstract class wormSegmentCommand{
+  abstract void tick(wormSegment x);
+  wormSegmentCommand _setup(wormHead x){
+    return this;
+  }
+  void end(wormHead x){
+  }
+}
+abstract class wormNodeCommand{
+  abstract void tick(wormNode x);
+  wormNodeCommand _setup(wormHead x){
+    return this;
+  }
+  void end(wormHead x){
+  }
+  void headMove(wormHead x){
+  }
+}
+class wormSegmentMove extends wormSegmentCommand{
+  void tick(wormSegment x){
+    x.move();
+  }
+}
+class wormNodeMove extends wormNodeCommand{
+  void tick(wormNode x){
+    x.move();
+  }
+  void headMove(wormHead x){
+   x.move(); 
+  }
+}
+class wormNodeCoil extends wormNodeCommand{
+ void tick(wormNode x){
+    x.move();
+ }
+ wormNodeCommand _setup(wormHead x){
+  useConstantFriction = true;
+  constantFriction = 0.7;
+  x.limit = (40.0/90)*scale;
+  accel = (x.limit - x.velocity.mag())/(2.5 * expectedFrameRate);
+  decel = (x.limit)/(2.5 * expectedFrameRate);
+  return this;
+ }
+ float accel,decel;
+ charge coilTime = new charge(7.5);
+ charge phase1 = new charge(2.5);
+ charge phase2 = new charge(2.5);
+ float r = 8;
+ float rChange = (10.125 - 8)/(2.5 * expectedFrameRate);
+ void headMove(wormHead x){
+   if(coilTime.cooldown()){
+     x.faceTarget();
+     x.attackMode = x.ATTACKREADY;
+     x.chooseCommand();
+   }
+   else{
+     if(!phase1.cooldown()){
+       x.accelerate(accel);
+       x.turnRight(r); 
+     }
+     else{
+       if(!phase2.cooldown()){
+         r += rChange;
+         x.turnRight(r);
+       }
+       else{
+         x.decelerate(decel);
+         x.turnRight(r);
+       }
+     }
+   }
+   x.move();
+ }
 }
 class wormHead extends wormSegment{
   wormHead(battleMode field,float xcor,float ycor,float sizeX,float sizeY,float angle,int health){
@@ -93,10 +176,54 @@ class wormHead extends wormSegment{
      super(parent,field,xcor,ycor,sizeX,sizeY,angle,health);
      
    }
-   float limit = 25;//change limit in wormNode too
-   float accel = 0.1;
-   float decel = 0.2;
-   float turnRate = 4;
+   wormSegmentCommand segmentCommand = new wormSegmentMove();
+   wormNodeCommand nodeCommand = new wormNodeMove();
+   wormSegmentCommand getSegmentCommand(){
+     return segmentCommand;
+   }
+   wormNodeCommand getNodeCommand(){
+     return nodeCommand;
+   }
+   unit target;
+   unit findTarget(){
+     oneWayLinkedListKey<unit> k = field.players.createKey();
+     int r = int(random(field.players.size)) + 1;
+    for(int i = 0; i < r; i++){
+      if(field.players.hasNext(k)){
+       field.players.next(k); 
+      }
+      else if(debug){
+       println("bosses, unit findTarget(), linkedList error"); 
+      }
+    }
+    return field.players.getCurrent(k);
+   }
+   void faceTarget(){
+    if(target == null){
+     target = findTarget();
+     if(target == null && debug){
+       println("bosses, void faceTarget(), findTarget error");
+     }
+    }
+    angle = degrees((new PVector(target.getXcor(),target.getYcor())).sub(location).heading());
+    velocity = PVector.fromAngle(radians(angle)).mult(velocity.mag());
+   }
+   final int PASSIVE = 0;
+   final int ATTACKREADY = 1;
+   int attackMode = PASSIVE;
+   float limit = (25.0/90)*scale;
+   float accel = (0.1/90)*scale;// 90 is the scale on my computer - edmond
+   float decel = (0.2/90)*scale;
+   float turnRate = 4;//10.125;
+   void chooseCommand(){
+     switch(attackMode){
+      case ATTACKREADY:
+          nodeCommand = new wormNodeMove()._setup(this);
+          limit = (50.0/90) * scale;
+          //faceTarget();
+          accelerate((50.0/90) * scale);
+     }
+   }
    void accelerate(float x){
      float speed = velocity.mag();
      if(speed + x < 0){
@@ -129,7 +256,7 @@ class wormHead extends wormSegment{
      setBackNode();
    }
    boolean update(){
-     move();
+     nodeCommand.headMove(this);
      return false;
    }
    void turnLeft(float degrees){//degrees is less than 90
@@ -152,6 +279,7 @@ class wormTail extends wormSegment{
    }
 }
 class wormNode extends unit implements circle{
+  wormHead leader = null;
   PVector location;
   PVector targetLocation;
   float friction = 1;
@@ -165,7 +293,12 @@ class wormNode extends unit implements circle{
   void setYcor(float x){location.y = x;}
   void setSize(float x){size = x;}
   boolean hitCheckCircle(bullet Bullet){
-    return Bullet.strikeCircle(this); 
+    if(backSegment != null){//last node (tail node) does not technically exist
+      return Bullet.strikeCircle(this);
+    }
+    else{
+      return false;
+    }
   }
   wormSegment createSegment(float sizeX,float sizeY,float angle,int health){
     PVector l = PVector.add(location,PVector.fromAngle(radians(angle + 180)).mult((sizeX + getSize())/2));
@@ -191,7 +324,7 @@ class wormNode extends unit implements circle{
   }
   boolean update(){
     if(parent != null){
-       move();
+       leader.getNodeCommand().tick(this);
     }
     return false;
   }
@@ -266,12 +399,14 @@ class wormNode extends unit implements circle{
   }
   @Override
   void trueDraw(float xcor,float ycor,PApplet applet){
+    if(backSegment == null){return;}
     applet.fill(#300DFF);
     applet.stroke(#300DFF);
     applet.ellipse(xcor,ycor,size,size);
   }
 }
 class wormSegment extends unit implements rectangle{
+  wormHead leader = null;
   PVector velocity = new PVector(0,0);
   PVector location;
    wormNode frontNode;
@@ -303,7 +438,7 @@ class wormSegment extends unit implements rectangle{
     return backNode = new wormNode(frontNode,field,this.xcor - cos(radians(this.angle))*((this.sizeX + getSizeY())/2),this.ycor - sin(radians(this.angle))*((this.sizeX + getSizeY())/2),getSizeY(),int(health * 0.75),this); 
    }
    boolean update(){
-     move();
+     leader.getSegmentCommand().tick(this);
      return false;
    }
    void move(){
