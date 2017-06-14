@@ -3,7 +3,9 @@ class giantWormBossLevel extends battleMode{
   @Override
   void _setup(){
     super._setup();
-    players.add(new testunitA(this,0.5,0.5,0.20,0.5));
+    testunitA xxx = new testunitA(this,0.5,0.5,0.20,0.5);
+    players.add(xxx);
+    xxx.health = 100000;
     head = makeWorm(this);
     fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
   }
@@ -257,6 +259,7 @@ class wormHead extends wormSegment{
    }
    boolean update(){
      nodeCommand.headMove(this);
+     contactDamage();
      return false;
    }
    void turnLeft(float degrees){//degrees is less than 90
@@ -292,6 +295,18 @@ class wormNode extends unit implements circle{
   void setXcor(float x){location.x = x;}
   void setYcor(float x){location.y = x;}
   void setSize(float x){size = x;}
+  
+  void contactDamage(){
+     while(field.players.hasNext(_key)){
+       unit target = field.players.next(_key);
+       if(target instanceof circle && circleXcircle((circle)target,this)){
+           hit(target);
+       }
+     }
+   }
+   void hit(unit x){
+    x.health -= 10; 
+   }
   boolean hitCheckCircle(bullet Bullet){
     if(backSegment != null){//last node (tail node) does not technically exist
       return Bullet.strikeCircle(this);
@@ -300,6 +315,7 @@ class wormNode extends unit implements circle{
       return false;
     }
   }
+  oneWayLinkedListKey _key;
   wormSegment createSegment(float sizeX,float sizeY,float angle,int health){
     PVector l = PVector.add(location,PVector.fromAngle(radians(angle + 180)).mult((sizeX + getSize())/2));
     wormSegment newSegment = new wormSegment(this,field,l.x,l.y,sizeX,sizeY,angle,health);
@@ -321,11 +337,13 @@ class wormNode extends unit implements circle{
     this.size = size;this.health = health;
     location = new PVector(xcor,ycor);
     this.frontSegment = frontSegment;
+    _key = field.players.createKey();
   }
   boolean update(){
     if(parent != null){
        leader.getNodeCommand().tick(this);
     }
+    contactDamage();
     return false;
   }
   void move(){
@@ -433,13 +451,27 @@ class wormSegment extends unit implements rectangle{
      super(parent,field,xcor,ycor);
      this.sizeX = sizeX;this.sizeY = sizeY;this.health = health;this.angle = angle;
      location = new PVector(xcor,ycor);
+     _key = field.players.createKey();
    }
+   oneWayLinkedListKey<unit> _key;
    wormNode createBackNode(){
     return backNode = new wormNode(frontNode,field,this.xcor - cos(radians(this.angle))*((this.sizeX + getSizeY())/2),this.ycor - sin(radians(this.angle))*((this.sizeX + getSizeY())/2),getSizeY(),int(health * 0.75),this); 
    }
    boolean update(){
      leader.getSegmentCommand().tick(this);
+     contactDamage();
      return false;
+   }
+   void contactDamage(){
+     while(field.players.hasNext(_key)){
+       unit target = field.players.next(_key);
+       if(target instanceof circle && circleXrectangle((circle)target,this)){
+           hit(target);
+       }
+     }
+   }
+   void hit(unit x){
+    x.health -= 10; 
    }
    void move(){
      angle = degrees(PVector.sub(frontNode.location,backNode.location).heading());
