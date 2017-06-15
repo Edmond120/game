@@ -18,6 +18,7 @@ abstract class bullet extends unit{
     this(null,field,xcor,ycor,size,xVector,yVector,damage);
     scaleVars();
   }
+  float getSize(){throw new UnsupportedOperationException();}
   float getXcor(){return xcor;}
   float getYcor(){return ycor;}
   void setXcor(float x){xcor = x;}
@@ -48,47 +49,26 @@ abstract class bullet extends unit{
   void death(){
   }
   boolean strikeCircle(circle hitbox){//target's hitbox is cicular
-   return abs(xcor - hitbox.getXcor()) + abs(ycor - hitbox.getYcor()) <= (size / 2) + (hitbox.getSize() / 2); 
+  //println("hi");
+   return abs(getXcor() - hitbox.getXcor()) + abs(getYcor() - hitbox.getYcor()) <= (getSize() / 2) + (hitbox.getSize() / 2); 
   }
   boolean strikeStandingRect(rectangle hitbox){//if angle is 90 or 270 degrees then tan(angle) will cause problems
-    if(xcor >= hitbox.getXcor() - hitbox.getSizeY()/2 && xcor <= hitbox.getXcor() + hitbox.getSizeY()/2
-      && ycor >= hitbox.getYcor() - hitbox.getSizeX()/2 && ycor <= hitbox.getYcor() + hitbox.getSizeX()/2){
+    if(getXcor() >= hitbox.getXcor() - hitbox.getSizeY()/2 && getXcor() <= hitbox.getXcor() + hitbox.getSizeY()/2
+      && getYcor() >= hitbox.getYcor() - hitbox.getSizeX()/2 && getYcor() <= hitbox.getYcor() + hitbox.getSizeX()/2){
        return true; 
       }
       return false;
   }
   boolean strikeLayingRect(rectangle hitbox){//if angle is 0 ir 180 then slopeShort will have to divide by 0
-     if(xcor >= hitbox.getXcor() - hitbox.getSizeX()/2 && xcor <= hitbox.getXcor() + hitbox.getSizeX()/2
-      && ycor >= hitbox.getYcor() - hitbox.getSizeY()/2 && ycor <= hitbox.getYcor() + hitbox.getSizeY()/2){
+     if(getXcor() >= hitbox.getXcor() - hitbox.getSizeX()/2 && xcor <= hitbox.getXcor() + hitbox.getSizeX()/2
+      && getYcor() >= hitbox.getYcor() - hitbox.getSizeY()/2 && ycor <= hitbox.getYcor() + hitbox.getSizeY()/2){
        return true; 
       }
       return false;
   }
-  boolean strikeRectangle(rectangle hitbox){
-    if(hitbox.getAngle() % 90 == 0 && hitbox.getAngle() % 180 != 0){
-      return strikeStandingRect(hitbox);
-    }
-    else if(hitbox.getAngle() % 180 == 0){
-      return strikeLayingRect(hitbox);
-    }
-    float slopeLong = tan(radians(hitbox.getAngle()));
-    float interceptLong = hitbox.getYcor() - (hitbox.getXcor() * slopeLong);
-    float slopeShort = -1/slopeLong;
-    float intersectX = (interceptLong - (ycor - (xcor * slopeShort)))/(slopeShort - slopeLong);
-    float intersectY = intersectX * slopeLong + interceptLong;
-    if(!(distanceEq(intersectX,intersectY,xcor,ycor) <= (hitbox.getSizeY() / 2) + (size / 2))){
-      return false;
-    }
-      float interceptShort = hitbox.getYcor() - (hitbox.getXcor() * slopeShort);
-      intersectX = (interceptShort - (ycor - (xcor * slopeLong)))/(slopeLong - slopeShort);
-      intersectY = intersectX * slopeShort + interceptShort;
-      if(distanceEq(intersectX,intersectY,xcor,ycor) <= (hitbox.getSizeX() / 2) + (size / 2)){
-       return true; 
-      }
-      else{
-        return false;
-      }
-    }
+  abstract boolean strikeRectangle(rectangle hitbox);//{
+    //return circleXrectangle((circle)this,hitbox);
+    //}
   boolean update(oneWayLinkedList<unit> x){
     boolean a = update();
     while(x.hasNext()){
@@ -137,6 +117,9 @@ class normalBullet extends bullet implements circle{
    location.add(velocity);
    return checkDisplayBounds(this);
  }
+ boolean strikeRectangle(rectangle hitbox){
+    return circleXrectangle(this,hitbox);
+    }
  void trueDraw(float xcor,float ycor,PApplet applet){
   applet.stroke(colour);
   applet.fill(colour);

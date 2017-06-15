@@ -34,8 +34,10 @@ interface fx{
 }
 class attractor implements fx{
   PGraphics layer2;
-  attractor(){layer2 = createGraphics(width,height);}
-  attractor(int x,int y){layer2 = createGraphics(x,y);}
+  attractor(){layer2 = createGraphics(width,height);
+}
+  attractor(int x,int y){layer2 = createGraphics(x,y);
+}
   oneWayLinkedList<PVector> dust = new oneWayLinkedList<PVector>();
   int colour;
   delay Delay;
@@ -66,9 +68,9 @@ class attractor implements fx{
   }
   void _draw(){
     layer2.beginDraw();
-    if(Delay.every()){
+    //if(Delay.every()){
       //fade(layer2,r);// not working?!?!
-    }
+    //}
     layer2.stroke(colour);
     while(dust.hasNext()){
       PVector p = dust.next();

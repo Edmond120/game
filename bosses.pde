@@ -149,18 +149,18 @@ class wormNodeCoil extends wormNodeCommand{
   return this;
  }
  float accel,decel;
- charge coilTime = new charge(7.5);
+ charge coilTime = new charge(5.5);
  charge phase1 = new charge(2.5);
- charge phase2 = new charge(2.5);
+ charge phase2 = new charge(1.5);
  float r = 8;
- float rChange = (10.125 - 8)/(2.5 * expectedFrameRate);
+ float rChange = (10.125 - 8)/(1.5 * expectedFrameRate);
  void headMove(wormHead x){
    if(coilTime.cooldown()){
      x.faceTarget();
      x.attackMode = x.ATTACKREADY;
      x.fxEffects = null;
      for(int i = 0; i < 360; i++){
-       x.field.bullets.add(new normalBullet(x,x.field,xx.target.copy(),PVector.fromAngle(radians(random(360))).setMag(random((30.0/45)*scale)),0.2 * scale,10));
+       x.field.bullets.add(new normalBullet(x,x.field,xx.target.copy(),PVector.fromAngle(radians(random(360))).setMag(random((25.0/45)*scale) + 0.1 * scale),0.2 * scale,10));
      }
      x.chooseCommand();
    }

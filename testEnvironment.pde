@@ -390,6 +390,9 @@ class testunitA extends testunit{
 }
 
 class testbullet extends bullet implements circle{
+  boolean strikeRectangle(rectangle hitbox){
+    return circleXrectangle(this,hitbox);
+    }
   float getXcor(){return xcor;}
 float getYcor(){return ycor;}
 float getSize(){return size;}
@@ -430,6 +433,9 @@ boolean hitCheckCircle(bullet Bullet){
 
 
 class Ebullet extends bullet implements circle{
+  boolean strikeRectangle(rectangle hitbox){
+    return circleXrectangle(this,hitbox);
+    }
   float getXcor(){return xcor;}
 float getYcor(){return ycor;}
 float getSize(){return size;}
