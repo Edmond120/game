@@ -55,7 +55,7 @@ class giantWormBossLevel extends battleMode{
     fp.setLocation(int(head.getXcor() + centerX - fp.width/2),int(head.getYcor() + centerY - fp.height/2));
   }
   boolean out = false;
-}                           
+}
                        //sizeX,sizeY,angle,health,segments
 float[] wormBossStats = {1,    0.5,  0,    2000,  16};
 float wormBossOpening = 0 * scale;
@@ -159,12 +159,16 @@ class wormNodeCoil extends wormNodeCommand{
      x.faceTarget();
      x.attackMode = x.ATTACKREADY;
      x.fxEffects = null;
+     for(int i = 0; i < 360; i++){
+       x.field.bullets.add(new normalBullet(x,x.field,xx.target.copy(),PVector.fromAngle(radians(random(360))).setMag(random((30.0/45)*scale)),0.2 * scale,10));
+     }
      x.chooseCommand();
    }
    else{
      if(!phase1.cooldown()){
        x.accelerate(accel);
        x.turnRight(r); 
+       x.field.bullets.add(new normalBullet(x,x.field,xx.target.copy(),PVector.fromAngle(radians(random(360))).setMag((30.0/90)*scale),0.2 * scale,10));
      }
      else{
        if(!phase2.cooldown()){

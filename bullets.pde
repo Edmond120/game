@@ -110,3 +110,36 @@ abstract class bullet extends unit{
     applet.ellipse(xcor,ycor,displaySize,displaySize);
   }
 }
+
+class normalBullet extends bullet implements circle{
+ normalBullet(entity parent,battleMode field,PVector location,PVector velocity,float size,int damage){
+   this.parent = parent;
+   this.field = field;
+   this.location = location;
+   this.size = size;
+   this.radius = size / 2;
+   this.damage = damage;
+   this.velocity = velocity;
+ }
+ PVector velocity;
+ color colour = #2C9EFF;
+ PVector location;
+ float getXcor(){return location.x;}
+ float getYcor(){return location.y;}
+ float getSize(){return size;}
+ void setXcor(float x){location.x = x;}
+ void setYcor(float x){location.y = x;}
+ void setSize(float x){size = x;}
+ boolean hitCheckCircle(bullet Bullet){
+   return Bullet.strikeCircle(this); 
+ }
+ boolean update(){
+   location.add(velocity);
+   return checkDisplayBounds(this);
+ }
+ void trueDraw(float xcor,float ycor,PApplet applet){
+  applet.stroke(colour);
+  applet.fill(colour);
+  applet.ellipse(xcor,ycor,size,size); 
+ }
+}
