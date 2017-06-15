@@ -29,13 +29,13 @@ class giantWormBossLevel extends battleMode{
     if(keys[keyL]){
       wormBossOpening += -0.1 * scale;
     }
-    if(coilAttack.cooldown(keys[keyK])){
+    if(keys[keyK]){
       wormBossOpening += 0.3 * scale;
       if(wormBossOpening > 0){
        wormBossOpening = 0; 
       }
     }
-    if(keys[keyJ]){
+    if(coilAttack.cooldown(keys[keyJ])){
      head.nodeCommand = new wormNodeCoil()._setup(head);
     }
     if(!out){
