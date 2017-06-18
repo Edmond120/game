@@ -13,6 +13,7 @@ class giantWormBossLevel extends battleMode{
   @Override
   void tick(){
     super.tick();
+    println(frameRate);
     //println(head.getAngle());
     if(keys[keyN]){
      head.accelerate(head.accel); 
@@ -41,6 +42,7 @@ class giantWormBossLevel extends battleMode{
     if(!out){
       if(head.getXcor() < 0 || head.getXcor() > width || head.getYcor() < 0 || head.getYcor() > height){
         out = true;
+        fp.loop();
         fp.vis();
       }
     }
@@ -48,6 +50,9 @@ class giantWormBossLevel extends battleMode{
       if(head.getXcor() >= 0 && head.getXcor() <= width && head.getYcor() >= 0 && head.getYcor() <= height){
        out = false;
        fp.invis();
+       if(selectedWindow.focused){
+         fp.noLoop();
+       }
       }
     }
     checkDisplayBounds(head.location);
