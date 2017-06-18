@@ -135,7 +135,8 @@ class mainMenu extends mode{
     buttons.add(new muteButton(4,6));
     buttons.add(new MetropolisButton(1,3.5,3,2));
     buttons.add(new WormButton(1,1,3,2));
-    playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
+    //playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
+    playBgm("song2.mp3");
   }
   void tick(){
     background(#F0F0F0);

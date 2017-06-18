@@ -6,16 +6,24 @@ import javax.sound.sampled.*;
 import java.awt.event.KeyEvent;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.io.*;
+
+
+int levelnumber = 3; //maunually increase?
+boolean[] levels = new boolean[levelnumber];
+
+
+boolean muted = true;
+
+//settings + variables
 int scale = 20;
 int fieldHeight;
 int fieldWidth;
-boolean pmousePressed;
-boolean muted = true;
-int tick = 0;
-int expectedFrameRate;
 int frameSizeX;
 int frameSizeY;
-mode Mode;
+int centerX;
+int centerY;
+boolean debug = true;
 void settings(){
   //screen resolution ratio is 16:9
   //to do: store settings in file
@@ -33,11 +41,18 @@ void settings(){
   size(frameSizeX,frameSizeY);
   centerX = displayWidth/2-width/2;
   centerY = displayHeight/2-height/2;
+  
+  /*SAVE SYSTEM TEST
+  SaveSystem a = new SaveSystem("savefile.txt");
+  levels = a.load(levels);
+  a.save();*/
 }
-int centerX;
-int centerY;
+
+//setup + variables
 Robot robot;
 PApplet mainWindow;
+mode Mode;
+int expectedFrameRate;
 void setup(){
   frameRate(60);
   mainWindow = this;
@@ -56,7 +71,13 @@ void setup(){
   //Mode = new sizeTestEnvironment();
   //Mode = new delayAndCooldownTestEnvironment();
   //Mode = new scrapTestEnvironment();
-  //Mode = new oneWayLinkedListTestEnvironment();
+  //Mode = new OneWayLinkedListTestEnvironment();
+  //Mode = new newWindowTestEnvironment();
+  //Mode = new giantWormBossTestEnvironment();
+  //Mode = new oneWayLinkedListTestEnvironment(); 
+  //Mode = new giantWormBossLevel();
+  //Mode = new Metropolis();
+  //Mode = new attractorTestEnvironment();
   Mode._setup();
   try{
   robot = new Robot();
@@ -65,32 +86,36 @@ void setup(){
     e.printStackTrace();
   }
 }
+
+//draw + variables
+int tick = 0;
+boolean pmousePressed;
 void draw(){
-  try{
+  //try{
     Mode.tick();
     pmousePressed = mousePressed;
     tick++;
-  }
-  catch(Throwable e){
-    e.printStackTrace();
-    noLoop();
-  }
+  //}
+  //catch(Throwable e){
+   // e.printStackTrace();
+  //  noLoop();
+  //}
 }
 
-//keyboard
-char[]_keys = {'z','x','c'};
-int keyZ = 0;int keyX = 1;int keyC = 2;
+//keyboard + variables
+char[]_keys = {'z','x','c','w','a','s','d','v','b','n','m','l','k','j'};
+int keyZ = 0;int keyX = 1;int keyC = 2;int keyW = 3;int keyA = 4;int keyS = 5;int keyD = 6;int keyV = 7;int keyB = 8;int keyN = 9;int keyM = 10;int keyL = 11;int keyK = 12;int keyJ = 13;
 boolean[]keys = new boolean[_keys.length];
 int[] _codedKeys = {UP,DOWN,LEFT,RIGHT,SHIFT,CONTROL,ALT};
 int cKeyUP = 0;int cKeyDOWN = 1;int cKeyLEFT = 2;int cKeyRIGHT = 3;int cKeySHIFT = 4;int cKeyCONTROL = 5;
 int cKeyALT = 6;
 boolean[]codedKeys = new boolean[_codedKeys.length];
-int keyPushed;/*most recently key that was push, a push is the process of pressing AND releasing a key
-this only need to be checked in keyReleased() because a key must be already pressed to be released.*/
-boolean codedAndPushed = false;/*codedAndPushed[0] == if the last key pushed was coded or not.
-codedAndPushed[1] == if there is a key pushed right now.
-codedAndPushed[1] is set to false at draw*/
+int keyPushed;/*Most recent key that was pushed. A push is the process of pressing AND releasing a key.
+Only needs to be checked in keyReleased() because a key must be already pressed to be released.*/
+boolean codedAndPushed = false;/*True if the last key pushed was coded or not. 
+False if there is a key pushed right now. Set to false at draw*/
 //^^^ the function these are used for are located at the tab helper
+
 int releasedTick;
 void KP(PApplet x){
   checkKey(true,x);
@@ -123,6 +148,7 @@ void checkKey(boolean setValue,PApplet x){
         return;
       }
     }
+    if(debug){System.out.println(keyCode);}
   }
   else{
     for(int i = 0; i < keys.length;i++){
@@ -131,5 +157,6 @@ void checkKey(boolean setValue,PApplet x){
         return;
       }
     }
+    if(debug){System.out.println(key);}
   }
 }

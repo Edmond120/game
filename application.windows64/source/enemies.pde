@@ -1,4 +1,13 @@
-class grunt extends unit{
+class grunt extends unit implements circle{
+  float getXcor(){return xcor;}
+   float getYcor(){return ycor;}
+   float getSize(){return size;}
+   void setXcor(float x){xcor = x;}
+void setYcor(float x){ycor = x;}
+void setSize(float x){size = x;}
+   boolean hitCheckCircle(bullet Bullet){
+    return Bullet.strikeCircle(this); 
+   }
   grunt(battleMode field, float xcor, float ycor, float size,int health,unit player){
     this.health = health;// + int(tick / 60 * 0.1);
     this.field = field;
@@ -43,7 +52,7 @@ class grunt extends unit{
     player.points++;
   }
   void shoot(float size,int damage,float speed){
-      field.players.rewind();
+      //field.players.rewind();
       float BxVector = player.xcor - xcor;
       float ByVector = player.ycor - ycor;
       float fireAngle;
@@ -53,23 +62,27 @@ class grunt extends unit{
       else{
         fireAngle = (degrees(atan(BxVector / ByVector))+(positiveOrNegative() * random(2))) % 360;
       }
-      field.bullets.add(new Ebullet(this,field,xcor,ycor,size,sin(radians(fireAngle)) * speed,cos(radians(fireAngle)) * speed,damage));
+      testbullet x = (new testbullet(this,field,xcor,ycor,size,sin(radians(fireAngle)) * speed,cos(radians(fireAngle)) * speed,damage));
+      x.colour = #1A03FC;
+      field.bullets.add(x);
   }
-  void _draw(){
-    fill(#00FAF8);
-    ellipse(xcor,ycor,size,size);
+  void trueDraw(float xcor, float ycor, PApplet applet){ 
+    applet.fill(#00FAF8);
+    applet.ellipse(xcor,ycor,size,size);
   }
 }
+
+
 class randomEdgeSpawner{
   charge spawnRate = new charge(5);
   battleMode field;
   unit player;
-  randomEdgeSpawner(battleMode field,unit player){
+  randomEdgeSpawner(battleMode field, unit player){
     this.field = field;
     this.player = player;
   }
   void create(){
-    field.enemies.add(new grunt(field,random(width),random(height / 20),0.5,10,player));
+    field.enemies.add(new grunt(field, random(width), random(height / 20),0.5,10,player));
   }
   void spawn(){
     if(spawnRate.cooldown(field.enemies.size <= 10)){

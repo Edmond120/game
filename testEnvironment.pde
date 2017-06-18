@@ -109,7 +109,8 @@ class testBattleMode extends battleMode{
       fieldPart window;
   void _setup(){
     super._setup();
-    playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
+   // playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
+   playBgm("song2.mp3");
     unit a = new testunitA(this,0.5,0.5,0.20,0.5);
     a.health = 100000;
     players.add(a);
