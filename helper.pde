@@ -34,10 +34,16 @@ void fade(PGraphics pic,float reduction){//beginDraw has already been called
   }
  
  pic.loadPixels();
+ //println( pic.pixels.length);
  for(int i = 0; i < pic.pixels.length;i++){
-  pic.pixels[i] = color(red(pic.pixels[i]),green(pic.pixels[i]),blue(pic.pixels[i]),alpha(pic.pixels[i]) - (pic.colorModeA * reduction));
+   float al = alpha(pic.pixels[i]) - pic.colorModeA * reduction;
+   if(al < 0){
+     al = 0;
+   }
+  pic.pixels[i] = color(red(pic.pixels[i]),green(pic.pixels[i]),blue(pic.pixels[i]),al);
  }
  pic.updatePixels();
+ 
  
 }
 boolean circleXcircle(circle a, circle b) {//target's hitbox is cicular
@@ -149,6 +155,22 @@ int arrayIndex(String[]ary, String target) {
   return -1;
 }
 int arrayIndex(char[]ary, char target) {
+  for (int i = 0; i < ary.length; i++) {
+    if (ary[i] == target) {
+      return i;
+    }
+  }
+  return -1;
+}
+int arrayIndex(Object[]ary, Object target) {
+  for (int i = 0; i < ary.length; i++) {
+    if (ary[i] == target) {
+      return i;
+    }
+  }
+  return -1;
+}
+int arrayIndex(int[]ary, int target) {
   for (int i = 0; i < ary.length; i++) {
     if (ary[i] == target) {
       return i;
@@ -269,7 +291,7 @@ boolean checkBoundsGhost(unit x, battleMode field) {
 }
 boolean checkDisplayBounds(unit x) {
   boolean r = false;
-  if (x.xcor + centerX > displayWidth - (x.size / 2)) {
+  if (x.getXcor() + centerX > displayWidth - (x.size / 2)) {
     x.xcor = (displayWidth - (x.size / 2)) - centerX;
     r = true;
   } else if (x.xcor + centerX < x.size / 2) {
@@ -281,6 +303,24 @@ boolean checkDisplayBounds(unit x) {
     r = true;
   } else if (x.ycor + centerY < x.size / 2) {
     x.ycor = (x.size / 2) - centerY;
+    r = true;
+  }
+  return r;
+}
+boolean checkDisplayBoundsCircle(circle x) {
+  boolean r = false;
+  if (x.getXcor() + centerX > displayWidth - (x.getSize() / 2)) {
+    x.setXcor((displayWidth - (x.getSize() / 2)) - centerX);
+    r = true;
+  } else if (x.getXcor() + centerX < x.getSize() / 2) {
+    x.setXcor( (x.getSize() / 2) - centerX);
+    r = true;
+  }
+  if (x.getYcor() + centerY > displayHeight - (x.getSize() / 2)) {
+    x.setYcor((displayHeight - (x.getSize() / 2)) - centerY);
+    r = true;
+  } else if (x.getYcor() + centerY < x.getSize() / 2) {
+    x.setYcor((x.getSize() / 2) - centerY);
     r = true;
   }
   return r;

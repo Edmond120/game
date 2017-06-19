@@ -13,6 +13,7 @@ class giantWormBossLevel extends battleMode{
   @Override
   void tick(){
     super.tick();
+    centerWindow();
     println(frameRate);
     //println(head.getAngle());
     if(keys[keyN]){
@@ -135,6 +136,7 @@ class wormNodeCoil extends wormNodeCommand{
     x.move();
  }
  attractor xx;
+ PVector centerPoint;
  wormNodeCommand _setup(wormHead x){
   useConstantFriction = true;
   constantFriction = 0.7;
@@ -143,14 +145,17 @@ class wormNodeCoil extends wormNodeCommand{
   //accel = (x.limit - x.velocity.mag())/(2.5 * expectedFrameRate);
   accel = (x.limit)/(2.5 * expectedFrameRate);
   decel = (x.limit)/(2.5 * expectedFrameRate);
-  xx = new attractor();
-  xx._setup();
-  xx.setForce(50);
-  xx.setDelay(new delay(0.1));
-  xx.setTarget(new PVector(x.getXcor(),x.getYcor()));
-  xx.setFade(0.90);
-  xx.setColour(color(255));
+  centerPoint = new PVector(x.getXcor(),x.getYcor());
+  if(graphicQuality == HIGH_QUALITY){
+    xx = new attractor();
+    xx._setup();
+    xx.setForce(50);
+    xx.setDelay(new delay(0.5));
+    xx.setTarget(centerPoint);
+    xx.setFade(0.1);
+    xx.setColour(color(255));
   x.fxEffects = xx;
+  }
   return this;
  }
  float accel,decel;
@@ -165,7 +170,7 @@ class wormNodeCoil extends wormNodeCommand{
      x.attackMode = x.ATTACKREADY;
      x.fxEffects = null;
      for(int i = 0; i < 360; i++){
-       x.field.bullets.add(new normalBullet(x,x.field,xx.target.copy(),PVector.fromAngle(radians(random(360))).setMag(random((25.0/45)*scale) + 0.1 * scale),0.2 * scale,10));
+       x.field.bullets.add(new normalBullet(x,x.field,centerPoint.copy(),PVector.fromAngle(radians(random(360))).setMag(random((25.0/45)*scale) + 0.1 * scale),0.2 * scale,10));
      }
      x.chooseCommand();
    }
@@ -173,7 +178,7 @@ class wormNodeCoil extends wormNodeCommand{
      if(!phase1.cooldown()){
        x.accelerate(accel);
        x.turnRight(r); 
-       x.field.bullets.add(new normalBullet(x,x.field,xx.target.copy(),PVector.fromAngle(radians(random(360))).setMag((30.0/90)*scale),0.2 * scale,10));
+       x.field.bullets.add(new normalBullet(x,x.field,centerPoint.copy(),PVector.fromAngle(radians(random(360))).setMag((30.0/90)*scale),0.2 * scale,10));
      }
      else{
        if(!phase2.cooldown()){

@@ -6,7 +6,7 @@ class attractorTestEnvironment extends testEnvironment{
   x.setForce(20);
   x.setDelay(new delay(0.1));
   x.setTarget(new PVector(8*scale,4.5*scale));
-  x.setFade(0.0);
+  x.setFade(0.1);
   x.setColour(color(0,0,255));
  }
  void tick(){
@@ -424,6 +424,7 @@ boolean hitCheckCircle(bullet Bullet){
     xcor += vector[0];
     ycor += vector[1];
     if(checkDisplayBounds(this)){
+      //println("dead");
       return true;
     }
     else{

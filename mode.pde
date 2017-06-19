@@ -127,7 +127,34 @@ class muteButton extends button{
     }
   }
 }
-
+String graphicQualityToString(){
+  int[]q = {LOW_QUALITY,DEFAULT_QUALITY,HIGH_QUALITY};
+  String[]s = {"LOW_QUALITY","DEFAULT_QUALITY","HIGH_QUALITY"};
+  return s[arrayIndex(q,graphicQuality)];
+}
+class qualityButton extends button{
+  qualityButton(float x,float y,float sizeX,float sizeY){
+   super(x,y,sizeX,sizeY); 
+  }
+  void action(){
+    int[] q = new int[]{LOW_QUALITY,DEFAULT_QUALITY,HIGH_QUALITY};
+    int index = arrayIndex(q,graphicQuality);
+    if(index >= q.length - 1){
+      index = 0;
+    }
+    else{
+      index++;
+    }
+    graphicQuality = q[index];
+  }
+  void _draw(){
+    super._draw();
+   fill(0);
+    textSize(25);
+    text("Graphic Quality:" + graphicQualityToString(),x + 0.1*scale,y + sizeY/2 - 0.1*scale); 
+  }
+  
+}
 
 class mainMenu extends mode{
   void _setup(){
@@ -135,6 +162,7 @@ class mainMenu extends mode{
     buttons.add(new muteButton(4,6));
     buttons.add(new MetropolisButton(1,3.5,3,2));
     buttons.add(new WormButton(1,1,3,2));
+    buttons.add(new qualityButton(5,1,6,1));
     //playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
     playBgm("song2.mp3");
   }

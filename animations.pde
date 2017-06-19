@@ -32,13 +32,20 @@ class flipbook{
 interface fx{
   void _draw();
 }
+class particle{
+ particle(PVector vector,float alpha){this.vector = vector;this.alpha = alpha;} 
+ PVector vector;
+ float alpha;
+}
 class attractor implements fx{
   PGraphics layer2;
   attractor(){layer2 = createGraphics(width,height);
 }
   attractor(int x,int y){layer2 = createGraphics(x,y);
 }
+  //oneWayLinkedList<particle> dust = new oneWayLinkedList<particle>();
   oneWayLinkedList<PVector> dust = new oneWayLinkedList<PVector>();
+  //oneWayLinkedList<particle> trail = new oneWayLinkedList<particle>();
   int colour;
   delay Delay;
   float r;
@@ -62,17 +69,19 @@ class attractor implements fx{
   
   void _setup(){
      for(int i = int((width * height)/1000); i > 0;i--){
+      //dust.add(new particle(new PVector(int(random(width)),int(random(height))),layer2.colorModeA));
       dust.add(new PVector(int(random(width)),int(random(height))));
      }
-     println(dust.size);
+     //println(dust.size);
   }
   void _draw(){
+    //background(0);
     layer2.beginDraw();
-    //if(Delay.every()){
-      //fade(layer2,r);// not working?!?!
-    //}
-    layer2.stroke(colour);
+    layer2.stroke(colour,layer2.colorModeA);
+    //float rr = layer2.colorModeA * r;
+    //int count = 0;
     while(dust.hasNext()){
+      
       PVector p = dust.next();
       PVector dist = PVector.sub(target,p);
       if(dist.mag() <= 10){
@@ -81,6 +90,32 @@ class attractor implements fx{
       p.add(dist.setMag(force/(dist.mag()*dist.mag())));
       layer2.point(p.x,p.y);
       //rect(p.x,p.y,10,10);
+    }
+      //particle p = dust.next();
+       // PVector dist = PVector.sub(target,p.vector);
+        //if(dist.mag() <= 10){
+       //   dust.remove();
+       // }
+      //  if(count++ % 10 == 0){
+       //   trail.add(new particle(p.vector.copy(),p.alpha));
+       // }
+      //  p.vector.add(dist.setMag(force/(dist.mag()*dist.mag())));
+     // layer2.point(p.vector.x,p.vector.y);
+      //rect(p.x,p.y,10,10);
+    //}
+    //while(trail.hasNext()){
+     // particle p = trail.next();
+     // layer2.stroke(colour,p.alpha);
+     // point(p.vector.x,p.vector.y);
+    // if(Delay.every()){
+       // p.alpha -= rr;
+       // if(p.alpha <= 0){
+        //  dust.remove();
+       // } 
+     // }
+  //  }
+    if(Delay.every()){
+      fade(layer2,r);
     }
     layer2.endDraw();
     image(layer2,0,0);

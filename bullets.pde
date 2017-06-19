@@ -115,7 +115,7 @@ class normalBullet extends bullet implements circle{
  }
  boolean update(){
    location.add(velocity);
-   return checkDisplayBounds(this);
+   return checkDisplayBoundsCircle(this);
  }
  boolean strikeRectangle(rectangle hitbox){
     return circleXrectangle(this,hitbox);

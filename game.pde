@@ -14,7 +14,10 @@ boolean[] levels = new boolean[levelnumber];
 
 
 boolean muted = true;
-
+final int LOW_QUALITY = 0;
+final int DEFAULT_QUALITY = 1;
+final int HIGH_QUALITY = 2;
+int graphicQuality = DEFAULT_QUALITY;
 //settings + variables
 int scale = 20;
 int fieldHeight;
