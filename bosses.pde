@@ -14,7 +14,10 @@ class giantWormBossLevel extends battleMode{
   void tick(){
     super.tick();
     centerWindow();
-    println(frameRate);
+    if(debug){
+      println(frameRate);
+    }
+    //println(scale);
     //println(head.getAngle());
     if(keys[keyN]){
      head.accelerate(head.accel); 
@@ -148,6 +151,13 @@ class wormNodeCoil extends wormNodeCommand{
   centerPoint = new PVector(x.getXcor(),x.getYcor());
   if(graphicQuality == HIGH_QUALITY){
     xx = new attractor();
+  }
+  else if(graphicQuality == LOW_QUALITY){
+    return this;
+  }
+  else{
+   xx = new quickAttractor(); 
+  }
     xx._setup();
     xx.setForce(50);
     xx.setDelay(new delay(0.5));
@@ -155,7 +165,6 @@ class wormNodeCoil extends wormNodeCommand{
     xx.setFade(0.1);
     xx.setColour(color(255));
   x.fxEffects = xx;
-  }
   return this;
  }
  float accel,decel;
@@ -178,12 +187,14 @@ class wormNodeCoil extends wormNodeCommand{
      if(!phase1.cooldown()){
        x.accelerate(accel);
        x.turnRight(r); 
+       //xx.force++;
        x.field.bullets.add(new normalBullet(x,x.field,centerPoint.copy(),PVector.fromAngle(radians(random(360))).setMag((30.0/90)*scale),0.2 * scale,10));
      }
      else{
        if(!phase2.cooldown()){
          r += rChange;
          x.turnRight(r);
+         //xx.force++;
        }
        else{
          x.decelerate(decel);

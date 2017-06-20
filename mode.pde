@@ -129,7 +129,7 @@ class muteButton extends button{
 }
 String graphicQualityToString(){
   int[]q = {LOW_QUALITY,DEFAULT_QUALITY,HIGH_QUALITY};
-  String[]s = {"LOW_QUALITY","DEFAULT_QUALITY","HIGH_QUALITY"};
+  String[]s = {"LOW_QUALITY","DEFAULT_QUALITY","HIGH_QUALITY(LAG)"};
   return s[arrayIndex(q,graphicQuality)];
 }
 class qualityButton extends button{

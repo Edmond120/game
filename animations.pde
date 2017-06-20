@@ -32,13 +32,60 @@ class flipbook{
 interface fx{
   void _draw();
 }
+class quickAttractor extends attractor{
+ quickAttractor(){
+  super(false); 
+ }
+ oneWayLinkedList<particle>dust2 = new oneWayLinkedList<particle>();
+ @Override
+ void _setup(){
+ }
+ @Override
+ void _draw(){
+   //try{
+   stroke(colour,getGraphics().colorModeA);
+   //}
+   //catch(Throwable e){
+   // e.printStackTrace(); 
+   //}
+   
+     PVector pp = new PVector(int(random(width)),int(random(height)));
+      dust2.add(new particle(pp,pp.copy(),getGraphics().colorModeA));
+      //dust.add(new PVector(int(random(width)),int(random(height))));
+     
+   while(dust2.hasNext()){
+     particle p = dust2.next();
+     PVector pv = p.vector;
+      PVector dist = PVector.sub(target,pv);
+      if(dist.mag() <= (20/90) * scale){
+        dust2.remove();
+        continue;
+      }
+      else{
+        p.previousVector = pv.copy();
+        float f = force/dist.mag();
+        pv.add(dist.setMag(f));
+        if(f < scale){
+          line(p.previousVector.x,p.previousVector.y,pv.x,pv.y);
+        }
+      }
+   }
+ }
+}
 class particle{
- particle(PVector vector,float alpha){this.vector = vector;this.alpha = alpha;} 
+ particle(PVector vector,float alpha){this.vector = vector;this.alpha = alpha;}
+ particle(PVector vector,PVector previousVector,float alpha){this(vector,alpha);this.previousVector = previousVector;}
  PVector vector;
  float alpha;
+ PVector previousVector;
 }
 class attractor implements fx{
   PGraphics layer2;
+  attractor(boolean a){
+   if(a){
+     layer2 = createGraphics(width,height);
+   }
+  }
   attractor(){layer2 = createGraphics(width,height);
 }
   attractor(int x,int y){layer2 = createGraphics(x,y);
