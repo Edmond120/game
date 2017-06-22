@@ -164,10 +164,10 @@ class mainMenu extends mode{
     buttons.add(new WormButton(1,1,3,2));
     buttons.add(new qualityButton(5,1,6,1));
     //playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
-    playBgm("song2.mp3");
+    playBgm("loopdeloop.wav");
   }
   void tick(){
-    background(#F0F0F0);
+    background(255);
     updateButtons();
   }
 }

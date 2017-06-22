@@ -14,7 +14,7 @@ SoundFile bgm;
       if(muted){
         bgmMute();
       }
-      bgm.play();
+      bgm.loop();
     }
     catch(NullPointerException e){
       //if(!fileName.equals("error.mp3")){

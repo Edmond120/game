@@ -12,6 +12,7 @@ class giantWormBossLevel extends battleMode{
     head = makeWorm(this);
     de = new delay(2,true);
     Animation1 = new flipbook("background1/frame_","_delay-0.21s.png",80,width,height);
+    playBgm("song2.mp3");
     fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
   }
   @Override
