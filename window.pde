@@ -66,7 +66,7 @@ class fieldPart extends PApplet{
     drawAll(field);
   }
   void skin(){
-    field._background(this);
+    field.partBackground(this);
   }
   void drawAll(battleMode field){
     skin();

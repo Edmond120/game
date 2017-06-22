@@ -4,16 +4,17 @@ class flipbook{
  flipbook(PImage[] book){
    this.book = book;
  }
- flipbook(String imageName,String end,int size){
+ flipbook(String imageName,String end,int size,int w,int h){
    book = new PImage[size];
    for(int i = 0; i < size; i++){
      book[i] = loadImage(imageName + i + end);
+     book[i].resize(w,h);
    }
  }
  
  //methods + variables
  int index = 0;
- boolean hasNext(){
+ boolean hasNext(){//no longer needed
    if(index >= book.length){
      rewind();
      return false;
@@ -23,7 +24,13 @@ class flipbook{
    }
  }
  PImage next(){
+   if(index >= book.length){
+     rewind();
+   }
    return book[index++];
+ }
+ PImage current(){
+  return book[index - 1]; 
  }
  void rewind(){
    index = 0;

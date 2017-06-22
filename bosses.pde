@@ -1,5 +1,7 @@
 class giantWormBossLevel extends battleMode{
   wormHead head;fieldPart fp;
+  flipbook Animation1;
+  delay de;
   charge coilAttack = new charge(3);
   @Override
   void _setup(){
@@ -8,7 +10,18 @@ class giantWormBossLevel extends battleMode{
     players.add(xxx);
     xxx.health = 100000;
     head = makeWorm(this);
+    de = new delay(2,true);
+    Animation1 = new flipbook("background1/frame_","_delay-0.21s.png",80,width,height);
     fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
+  }
+  @Override
+  void _background(PApplet applet){
+    if(de.every()){
+      applet.background(Animation1.next());
+    }
+    else{
+      applet.background(Animation1.current());
+    }
   }
   @Override
   void tick(){

@@ -196,6 +196,14 @@ class delay {
   delay(float wait) {
     this.wait = int(wait * expectedFrameRate);
   }
+  delay(float wait,boolean frames){
+   if(frames){
+     this.wait = int(wait);
+   }
+   else{
+    this.wait = int(wait * expectedFrameRate);
+   }
+  }
   boolean every() {
     if (counter++ % wait == 0) {
       return true;

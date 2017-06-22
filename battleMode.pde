@@ -80,6 +80,9 @@ class battleMode extends mode{
   void _setup(){
    
   }
+  void partBackground(PApplet applet){
+    applet.background(0);
+  }
   void _background(PApplet applet){
     applet.background(0);
   }

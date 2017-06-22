@@ -100,8 +100,8 @@ void draw(){
     tick++;
   //}
   //catch(Throwable e){
-   // e.printStackTrace();
-  //  noLoop();
+    //e.printStackTrace();
+    //noLoop();
   //}
 }
 
