@@ -60,6 +60,7 @@ void setup(){
   frameRate(60);
   mainWindow = this;
   expectedFrameRate = 60;
+  setupGravity();
   surface.setResizable(true);
   centerWindow();
   //frame.setSize(1000,1000);

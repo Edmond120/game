@@ -202,7 +202,7 @@ class wormNodeCoil extends wormNodeCommand{
        x.accelerate(accel);
        x.turnRight(r); 
        //xx.force++;
-       x.field.bullets.add(new normalBullet(x,x.field,centerPoint.copy(),PVector.fromAngle(radians(random(360))).setMag((30.0/90)*scale),0.2 * scale,10));
+       x.field.bullets.add(new custerBomb(x,x.field,centerPoint.copy(),PVector.fromAngle(radians(random(360))).setMag((30.0/90)*scale),0.2 * scale,10));
      }
      else{
        if(!phase2.cooldown()){

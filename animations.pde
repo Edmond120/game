@@ -222,3 +222,38 @@ class Animation extends unit{
     update(xcor,ycor,applet);
   }
 }
+
+class petal{
+ PVector location;
+ petal(float xcor,float ycor){
+   location = new PVector(xcor,ycor);
+ }
+ boolean fall(){
+   if(location.y > height){
+     return true;
+   }
+   else{
+     return true;
+   }
+ }
+}
+class mainMenuAnimation implements fx{
+  oneWayLinkedList<petal> petals = new oneWayLinkedList<petal>();
+  void _setup(){
+  }
+  float s;
+  float t = 8 * scale;
+  float x = 0.1;
+  void _draw(){
+     stroke(#FF76EF);
+     strokeWeight(1 * scale);
+     fill(#FFAAF5);
+     s = x * t;
+     ellipse(8*scale,4.5*scale,s,s);
+     while(petals.hasNext()){
+        if(petals.next().fall()){
+           petals.remove(); 
+        }
+     }
+  } 
+}

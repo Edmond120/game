@@ -121,8 +121,61 @@ class normalBullet extends bullet implements circle{
     return circleXrectangle(this,hitbox);
     }
  void trueDraw(float xcor,float ycor,PApplet applet){
-  applet.stroke(colour);
+  applet.noStroke();
   applet.fill(colour);
   applet.ellipse(xcor,ycor,size,size); 
  }
+}
+float gravity = 0;
+void setupGravity(){
+  gravity = (0.75 * scale)/expectedFrameRate;
+}
+class spark extends normalBullet{
+  spark(entity parent,battleMode field,PVector location,PVector velocity,float size,int damage,color _color){
+    super(parent,field,location,velocity,size,damage);
+    colour = _color;
+    pastLocation = location;
+  }
+  int counter = 0;
+  PVector pastLocation;
+  boolean update(){
+   velocity.y += gravity;
+   if(counter++ % 2 == 0){
+     pastLocation = location.copy();
+   }
+   return super.update();
+  }
+  @Override
+  void trueDraw(float xcor,float ycor,PApplet applet){
+   applet.stroke(colour);
+   applet.strokeWeight(size);
+   applet.line(location.x,location.y,pastLocation.x,pastLocation.y);
+   applet.strokeWeight(1);
+  }
+  
+}
+class custerBomb extends normalBullet{
+  custerBomb(entity parent,battleMode field,PVector location,PVector velocity,float size,int damage){
+    super(parent,field,location,velocity,size,damage);
+  }
+  custerBomb(entity parent,battleMode field,PVector location,PVector velocity,float size,int damage,int clock){
+    super(parent,field,location,velocity,size,damage);
+    counter = clock * expectedFrameRate;
+  }
+  int counter = 20;
+  boolean update(){
+   if(counter-- == 0){
+     colorMode(HSB,100);
+     float s = 0.05 * scale;
+     float sp = 0.1 * scale;
+     for(int i = 0; i < 6;i++){
+      field.bullets.add(new spark(this,field,location.copy(),PVector.fromAngle(radians(i * (180/5) + 180)).setMag(sp),s,damage,color(random(360),99,99)));
+     }
+     colorMode(RGB);
+     return true;
+   }
+   else{
+     return super.update();
+   }
+  }
 }
