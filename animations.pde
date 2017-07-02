@@ -1,17 +1,67 @@
+class flipbookThread extends Thread{
+  flipbook[] data;
+  int totalSize = 0;
+  int totalLoadedData = 0;
+  flipbook current;
+  flipbookThread(flipbook[] _data){
+    data = _data;
+    for(int i = 0; i < data.length; i++){
+     totalSize += data[i].getSize();
+     data[i].t = this;
+    }
+    current = data[0];
+  }
+  @Override
+  void run(){
+    for(int i = 0; i < data.length;i++){
+      current = data[i];
+      current.load();
+    }
+    done = true;
+  }
+  boolean done = false;
+  float currentLoadingBar(){
+    println(current.getLoadingProgress());
+    return current.getLoadingProgress();
+  }
+  float mainLoadingBar(){
+    return (totalLoadedData * 1.0) / totalSize; 
+  }
+}
 class flipbook{
  //constructors + variables
  PImage[]book;
  flipbook(PImage[] book){
    this.book = book;
  }
- flipbook(String imageName,String end,int size,int w,int h){
+ flipbookThread t;
+ int size;
+ int loaded = 0;
+ String imageName;
+ String end;
+ int w,h;
+ flipbook(String imageName,String end,int size,int _w,int _h){
    book = new PImage[size];
-   for(int i = 0; i < size; i++){
+   this.size = size;
+   this.imageName = imageName;
+   this.end = end;
+   w = _w;
+   h = _h;
+ }
+ void load(){
+  for(int i = 0; i < size; i++){
      book[i] = loadImage(imageName + i + end);
      book[i].resize(w,h);
-   }
+     loaded++;
+     if(t != null){
+        t.totalLoadedData++; 
+     }
+   } 
  }
- 
+ int getSize(){return size;}
+ float getLoadingProgress(){
+   return (loaded * 1.0)/size;
+ }
  //methods + variables
  int index = 0;
  boolean hasNext(){//no longer needed
@@ -255,5 +305,6 @@ class mainMenuAnimation implements fx{
            petals.remove(); 
         }
      }
-  } 
+     strokeWeight(1);
+  }
 }

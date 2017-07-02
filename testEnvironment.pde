@@ -313,6 +313,7 @@ boolean hitCheckCircle(bullet Bullet){
     else{
       applet.fill(#FF0000);
     }
+    applet.stroke(255);
     applet.textSize(25);
     applet.text("hp: " + health + " kills: " + points + " time: " + tick / expectedFrameRate + " " + achievement,0,25);
   }

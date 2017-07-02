@@ -123,7 +123,8 @@ class normalBullet extends bullet implements circle{
  void trueDraw(float xcor,float ycor,PApplet applet){
   applet.noStroke();
   applet.fill(colour);
-  applet.ellipse(xcor,ycor,size,size); 
+  applet.ellipse(xcor,ycor,size,size);
+  applet.strokeWeight(1);
  }
 }
 float gravity = 0;
@@ -171,7 +172,7 @@ class custerBomb extends normalBullet{
      for(int i = 0; i < 6;i++){
       field.bullets.add(new spark(this,field,location.copy(),PVector.fromAngle(radians(i * (180/5) + 180)).setMag(sp),s,damage,color(random(360),99,99)));
      }
-     colorMode(RGB);
+     colorMode(RGB,255,255,255);
      return true;
    }
    else{

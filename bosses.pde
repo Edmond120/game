@@ -3,17 +3,25 @@ class giantWormBossLevel extends battleMode{
   flipbook Animation1;
   delay de;
   charge coilAttack = new charge(3);
+  boolean loadingScreen = true;
   @Override
   void _setup(){
-    super._setup();
-    testunitA xxx = new testunitA(this,0.5,0.5,0.20,0.5);
-    players.add(xxx);
-    xxx.health = 100000;
-    head = makeWorm(this);
-    de = new delay(2,true);
-    Animation1 = new flipbook("background1/frame_","_delay-0.21s.png",80,width,height);
-    playBgm("song2.mp3");
-    fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
+    if(loadingScreen){
+      super._setup();
+      testunitA xxx = new testunitA(this,0.5,0.5,0.20,0.5);
+      players.add(xxx);
+      xxx.health = 100000;
+      head = makeWorm(this);
+      de = new delay(2,true);
+      Animation1 = new flipbook("background1/frame_","_delay-0.21s.png",80,width,height);
+      Mode = new loadingScreen(new flipbookThread(new flipbook[]{Animation1}),this);
+      loadingScreen = false;
+      Mode._setup();
+    }
+    else{
+      playBgm("song2.mp3");
+      fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
+    }
   }
   @Override
   void _background(PApplet applet){

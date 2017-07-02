@@ -43,6 +43,7 @@ class button{
   }
 }
 class mode{
+  mode(){}
   ArrayList<button>buttons = new ArrayList<button>();
   void _setup(){
   }
@@ -149,11 +150,44 @@ class qualityButton extends button{
   }
   void _draw(){
     super._draw();
-   fill(0);
+    fill(0);
     textSize(25);
     text("Graphic Quality:" + graphicQualityToString(),x + 0.1*scale,y + sizeY/2 - 0.1*scale); 
   }
   
+}
+class loadingScreen extends mode{
+  void _setup(){
+    t.start();
+    s = new float[]{1 * scale,3 * scale,14 * scale,3 * scale};
+    half = s[3] / 2.0;
+  }
+  float[] s;
+  float difference;
+  float half;
+  void tick(){
+    if(t.done){
+      Mode = previousMode;
+      previousMode._setup();
+    }
+    else{
+      background(0);
+      noStroke();
+      fill(#FF0009);
+      rect(s[0],s[1],s[2],s[3]); 
+      fill(#00FF28);
+      rect(s[0],s[1],s[2] * t.mainLoadingBar(),half);
+      fill(#00FFF9);
+      rect(s[0],s[1] + half,s[2] * t.currentLoadingBar(),half);
+      strokeWeight(1);
+    }
+  }
+  flipbookThread t;
+  mode previousMode;
+  loadingScreen(flipbookThread _t,mode _previousMode){
+    t = _t;
+    previousMode = _previousMode;
+  }
 }
 
 class mainMenu extends mode{
