@@ -49,8 +49,12 @@ class mode{
   }
   void tick(){
   }
+  boolean newMode = false;
   void updateButtons(){
     for(int i = 0; i < buttons.size(); i++){
+      if(newMode){
+        break;
+      }
       buttons.get(i).tick();
     }
   }
@@ -159,8 +163,9 @@ class qualityButton extends button{
 class loadingScreen extends mode{
   void _setup(){
     t.start();
-    s = new float[]{1 * scale,3 * scale,14 * scale,3 * scale};
+    s = new float[]{1 * scale,8 * scale,14 * scale,0.5 * scale};
     half = s[3] / 2.0;
+    background(0);
   }
   float[] s;
   float difference;
@@ -171,13 +176,19 @@ class loadingScreen extends mode{
       previousMode._setup();
     }
     else{
-      background(0);
+      fill(0,5);
+      rect(0,0,width,height);
+      fill(255);
       noStroke();
+      for(int i = 0;i < 6;i++){
+        float r = random(0.5)*scale;
+        rect(random(width),random(height),r/2,r);
+      }
       fill(#FF0009);
       rect(s[0],s[1],s[2],s[3]); 
       fill(#00FF28);
       rect(s[0],s[1],s[2] * t.mainLoadingBar(),half);
-      fill(#00FFF9);
+      fill(#0006FF);
       rect(s[0],s[1] + half,s[2] * t.currentLoadingBar(),half);
       strokeWeight(1);
     }
@@ -212,6 +223,7 @@ class MetropolisButton extends button{
     super(x,y,xSize,ySize);
   }
   void action(){
+    Mode.newMode = true;
     Mode = new Metropolis();
     Mode._setup();
   }
@@ -232,6 +244,7 @@ class WormButton extends button{
     super(x,y,xSize,ySize);
   }
   void action(){
+    Mode.newMode = true;
     Mode = new giantWormBossLevel();
     Mode._setup();
   }
@@ -254,6 +267,7 @@ class mmButton extends button{
     super(x,y,xSize,ySize);
   }
   void action(){
+    Mode.newMode = true;
     Mode = new mainMenu();
     Mode._setup();
   }

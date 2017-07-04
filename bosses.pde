@@ -551,10 +551,13 @@ class wormSegment extends unit implements rectangle{
    wormNode createBackNode(){
     return backNode = new wormNode(frontNode,field,this.xcor - cos(radians(this.angle))*((this.sizeX + getSizeY())/2),this.ycor - sin(radians(this.angle))*((this.sizeX + getSizeY())/2),getSizeY(),int(health * 0.75),this); 
    }
+   delay wiggleDelay = new delay(2,true);
    boolean update(){
      leader.getSegmentCommand().tick(this);
      contactDamage();
-     updateOrientation();
+     if(wiggleDelay.every()){
+       updateOrientation();
+     }
      return false;
    }
    void contactDamage(){
