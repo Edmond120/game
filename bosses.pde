@@ -13,23 +13,31 @@ class giantWormBossLevel extends battleMode{
       xxx.health = 100000;
       head = makeWorm(this);
       de = new delay(2,true);
-      Animation1 = new flipbook("background1/frame_","_delay-0.21s.png",80,width,height);
-      Mode = new loadingScreen(new flipbookThread(new flipbook[]{Animation1}),this);
+      if(graphicQuality != LOW_QUALITY){
+        Animation1 = new flipbook("background1/frame_","_delay-0.21s.png",80,width,height);
+        Mode = new loadingScreen(new flipbookThread(new flipbook[]{Animation1}),this);
+      }
       loadingScreen = false;
       Mode._setup();
     }
     else{
       playBgm("song2.mp3");
       fp = createFieldPart(this,"worm",int(4 * scale),int(4*scale),int(head.getXcor() + centerX),int(head.getYcor() + centerY),true);
+      setPhase(head);
     }
   }
   @Override
   void _background(PApplet applet){
-    if(de.every()){
-      applet.background(Animation1.next());
+    if(graphicQuality != LOW_QUALITY){
+      if(de.every()){
+        applet.background(Animation1.next());
+      }
+      else{
+        applet.background(Animation1.current());
+      }
     }
     else{
-      applet.background(Animation1.current());
+     background(0); 
     }
   }
   @Override
@@ -86,6 +94,20 @@ class giantWormBossLevel extends battleMode{
     fp.setLocation(int(head.getXcor() + centerX - fp.width/2),int(head.getYcor() + centerY - fp.height/2));
   }
   boolean out = false;
+}
+void setPhase(wormSegment seg){
+  int i = 0;
+  while(seg.backNode.backSegment != null){
+    seg.phase = 10;
+    for(int ii = 0; ii < i;ii ++){
+      seg.updateOrientation();
+    }
+    if(debug){
+      println(seg.phase);
+    }
+    seg = seg.backNode.backSegment;
+    i++;
+  }
 }
                        //sizeX,sizeY,angle,health,segments
 float[] wormBossStats = {1,    0.5,  0,    2000,  16};
@@ -491,6 +513,11 @@ class wormNode extends unit implements circle{
   }
 }
 class wormSegment extends unit implements rectangle{
+  //for wiggle animation
+  final float[]wiggleAnimation = {-2,-1.9,-1.8,-1.7,-1.6,-1.5,-1.4,-1.3,-1.2,-1.1,0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2};
+  boolean back = true;
+  int phase = -1;
+  //
   wormHead leader = null;
   PVector velocity = new PVector(0,0);
   PVector location;
@@ -527,6 +554,7 @@ class wormSegment extends unit implements rectangle{
    boolean update(){
      leader.getSegmentCommand().tick(this);
      contactDamage();
+     updateOrientation();
      return false;
    }
    void contactDamage(){
@@ -559,13 +587,39 @@ class wormSegment extends unit implements rectangle{
    void _draw(){
        trueDraw(location.x,location.y,mainWindow); 
    }
+   void updateOrientation(){
+     if(phase != -1){
+       if(phase == wiggleAnimation.length - 1 || phase == 0){
+          back = !back;
+       }
+       if(back){
+         phase--;
+       }
+       else{
+         phase++;
+         }
+     }
+   }
    @Override
    void trueDraw(float xcor,float ycor,PApplet applet){
      applet.pushMatrix();
      applet.stroke(#00F2FC);
-     applet.fill(#FFFFFF);
+     if(phase == 0){
+       applet.fill(#FF0000);
+     }
+     else{
+       applet.fill(#FFFFFF);
+     }
+     
      applet.translate(xcor,ycor);
-     applet.rotate(radians(angle));
+     if(phase == -1){
+       applet.rotate(radians(angle));
+     }
+     else{
+         applet.rotate(radians(angle + wiggleAnimation[phase]));
+     }
+       
+     
      applet.rect(sizeX/-2,sizeY/-2,sizeX,sizeY);
      applet.popMatrix();
    }
