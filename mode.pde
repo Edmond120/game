@@ -172,25 +172,27 @@ class loadingScreen extends mode{
   float half;
   void tick(){
     if(t.done){
+      strokeWeight(1);
       Mode = previousMode;
       previousMode._setup();
     }
     else{
       fill(0,5);
       rect(0,0,width,height);
-      fill(255);
-      noStroke();
+      stroke(255);
+      noFill();
+      strokeWeight(0.05 * scale);
       for(int i = 0;i < 6;i++){
         float r = random(0.5)*scale;
         rect(random(width),random(height),r/2,r);
       }
+      noStroke();
       fill(#FF0009);
       rect(s[0],s[1],s[2],s[3]); 
       fill(#00FF28);
       rect(s[0],s[1],s[2] * t.mainLoadingBar(),half);
       fill(#0006FF);
       rect(s[0],s[1] + half,s[2] * t.currentLoadingBar(),half);
-      strokeWeight(1);
     }
   }
   flipbookThread t;
