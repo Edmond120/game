@@ -162,11 +162,19 @@ class qualityButton extends button{
 }
 class loadingScreen extends mode{
   void _setup(){
+    if(random(100) < 50){
+      animation = new circlesAnimation();
+      ((circlesAnimation)animation)._setup();
+    }
+    else{
+      animation = new rectanglesAnimation(); 
+    }
     t.start();
     s = new float[]{1 * scale,8 * scale,14 * scale,0.5 * scale};
     half = s[3] / 2.0;
     background(0);
   }
+  fx animation;
   float[] s;
   float difference;
   float half;
@@ -177,15 +185,7 @@ class loadingScreen extends mode{
       previousMode._setup();
     }
     else{
-      fill(0,5);
-      rect(0,0,width,height);
-      stroke(255);
-      noFill();
-      strokeWeight(0.05 * scale);
-      for(int i = 0;i < 6;i++){
-        float r = random(0.5)*scale;
-        rect(random(width),random(height),r/2,r);
-      }
+      animation._draw();
       noStroke();
       fill(#FF0009);
       rect(s[0],s[1],s[2],s[3]); 

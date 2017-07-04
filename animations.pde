@@ -21,7 +21,9 @@ class flipbookThread extends Thread{
   }
   boolean done = false;
   float currentLoadingBar(){
-    println(current.getLoadingProgress());
+    if(debug){
+      println(current.getLoadingProgress());
+    }
     return current.getLoadingProgress();
   }
   float mainLoadingBar(){
@@ -306,5 +308,63 @@ class mainMenuAnimation implements fx{
         }
      }
      strokeWeight(1);
+  }
+}
+class rectanglesAnimation implements fx{
+  void _draw(){
+      fill(0,5);
+      rect(0,0,width,height);
+      stroke(255);
+      noFill();
+      strokeWeight(0.05 * scale);
+      for(int i = 0;i < 6;i++){
+        float r = random(0.5)*scale;
+        rect(random(width),random(height),r/2,r);
+      } 
+  }
+  
+}
+class circlesAnimation implements fx{
+  PVector[] c;
+  PGraphics g;
+  float x = 0;
+  void _setup(){
+   c = new PVector[750];
+   for(int i = 0; i < c.length;i++){
+     //c[i] = new PVector(random(width),random(height));
+     c[i] = new PVector(random(width) * 1.5 - width,random(height) * 1.5 - height * 1.5);
+   }  
+  }
+  void _draw(){
+    noStroke();
+    fill(0,0,0,10);
+    rect(0,0,width,height);
+    //stroke(255);
+    fill(255);
+    for(int i = 0; i < c.length; i++){
+     if(c[i].x > width || c[i].y > height){
+       c[i] = new PVector(random(width) - width,random(height) - height * 1.5);
+     }
+     if(mousePressed){
+       c[i].add(PVector.fromAngle(radians(45 + sin(radians(x + i))*45)).setMag(5));
+     }
+     else{
+       c[i].add(PVector.fromAngle(radians(45)).setMag(5));
+     }
+     //point(c[i].x,c[i].y);
+     if(keyPressed){
+       if(key == CODED){
+         float r = random(50);
+         ellipse(c[i].x,c[i].y,r,r);
+       }
+       else{
+         ellipse(c[i].x,c[i].y,key/4,key/4);
+       }
+     }
+     else{
+       ellipse(c[i].x,c[i].y,10,10);
+     }
+    }
+    x+=20;
   }
 }

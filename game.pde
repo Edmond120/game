@@ -26,7 +26,7 @@ int frameSizeX;
 int frameSizeY;
 int centerX;
 int centerY;
-boolean debug = true;
+boolean debug = true; //set this to false during release
 void settings(){
   //screen resolution ratio is 16:9
   //to do: store settings in file
