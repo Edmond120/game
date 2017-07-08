@@ -178,6 +178,40 @@ class wormNodeMove extends wormNodeCommand{
    x.move(); 
   }
 }
+class wormNodePath extends wormNodeCommand{
+ wormNodePath(PVector[]p,int[]d,wormHead x){
+   path = p;
+   frameDelay = d;
+   temp = 1/frameDelay[0];
+   startingLocation = new PVector(x.getXcor(),x.getYcor());
+   x.velocity = PVector.sub(startingLocation,path[index]).mult(x.velocity.mag());
+ }
+ PVector[]path;
+ int[]frameDelay;//time it takes to reach location
+ int index = 0;
+ int frames = 0;
+ float temp;
+ float temp2 = 0;
+ PVector startingLocation;
+ void tick(wormNode x){
+   x.move();
+ }
+ void headMove(wormHead x){
+   if(index >= path.length){
+     x.chooseCommand();
+   }
+   if(frames++ < frameDelay[index]){
+     x.location = PVector.lerp(startingLocation.copy(),path[index],temp2 += temp);
+   }
+   else{
+     startingLocation = path[index];
+     frames = 0;
+     temp = 1/frameDelay[index += 1];
+     temp2 = 0;
+     x.velocity = PVector.sub(startingLocation,path[index]).mult(x.velocity.mag());
+   }
+ }
+}
 class wormNodeCoil extends wormNodeCommand{
  void tick(wormNode x){
     x.move();
