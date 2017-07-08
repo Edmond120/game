@@ -34,6 +34,7 @@ abstract class entity implements shape{
 }
 
 abstract class unit extends entity{
+  boolean dead = false;
   unit(){}
   unit(battleMode field,float xcor,float ycor){
     this(null,field,xcor,ycor);
@@ -64,6 +65,7 @@ abstract class unit extends entity{
     ycor *= scale;
   }
   void death(){
+    dead = true;
   }
 }
 

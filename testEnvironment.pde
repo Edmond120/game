@@ -107,12 +107,18 @@ class robotTestEnvironment extends testEnvironment{
 class testBattleMode extends battleMode{
       randomEdgeSpawner spawn;
       fieldPart window;
+      unit a;
   void _setup(){
     super._setup();
    // playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
    playBgm("song2.mp3");
-    unit a = new testunitA(this,0.5,0.5,0.20,0.5);
-    a.health = 100000;
+    a = new testunitA(this,0.5,0.5,0.20,0.5);
+    if(debug){
+      a.health = 100000;
+    }
+    else{
+     a.health = 100; 
+    }
     players.add(a);
     window = createFieldPart(this,"test",500,500,displayWidth / 2,displayHeight / 2,true);
     spawn = new randomEdgeSpawner(this,a);
@@ -126,6 +132,10 @@ class testBattleMode extends battleMode{
     }
     spawn.spawn();
     super.tick();
+    if(a.dead){
+      window._exit();
+      return;
+    }
     if(keys[keyW]){
       window.move(0,-2);
     }
@@ -275,6 +285,7 @@ boolean hitCheckCircle(bullet Bullet){
   }
   charge zCooldown = new charge(0.1);
   void death(){
+    super.death();
     Mode = new gameOver();
     Mode._setup();
   }

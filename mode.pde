@@ -20,6 +20,8 @@ class button{
     _draw();
   }
   void _draw(){
+    stroke(0);
+    strokeWeight(1);
     fill(#FFFFFF);
     rect(x,y,sizeX,sizeY);
   }
