@@ -107,8 +107,8 @@ void draw(){
 }
 
 //keyboard + variables
-char[]_keys = {'z','x','c','w','a','s','d','v','b','n','m','l','k','j'};
-int keyZ = 0;int keyX = 1;int keyC = 2;int keyW = 3;int keyA = 4;int keyS = 5;int keyD = 6;int keyV = 7;int keyB = 8;int keyN = 9;int keyM = 10;int keyL = 11;int keyK = 12;int keyJ = 13;
+char[]_keys = {'z','x','c','w','a','s','d','v','b','n','m','l','k','j','h'};
+int keyZ = 0;int keyX = 1;int keyC = 2;int keyW = 3;int keyA = 4;int keyS = 5;int keyD = 6;int keyV = 7;int keyB = 8;int keyN = 9;int keyM = 10;int keyL = 11;int keyK = 12;int keyJ = 13;int keyH = 14;
 boolean[]keys = new boolean[_keys.length];
 int[] _codedKeys = {UP,DOWN,LEFT,RIGHT,SHIFT,CONTROL,ALT};
 int cKeyUP = 0;int cKeyDOWN = 1;int cKeyLEFT = 2;int cKeyRIGHT = 3;int cKeySHIFT = 4;int cKeyCONTROL = 5;

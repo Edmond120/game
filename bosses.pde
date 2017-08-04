@@ -45,7 +45,7 @@ class giantWormBossLevel extends battleMode{
     super.tick();
     centerWindow();
     if(debug){
-      println(frameRate);
+      //println(frameRate);
     }
     //println(scale);
     //println(head.getAngle());
@@ -72,6 +72,9 @@ class giantWormBossLevel extends battleMode{
     }
     if(coilAttack.cooldown(keys[keyJ])){
      head.nodeCommand = new wormNodeCoil()._setup(head);
+    }
+    if(keys[keyH]){
+       head.chooseCommand(); 
     }
     if(!out){
       if(head.getXcor() < 0 || head.getXcor() > width || head.getYcor() < 0 || head.getYcor() > height){
@@ -179,37 +182,50 @@ class wormNodeMove extends wormNodeCommand{
   }
 }
 class wormNodePath extends wormNodeCommand{
- wormNodePath(PVector[]p,int[]d,wormHead x){
-   path = p;
-   frameDelay = d;
-   temp = 1/frameDelay[0];
-   startingLocation = new PVector(x.getXcor(),x.getYcor());
-   x.velocity = PVector.sub(startingLocation,path[index]).mult(x.velocity.mag());
+ wormNodePath(PVector p[],float[]s){
+  speed = s;
+  path = p;
  }
- PVector[]path;
- int[]frameDelay;//time it takes to reach location
+ wormNodePath(PVector[] p,float[]s,int nextmode){
+  this(p,s);
+  nextMode = nextmode;
+ }
+ float[]speed;
+ PVector[] path;
  int index = 0;
- int frames = 0;
- float temp;
- float temp2 = 0;
- PVector startingLocation;
+ int frames;
+ boolean first = true;
+ int nextMode = 0;
  void tick(wormNode x){
    x.move();
  }
+ void turnEffect(wormHead x){
+ }
  void headMove(wormHead x){
-   if(index >= path.length){
-     x.chooseCommand();
+   if(first){
+     PVector target = path[index].copy();
+     x.angle = degrees((target).sub(x.location).heading());
+     x.velocity = PVector.fromAngle(radians(x.getAngle())).mult(speed[index]);
+     frames = round(PVector.sub(path[index],x.location).mag()/x.velocity.mag());
+     first = false;
+     index++;
+     turnEffect(x);
    }
-   if(frames++ < frameDelay[index]){
-     x.location = PVector.lerp(startingLocation.copy(),path[index],temp2 += temp);
+   if(frames-- == 0){
+      if(index < path.length){
+        PVector target = path[index].copy();
+        x.angle = degrees((target).sub(x.location).heading());
+        x.velocity = PVector.fromAngle(radians(x.getAngle())).mult(speed[index]);
+        frames = round(PVector.sub(path[index],x.location).mag()/x.velocity.mag());
+        turnEffect(x);
+      }
+      else{
+        x.attackMode = nextMode;
+        x.chooseCommand();
+      }
+      index++;
    }
-   else{
-     startingLocation = path[index];
-     frames = 0;
-     temp = 1/frameDelay[index += 1];
-     temp2 = 0;
-     x.velocity = PVector.sub(startingLocation,path[index]).mult(x.velocity.mag());
-   }
+   x.move();
  }
 }
 class wormNodeCoil extends wormNodeCommand{
@@ -335,6 +351,7 @@ class wormHead extends wormSegment{
    }
    final int PASSIVE = 0;
    final int ATTACKREADY = 1;
+   final int PATH = 2;
    int attackMode = PASSIVE;
    float limit = (25.0/90)*scale;
    float accel = (0.1/90)*scale;// 90 is the scale on my computer - edmond
@@ -342,11 +359,20 @@ class wormHead extends wormSegment{
    float turnRate = 4;//10.125;
    void chooseCommand(){
      switch(attackMode){
+      case PASSIVE:
+        nodeCommand = new wormNodeMove()._setup(this);
+        return;
       case ATTACKREADY:
           nodeCommand = new wormNodeMove()._setup(this);
           limit = (50.0/90) * scale;
           //faceTarget();
           accelerate((50.0/90) * scale);
+          attackMode = PATH;
+          return;
+      case PATH:
+          float a = (25.0/90)*scale;
+          nodeCommand = new wormNodePath(new PVector[]{new PVector(scale,scale),new PVector(15 * scale,scale),new PVector(15*scale,8*scale),new PVector(scale,8*scale),new PVector(scale,scale)},new float[]{a,a,a,a,a},PASSIVE);
+          return;
      }
    }
    void accelerate(float x){
