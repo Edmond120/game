@@ -90,6 +90,7 @@ class battleMode extends mode{
   }
   void tick(){
     _background(selectedWindow);
+    updateButtons();
     try{
     update(playerBullets,enemies);
     update(bullets,players);

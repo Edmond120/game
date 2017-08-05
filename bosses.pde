@@ -6,6 +6,7 @@ class giantWormBossLevel extends battleMode{
   boolean loadingScreen = true;
   @Override
   void _setup(){
+    buttons.add(new mmButton(14,8,2,1));
     if(loadingScreen){
       super._setup();
       testunitA xxx = new testunitA(this,0.5,0.5,0.20,0.5);

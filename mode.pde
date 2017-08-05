@@ -238,7 +238,9 @@ class mainMenu extends mode{
     //anime._drawBg();
     updateButtons();
     //anime._drawFg();
-    anime._draw();
+    if(graphicQuality != LOW_QUALITY){
+      anime._draw();
+    }
   }
 }
 
