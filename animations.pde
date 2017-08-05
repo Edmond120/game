@@ -275,43 +275,103 @@ class Animation extends unit{
   }
 }
 
-class petal{
- PVector location;
- petal(float xcor,float ycor){
-   location = new PVector(xcor,ycor);
- }
- boolean fall(){
-   if(location.y > height){
-     return true;
-   }
-   else{
-     return true;
-   }
- }
+class mainMenuCircle{
+  PVector location;
+  float size;
+  color colour;
+  color colour2 = #B4FF34;
+  float tick = 0;
+  boolean tickMode = true;
+  int waitFrames = 0;
+  float fallSpeed = random(0.075 * scale);
+  float xVelocity = 0;
+  float xAcceleration = 0.05;
+  mainMenuCircle(PVector l, float s,color c){
+    location = l;
+    size = s;
+     colour = c;;
+  }
+  void update(){
+    if(location.y > (height - (1 * scale))){
+       location.x = random(width);
+       location.y = 0;
+    }
+    noStroke();
+    fill(lerpColor(colour,colour2,tick),(((height - (1 * scale)) - location.y)/(height - (1 * scale))) * 100 );
+    if(waitFrames > 0){
+      waitFrames--;
+    }
+    else{
+      if(tickMode){
+        tick += 0.01;
+      }
+      else{
+        tick -= 0.01;
+      }
+      if(tick > 1 || tick < 0){
+        tickMode = !tickMode;
+        waitFrames = 60;
+      }
+    }
+    ellipse(location.x,location.y,size,size);
+    location.y = location.y + fallSpeed;
+    if(tickMode){
+      location.x += xVelocity;
+      xVelocity += xAcceleration;
+    }
+    else{
+      location.x += xVelocity;
+      xVelocity -= xAcceleration;
+    }
+  }
 }
 class mainMenuAnimation implements fx{
-  oneWayLinkedList<petal> petals = new oneWayLinkedList<petal>();
+  oneWayLinkedList<mainMenuCircle> circlesBg = new oneWayLinkedList<mainMenuCircle>();
+  oneWayLinkedList<mainMenuCircle> circlesFg = new oneWayLinkedList<mainMenuCircle>();
+  float a = 2.2 * scale;
   void _setup(){
+    for(int n = 0;n < 50;n++){
+       if(random(100) > 50){
+         circlesBg.add(new mainMenuCircle(new PVector(random(width) - a,random(height) - height),0.5 * scale,#FF95DA)); 
+       }
+       else{
+         circlesBg.add(new mainMenuCircle(new PVector(random(width) - a,random(height) - height),0.5 * scale,#FF74CF)); 
+       }
+    }
+    for(int n = 0;n < 50;n++){
+       if(random(100) > 50){
+         circlesFg.add(new mainMenuCircle(new PVector(random(width) - a,random(height) - height),0.5 * scale,#FF95DA)); 
+       }
+       else{
+         circlesFg.add(new mainMenuCircle(new PVector(random(width) - a,random(height) - height),0.5 * scale,#FF74CF)); 
+       }
+    }
   }
-  float s;
-  float t = 8 * scale;
-  float x = 0.1;
+  void _drawBg(){
+    while(circlesBg.hasNext()){
+       circlesBg.next().update();
+    }
+  }
+  void _drawFg(){
+    while(circlesFg.hasNext()){
+       circlesFg.next().update();
+    }
+  }
   void _draw(){
-     stroke(#FF76EF);
-     strokeWeight(1 * scale);
-     fill(#FFAAF5);
-     s = x * t;
-     ellipse(8*scale,4.5*scale,s,s);
-     while(petals.hasNext()){
-        if(petals.next().fall()){
-           petals.remove(); 
-        }
-     }
-     strokeWeight(1);
+    _drawBg();
+    _drawFg();
   }
 }
 class rectanglesAnimation implements fx{
+  void _setup(){
+      //background(255); 
+  }
+  boolean first = true;
   void _draw(){
+      if(first){
+        background(0);
+        first = false;
+      }
       fill(0,5);
       rect(0,0,width,height);
       stroke(255);
@@ -335,7 +395,12 @@ class circlesAnimation implements fx{
      c[i] = new PVector(random(width) * 1.5 - width,random(height) * 1.5 - height * 1.5);
    }  
   }
+  boolean first = true;
   void _draw(){
+    if(first){
+      background(0);
+      first = false;
+    }
     noStroke();
     fill(0,0,0,10);
     rect(0,0,width,height);

@@ -181,6 +181,35 @@ class wormNodeMove extends wormNodeCommand{
    x.move(); 
   }
 }
+class wormNodePathShoot extends wormNodePath{
+  wormNodePathShoot(PVector p[],float[]s){
+     super(p,s); 
+  }
+  wormNodePathShoot(PVector p[],float[]s,int nextMode){
+     super(p,s,nextMode); 
+  }
+  void turnEffect(wormHead x){
+    //normalBullet(entity parent,battleMode field,PVector location,PVector velocity,float size,int damage)
+    unit target = x.findTarget();
+    PVector targetLocation = new PVector(target.getXcor(),target.getYcor());
+    for(float i = 1.2;i >= 0.8;i -= 0.2){
+      wormSegment shooter = x.backNode.backSegment;
+      x.field.bullets.add(new normalBullet(x,x.field,shooter.location.copy(),PVector.sub(targetLocation,shooter.location).setMag(speed[index - 1] * i),0.2 * scale,10));
+      shooter = shooter.backNode.backSegment;
+      x.field.bullets.add(new normalBullet(x,x.field,shooter.location.copy(),PVector.sub(targetLocation,shooter.location).setMag(speed[index - 1] * i),0.2 * scale,10));
+      shooter = shooter.backNode.backSegment;
+      x.field.bullets.add(new normalBullet(x,x.field,shooter.location.copy(),PVector.sub(targetLocation,shooter.location).setMag(speed[index - 1] * i),0.2 * scale,10));
+      shooter = shooter.backNode.backSegment;
+      x.field.bullets.add(new normalBullet(x,x.field,shooter.location.copy(),PVector.sub(targetLocation,shooter.location).setMag(speed[index - 1] * i),0.2 * scale,10));
+      shooter = shooter.backNode.backSegment;
+      x.field.bullets.add(new normalBullet(x,x.field,shooter.location.copy(),PVector.sub(targetLocation,shooter.location).setMag(speed[index - 1] * i),0.2 * scale,10));
+    }
+  }
+  void endEffect(wormHead x){ 
+    turnEffect(x);
+  }
+  
+}
 class wormNodePath extends wormNodeCommand{
  wormNodePath(PVector p[],float[]s){
   speed = s;
@@ -201,6 +230,10 @@ class wormNodePath extends wormNodeCommand{
  }
  void turnEffect(wormHead x){
  }
+ void firstEffect(wormHead x){
+ }
+ void endEffect(wormHead x){
+ }
  void headMove(wormHead x){
    if(first){
      PVector target = path[index].copy();
@@ -209,7 +242,7 @@ class wormNodePath extends wormNodeCommand{
      frames = round(PVector.sub(path[index],x.location).mag()/x.velocity.mag());
      first = false;
      index++;
-     turnEffect(x);
+     firstEffect(x);
    }
    if(frames-- == 0){
       if(index < path.length){
@@ -220,6 +253,7 @@ class wormNodePath extends wormNodeCommand{
         turnEffect(x);
       }
       else{
+        endEffect(x);
         x.attackMode = nextMode;
         x.chooseCommand();
       }
@@ -371,7 +405,7 @@ class wormHead extends wormSegment{
           return;
       case PATH:
           float a = (25.0/90)*scale;
-          nodeCommand = new wormNodePath(new PVector[]{new PVector(scale,scale),new PVector(15 * scale,scale),new PVector(15*scale,8*scale),new PVector(scale,8*scale),new PVector(scale,scale)},new float[]{a,a,a,a,a},PASSIVE);
+          nodeCommand = new wormNodePathShoot(new PVector[]{new PVector(scale,scale),new PVector(15 * scale,scale),new PVector(15*scale,8*scale),new PVector(scale,8*scale),new PVector(scale,scale)},new float[]{a,a,a,a,a},PASSIVE);
           return;
      }
    }

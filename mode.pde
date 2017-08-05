@@ -1,6 +1,8 @@
 class button{
   //constructor + variables
   float sizeX,sizeY,x,y,x1,y1;
+  int colour = #FFFFFF;
+  boolean STROKE = true;
   //include pic, hover animation, and pressed pic
   button(float x,float y,float sizeX,float sizeY){
     this.x = x * scale;
@@ -20,10 +22,23 @@ class button{
     _draw();
   }
   void _draw(){
-    stroke(0);
+    if(STROKE){
+      stroke(0);
+    }
+    else{
+      noStroke();
+    }
     strokeWeight(1);
-    fill(#FFFFFF);
+    fill(colour);
     rect(x,y,sizeX,sizeY);
+  }
+  button setColor(int c){
+    colour = c;
+    return this;
+  }
+  button setStroke(boolean b){
+    STROKE = b;
+    return this;
   }
   void tick(){
     if(mouseX >= x && mouseX <= x1 && mouseY >= y && mouseY <= y1){
@@ -170,6 +185,7 @@ class loadingScreen extends mode{
     }
     else{
       animation = new rectanglesAnimation(); 
+      ((rectanglesAnimation)animation)._setup();
     }
     t.start();
     s = new float[]{1 * scale,8 * scale,14 * scale,0.5 * scale};
@@ -206,18 +222,23 @@ class loadingScreen extends mode{
 }
 
 class mainMenu extends mode{
+  mainMenuAnimation anime = new mainMenuAnimation();
   void _setup(){
-    buttons.add(new testButton(1,6,3,2));
-    buttons.add(new muteButton(4,6));
-    buttons.add(new MetropolisButton(1,3.5,3,2));
-    buttons.add(new WormButton(1,1,3,2));
-    buttons.add(new qualityButton(5,1,6,1));
+    ((mainMenuAnimation)anime)._setup();
+    buttons.add(new testButton(1,6,3,2).setColor(#CBFDFF).setStroke(false));
+    buttons.add(new muteButton(4,1).setColor(#CBFDFF).setStroke(false));
+    buttons.add(new MetropolisButton(1,3.5,3,2).setColor(#CBFDFF).setStroke(false));
+    buttons.add(new WormButton(1,1,3,2).setColor(#CBFDFF).setStroke(false));
+    buttons.add(new qualityButton(5,1,6,1).setColor(#CBFDFF).setStroke(false));
     //playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
     playBgm("loopdeloop.wav");
   }
   void tick(){
     background(255);
+    //anime._drawBg();
     updateButtons();
+    //anime._drawFg();
+    anime._draw();
   }
 }
 
