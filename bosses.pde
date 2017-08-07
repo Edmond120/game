@@ -278,10 +278,7 @@ class wormNodeCoil extends wormNodeCommand{
   accel = (x.limit)/(2.5 * expectedFrameRate);
   decel = (x.limit)/(2.5 * expectedFrameRate);
   centerPoint = new PVector(x.getXcor(),x.getYcor());
-  if(graphicQuality == HIGH_QUALITY){
-    xx = new attractor();
-  }
-  else if(graphicQuality == LOW_QUALITY){
+  if(graphicQuality == LOW_QUALITY){
     return this;
   }
   else{

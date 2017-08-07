@@ -234,12 +234,16 @@ class mainMenu extends mode{
     playBgm("loopdeloop.wav");
   }
   void tick(){
+    println(frameRate);
     background(255);
     //anime._drawBg();
-    updateButtons();
     //anime._drawFg();
     if(graphicQuality != LOW_QUALITY){
+      updateButtons();
       anime._draw();
+    }
+    else{
+      updateButtons();
     }
   }
 }

@@ -297,7 +297,15 @@ class mainMenuCircle{
        location.y = 0;
     }
     noStroke();
-    fill(lerpColor(colour,colour2,tick),(((height - (1 * scale)) - location.y)/(height - (1 * scale))) * 100 );
+    float alpha;
+    if(graphicQuality == HIGH_QUALITY){
+      alpha = ((((height - (1 * scale)) - location.y)/(height - (1 * scale))) * 100)/3;
+    }
+    else{
+      alpha = (((height - (1 * scale)) - location.y)/(height - (1 * scale))) * 100;
+    }
+    int c = lerpColor(colour,colour2,tick);
+    fill(c,alpha);
     if(waitFrames > 0){
       waitFrames--;
     }
@@ -314,6 +322,14 @@ class mainMenuCircle{
       }
     }
     ellipse(location.x,location.y,size,size);
+    if(graphicQuality == HIGH_QUALITY){
+      fill(c,alpha * 0.8);
+      ellipse(location.x,location.y,size * 1.1,size * 1.1);
+      fill(c,alpha * 0.6);
+      ellipse(location.x,location.y,size * 1.2,size * 1.2);
+      fill(c,alpha * 0.4);
+      ellipse(location.x,location.y,size * 1.3,size * 1.3);
+    }
     location.y = location.y + fallSpeed;
     if(tickMode){
       location.x += xVelocity;
