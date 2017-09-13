@@ -99,6 +99,13 @@ class giantWormBossLevel extends battleMode{
   }
   boolean out = false;
 }
+wormSegment getWormSegment(wormHead head,int index){
+  wormSegment r = head;
+  for(int i = 0;i < index;i++){
+    r = head.backNode.backSegment;
+  }
+  return r;
+}
 void setPhase(wormSegment seg){
   int i = 0;
   while(seg.backNode.backSegment != null){
