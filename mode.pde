@@ -60,9 +60,13 @@ class button{
   }
 }
 class mode{
+  boolean clear = true;
   mode(){}
   ArrayList<button>buttons = new ArrayList<button>();
   void _setup(){
+    if(clear){
+       clearWindows(); 
+    }
   }
   void tick(){
   }
@@ -80,6 +84,7 @@ class mode{
 
 class gameOver extends mode{
   void _setup(){
+    super._setup();
     background(#FF0000);
     buttons.add(new testButton(1,6,3,2));
     buttons.add(new muteButton(4,6));
@@ -179,6 +184,7 @@ class qualityButton extends button{
 }
 class loadingScreen extends mode{
   void _setup(){
+    super._setup();
     if(random(100) < 50){
       animation = new circlesAnimation();
       ((circlesAnimation)animation)._setup();
@@ -224,12 +230,14 @@ class loadingScreen extends mode{
 class mainMenu extends mode{
   mainMenuAnimation anime = new mainMenuAnimation();
   void _setup(){
+    super._setup();
     ((mainMenuAnimation)anime)._setup();
     buttons.add(new testButton(1,6,3,2).setColor(#CBFDFF).setStroke(false));
     buttons.add(new muteButton(4,1).setColor(#CBFDFF).setStroke(false));
     buttons.add(new MetropolisButton(1,3.5,3,2).setColor(#CBFDFF).setStroke(false));
     buttons.add(new WormButton(1,1,3,2).setColor(#CBFDFF).setStroke(false));
     buttons.add(new qualityButton(5,1,6,1).setColor(#CBFDFF).setStroke(false));
+    buttons.add(new creditsButton(14,8,2,1).setColor(#CBFDFF).setStroke(false));
     //playBgm(randomSelect(new String[]{"song1.mp3","song2.mp3","song3.mp3"}));
     playBgm("loopdeloop.wav");
   }
@@ -291,7 +299,41 @@ class WormButton extends button{
     text("Worm Level",x+(x/1.5),y+(y/1.2),500,500);
   }
 }
-
+class creditsButton extends button{
+  creditsButton(float x,float y,float xSize,float ySize){
+     super(x,y,xSize,ySize);
+  }
+  void action(){
+     Mode.newMode = true;
+     Mode = new credits();
+     Mode._setup();
+  }
+  void pushed(){ 
+  }
+  void hover(){
+    _draw();
+  }
+  void _draw(){
+    super._draw();
+    fill(0);
+    textSize(25);
+    text("credits",x+sizeX/4,y+sizeY/2.5,400,400);
+  }
+}
+class credits extends mode{
+  void _setup(){
+    super._setup();
+    buttons.add(new mmButton(14,8,2,1));
+  }
+  int y = height;
+  void tick(){
+   fill(255);
+   background(0);
+   textSize(16);
+   text("Credits:\n\nGame:\nEdmond Wong\nEmily Wang\n\nMain Menu Music:\nEvan Wong",10,y--);
+   updateButtons();
+  }
+}
 
 class mmButton extends button{
   mmButton(int x, int y,int xSize,int ySize){

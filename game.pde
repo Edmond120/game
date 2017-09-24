@@ -66,6 +66,7 @@ void setup(){
   //frame.setSize(1000,1000);
   //frame.setLocation(100,100);
   Mode = new mainMenu();
+  //Mode = new manyWindowsTestEnvironment();
   //Mode = new experimentTestEnironment();
   //Mode = new gameOver();
   //Mode = new tempTestEnvironment();

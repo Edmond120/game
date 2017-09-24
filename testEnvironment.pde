@@ -13,6 +13,14 @@ class attractorTestEnvironment extends testEnvironment{
   x._draw(); 
  }
 }
+class manyWindowsTestEnvironment extends testEnvironment{
+  battleMode x = new battleMode();
+ void _setup(){
+ }
+ void tick(){
+   createFieldPart(x,"test",100,100,200,200,false);
+ }
+}
 class newWindowTestEnvironment extends testEnvironment{
   fieldPart x;
  void _setup(){

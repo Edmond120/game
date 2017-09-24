@@ -1,3 +1,11 @@
+ArrayList<fieldPart>newWindows = new ArrayList<fieldPart>();
+void clearWindows(){
+  int i = newWindows.size();
+  while(i-- > 0){
+    newWindows.get(0).kill();
+    newWindows.remove(0);
+  }
+}
 class window extends PApplet{
   window(String name){
     super();
@@ -21,7 +29,9 @@ class window extends PApplet{
 synchronized fieldPart createFieldPart(battleMode field,String name, int Width, int Height, int xcor, int ycor,boolean onTop){
   newWindowWidth = Width;
   newWindowHeight = Height;
-  return new fieldPart(field,name,xcor,ycor,onTop);
+  fieldPart x = new fieldPart(field,name,xcor,ycor,onTop);
+  newWindows.add(x);
+  return x;
 }
 int newWindowWidth,newWindowHeight;//to be used only by fieldPart;
 class fieldPart extends PApplet{
@@ -34,6 +44,10 @@ class fieldPart extends PApplet{
     this.field = field;
     visiable = true;
     PApplet.runSketch(new String[]{name},this);
+  }
+  void kill(){
+    dispose();
+    frame.setVisible(false);
   }
   String name;
   int Width,Height,xcor,ycor;

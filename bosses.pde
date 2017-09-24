@@ -6,6 +6,7 @@ class giantWormBossLevel extends battleMode{
   boolean loadingScreen = true;
   @Override
   void _setup(){
+    super._setup();
     buttons.add(new mmButton(14,8,2,1));
     if(loadingScreen){
       super._setup();

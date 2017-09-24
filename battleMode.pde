@@ -80,7 +80,7 @@ class battleMode extends mode{
   oneWayLinkedList<unit> anime = new oneWayLinkedList<unit>(); //this "anime" stands for animation, not the anime anime (lol)
   oneWayLinkedList[] drawables = {anime,playerBullets,enemies,players,bullets};
   void _setup(){
-   
+   super._setup();
   }
   void partBackground(PApplet applet){
     applet.background(0);
