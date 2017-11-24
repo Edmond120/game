@@ -20,6 +20,9 @@ as planned attack patterns require control over other segments besides the head.
 Control varies on friction values which is currently not adjustable yet.  
 
 
+worm level and test game works  
+
+
 see if you can move the worm to the center of the screen(get rid of the other window  
 by moving worm out of bounds then back in again)  
 press J for attack pattern 1  
