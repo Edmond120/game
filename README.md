@@ -1,6 +1,12 @@
 # game
 
-bugs: all commented out or the bugged features are not being used
+bugs: processing.sound library might not work due to this issue https://github.com/processing/processing-sound/issues/81   
+this bug seems to be an ubuntu only thing, if you were to encounter this bug and can't fix it then I suggest you use windows
+
+
+requirments:
+    processing  
+    the library: processing.sound  
 
 updates: 
 
